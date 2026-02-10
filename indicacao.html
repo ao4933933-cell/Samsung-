@@ -3,51 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NIO - Network Management Ultra</title>
+    <title>Samsung - Network Management</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
-            --nio-blue: #00a3e0;
-            --dark-bg: #010409;
-            --glass-card: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --nio-gradient: linear-gradient(135deg, #00a3e0 0%, #005a87 100%);
-            --active-green: #00ff88;
-            --gold: #ffcc00;
+            /* PALETA SAMSUNG EXPERIENCE */
+            --samsung-blue: #034EA2; 
+            --dark-bg: #f4f4f4;
+            --card-bg: #ffffff;
+            --border-color: #dddddd;
+            --text-main: #000000;
+            --text-sub: #555555;
+            --active-green: #2fb13b;
+            --samsung-gradient: linear-gradient(135deg, #034EA2 0%, #002e67 100%);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Samsung One', 'Inter', 'Segoe UI', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: var(--dark-bg);
-            color: white;
+            color: var(--text-main);
             padding-bottom: 140px;
-            background-image: radial-gradient(circle at 10% 10%, #0a1a2f 0%, transparent 50%);
             min-height: 100vh;
         }
 
         /* HEADER */
         .premium-header {
-            padding: 40px 25px 10px;
+            padding: 40px 25px 15px;
             text-align: center;
         }
 
         .premium-header h1 {
-            font-weight: 800;
-            letter-spacing: 2px;
+            font-weight: 700;
+            letter-spacing: 1px;
             text-transform: uppercase;
             font-size: 1.6rem;
+            color: var(--samsung-blue);
             margin-bottom: 5px;
-            background: var(--nio-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         /* DASHBOARD DE ESTATÍSTICAS */
@@ -59,17 +58,17 @@
         }
 
         .stat-box {
-            background: var(--glass-card);
-            border: 1px solid var(--glass-border);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
             padding: 20px 15px;
             border-radius: 25px;
             text-align: center;
-            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
         .stat-box i {
-            color: var(--nio-blue);
-            font-size: 20px;
+            color: var(--samsung-blue);
+            font-size: 22px;
             margin-bottom: 10px;
             display: block;
         }
@@ -77,37 +76,41 @@
         .stat-box span {
             display: block;
             font-size: 10px;
-            color: rgba(255,255,255,0.5);
+            color: var(--text-sub);
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 5px;
+            font-weight: 700;
         }
 
         .stat-box h3 {
             font-size: 18px;
             font-weight: 800;
+            color: var(--samsung-blue);
         }
 
         /* RESUMO DE FUNCIONAMENTO */
         .how-it-works {
             margin: 0 20px 25px;
             padding: 20px;
-            background: rgba(0, 163, 224, 0.05);
+            background: #fff;
             border-radius: 25px;
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
 
         .how-it-works h2 {
             font-size: 14px;
-            color: var(--nio-blue);
+            color: var(--samsung-blue);
             margin-bottom: 8px;
             text-transform: uppercase;
+            font-weight: 700;
         }
 
         .how-it-works p {
             font-size: 12px;
             line-height: 1.6;
-            color: rgba(255,255,255,0.7);
+            color: var(--text-sub);
         }
 
         /* GRID DE COMISSÕES */
@@ -119,8 +122,8 @@
         }
 
         .commission-card {
-            background: var(--glass-card);
-            border: 1px solid var(--glass-border);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
             padding: 15px 5px;
             border-radius: 20px;
             text-align: center;
@@ -128,23 +131,23 @@
         }
 
         .commission-card.active-lv {
-            border-color: var(--nio-blue);
-            background: rgba(0, 163, 224, 0.1);
-            box-shadow: 0 0 15px rgba(0, 163, 224, 0.2);
+            border-color: var(--samsung-blue);
+            background: rgba(3, 78, 162, 0.05);
+            box-shadow: 0 0 15px rgba(3, 78, 162, 0.1);
         }
 
-        .lv-label { font-size: 10px; opacity: 0.5; display: block; margin-bottom: 5px; }
-        .percent { font-size: 18px; font-weight: 800; color: var(--active-green); }
+        .lv-label { font-size: 10px; color: var(--text-sub); display: block; margin-bottom: 5px; font-weight: 700; }
+        .percent { font-size: 18px; font-weight: 800; color: var(--samsung-blue); }
 
         /* CARD DE CONVITE */
         .main-invite-card {
             margin: 0 20px 30px;
-            background: var(--glass-card);
-            border: 1px solid var(--glass-border);
-            border-radius: 40px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 35px;
             padding: 30px 20px;
-            backdrop-filter: blur(25px);
             text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
         .qr-placeholder {
@@ -157,13 +160,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid var(--border-color);
         }
         .qr-placeholder img { width: 100%; height: 100%; }
 
         .copy-wrapper {
-            background: rgba(0,0,0,0.4);
-            border: 1px solid var(--glass-border);
+            background: #f8f9fa;
+            border: 1px solid var(--border-color);
             border-radius: 15px;
             padding: 10px 15px;
             display: flex;
@@ -172,55 +175,59 @@
         }
 
         #inviteLinkDisplay { 
-            font-size: 11px; color: rgba(255,255,255,0.6);
+            font-size: 11px; color: var(--text-sub);
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
             max-width: 70%;
+            font-weight: 500;
         }
 
         .btn-action-copy {
-            background: var(--nio-blue);
+            background: var(--samsung-gradient);
             border: none; color: white;
-            padding: 8px 15px; border-radius: 10px;
+            padding: 10px 18px; border-radius: 12px;
             font-weight: 700; font-size: 11px; cursor: pointer;
             transition: 0.2s;
         }
-        .btn-action-copy:active { transform: scale(0.9); }
+        .btn-action-copy:active { transform: scale(0.95); }
 
         /* MONITORAMENTO DE REDE */
         .network-monitor { padding: 0 20px; }
 
         .section-title {
             font-size: 13px; text-transform: uppercase;
-            letter-spacing: 2px; color: var(--nio-blue);
+            letter-spacing: 1px; color: var(--text-main);
             margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+            font-weight: 700;
         }
 
         .level-tabs {
-            display: flex; background: rgba(255,255,255,0.05);
-            border-radius: 15px; padding: 5px; margin-bottom: 20px;
-            border: 1px solid var(--glass-border);
+            display: flex; background: #fff;
+            border-radius: 20px; padding: 6px; margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
         }
 
         .tab-btn {
             flex: 1; padding: 12px; border: none;
-            background: transparent; color: rgba(255,255,255,0.4);
-            font-weight: 700; font-size: 10px; border-radius: 12px;
+            background: transparent; color: var(--text-sub);
+            font-weight: 700; font-size: 10px; border-radius: 15px;
             cursor: pointer; transition: 0.3s;
             display: flex; flex-direction: column; align-items: center; gap: 4px;
         }
 
         .tab-btn b { font-size: 12px; }
 
-        .tab-btn.active { background: var(--nio-blue); color: white; }
+        .tab-btn.active { background: var(--samsung-blue); color: white; }
 
         /* LISTA DE INDICADOS */
         .team-list { display: flex; flex-direction: column; gap: 12px; }
 
         .member-card {
-            background: var(--glass-card); border: 1px solid var(--glass-border);
-            padding: 15px; border-radius: 20px;
+            background: #fff; border: 1px solid var(--border-color);
+            padding: 18px; border-radius: 22px;
             display: flex; align-items: center; justify-content: space-between;
             animation: fadeIn 0.4s ease-out;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
         }
 
         @keyframes fadeIn {
@@ -231,42 +238,44 @@
         .member-info { display: flex; align-items: center; gap: 12px; }
 
         .member-avatar {
-            width: 40px; height: 40px; background: rgba(0, 163, 224, 0.1);
+            width: 42px; height: 42px; background: rgba(3, 78, 162, 0.08);
             border-radius: 50%; display: flex; align-items: center; 
-            justify-content: center; color: var(--nio-blue);
+            justify-content: center; color: var(--samsung-blue);
         }
 
-        .member-details h4 { font-size: 14px; margin-bottom: 2px; }
-        .member-details p { font-size: 10px; color: rgba(255,255,255,0.4); }
+        .member-details h4 { font-size: 14px; margin-bottom: 2px; color: var(--text-main); font-weight: 600; }
+        .member-details p { font-size: 11px; color: var(--text-sub); }
 
         .status-badge {
-            padding: 6px 12px; border-radius: 8px;
+            padding: 6px 14px; border-radius: 10px;
             font-size: 9px; font-weight: 800;
+            text-transform: uppercase;
         }
-        .status-active { background: rgba(0, 255, 136, 0.1); color: var(--active-green); }
-        .status-pending { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.3); }
+        .status-active { background: rgba(47, 177, 59, 0.1); color: var(--active-green); }
+        .status-pending { background: #f1f1f1; color: #888; }
 
         /* NAVBAR */
         .bottom-nav {
             position: fixed; bottom: 0; width: 100%;
-            background: rgba(5, 10, 20, 0.98); backdrop-filter: blur(25px);
+            background: #ffffff;
             display: flex; justify-content: space-around;
-            padding: 15px 0 35px; border-top: 1px solid var(--glass-border);
+            padding: 15px 0 35px; border-top: 1px solid var(--border-color);
             z-index: 1000;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
         }
 
         .nav-item {
-            text-align: center; color: rgba(255,255,255,0.3);
+            text-align: center; color: #999;
             text-decoration: none; font-size: 10px; font-weight: 700;
         }
-        .nav-item.active { color: var(--nio-blue); }
+        .nav-item.active { color: var(--samsung-blue); }
         .nav-item i { font-size: 22px; display: block; margin-bottom: 6px; }
 
-        #emptyState { text-align: center; padding: 40px 0; opacity: 0.5; font-size: 13px; display: none; }
+        #emptyState { text-align: center; padding: 40px 0; color: #999; font-size: 13px; display: none; }
         
         .loader {
-            border: 3px solid rgba(255,255,255,0.1);
-            border-radius: 50%; border-top: 3px solid var(--nio-blue);
+            border: 3px solid #eee;
+            border-radius: 50%; border-top: 3px solid var(--samsung-blue);
             width: 30px; height: 30px; animation: spin 1s linear infinite;
             margin: 20px auto; display: none;
         }
@@ -277,26 +286,26 @@
 
     <header class="premium-header">
         <h1>Minha Rede</h1>
-        <p style="color: rgba(255,255,255,0.5); font-size: 12px;">Gestão de Profundidade NIO Network</p>
+        <p style="color: var(--text-sub); font-size: 12px; font-weight: 500;">Gestão de Profundidade Samsung Rewards</p>
     </header>
 
     <main>
         <div class="network-stats-row">
             <div class="stat-box">
-                <i class="fa-solid fa-users-viewfinder"></i>
-                <span>Total de Membros</span>
+                <i class="fa-solid fa-users"></i>
+                <span>Membros Totais</span>
                 <h3 id="totalMembrosCount">0</h3>
             </div>
             <div class="stat-box">
-                <i class="fa-solid fa-sack-dollar"></i>
-                <span>Ganhos da Rede</span>
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Bônus Acumulado</span>
                 <h3 id="totalRedeGanhos">R$ 0,00</h3>
             </div>
         </div>
 
         <section class="how-it-works">
             <h2>Ganhos de Rede</h2>
-            <p>Sua rede é composta por 3 níveis. Você recebe comissões creditadas diretamente no seu <b>Saldo Lucro</b> sempre que um indicado ativa máquinas de mineração.</p>
+            <p>Seu ecossistema possui 3 níveis de profundidade. Comissões são creditadas em tempo real sempre que um membro da sua rede adquire um novo ativo.</p>
         </section>
 
         <section class="commission-grid">
@@ -316,17 +325,17 @@
 
         <div class="main-invite-card">
             <div class="qr-placeholder" id="qrCodeBox">
-                <i class="fa-solid fa-qrcode fa-3x" style="color: #eee"></i>
+                <i class="fa-solid fa-qrcode fa-3x" style="color: #ddd"></i>
             </div>
             <div class="copy-wrapper">
-                <span id="inviteLinkDisplay">Carregando link...</span>
-                <button class="btn-action-copy" onclick="copyMyInviteLink()">COPIAR</button>
+                <span id="inviteLinkDisplay">Aguardando link...</span>
+                <button class="btn-action-copy" onclick="copyMyInviteLink()">COPIAR LINK</button>
             </div>
-            <p style="font-size: 10px; color: var(--nio-blue); margin-top: 15px; opacity: 0.7;">Seu código: <b id="shortIdDisplay">...</b></p>
+            <p style="font-size: 11px; color: var(--samsung-blue); margin-top: 15px; font-weight: 700;">ID de Convite: <span id="shortIdDisplay" style="color: var(--text-main);">...</span></p>
         </div>
 
         <section class="network-monitor">
-            <h3 class="section-title"><i class="fa-solid fa-sitemap"></i> Membros da Rede</h3>
+            <h3 class="section-title"><i class="fa-solid fa-sitemap" style="color: var(--samsung-blue);"></i> Gerenciamento de Membros</h3>
             
             <div class="level-tabs">
                 <button class="tab-btn active" id="btnLv1" onclick="changeLevel(1)">
@@ -344,15 +353,15 @@
             <div class="team-list" id="teamContainer"></div>
 
             <div id="emptyState">
-                <i class="fa-solid fa-user-slash fa-2x" style="margin-bottom:10px"></i><br>
-                Nenhum membro encontrado neste nível.
+                <i class="fa-solid fa-users-slash fa-2x" style="margin-bottom:10px; display: block;"></i>
+                Nenhum membro ativo neste nível.
             </div>
         </section>
     </main>
 
     <nav class="bottom-nav">
         <a href="home.html" class="nav-item">
-            <i class="fa-solid fa-house-chimney"></i>HOME
+            <i class="fa-solid fa-house"></i>HOME
         </a>
         <a href="ativos.html" class="nav-item">
             <i class="fa-solid fa-microchip"></i>ATIVOS
@@ -361,7 +370,7 @@
             <i class="fa-solid fa-share-nodes"></i>CONVITE
         </a>
         <a href="perfil.html" class="nav-item">
-            <i class="fa-solid fa-user-astronaut"></i>PERFIL
+            <i class="fa-solid fa-user"></i>PERFIL
         </a>
     </nav>
 
@@ -370,13 +379,15 @@
         import { getFirestore, collection, query, where, getDocs, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
+        // Novo Firebase Config solicitado
         const firebaseConfig = {
-            apiKey: "AIzaSyDyahOcB_wXbU_E0IzEXHBMsyw8uqJR2Es",
-            authDomain: "ironpay-cc5e1.firebaseapp.com",
-            projectId: "ironpay-cc5e1",
-            storageBucket: "ironpay-cc5e1.firebasestorage.app",
-            messagingSenderId: "283629903594",
-            appId: "1:283629903594:web:07b39ed18372335c758193"
+            apiKey: "AIzaSyBEwr-HGUXvLZwH15TFWbXI6Q4sdxbqsTw",
+            authDomain: "sasung-4e6c1.firebaseapp.com",
+            projectId: "sasung-4e6c1",
+            storageBucket: "sasung-4e6c1.firebasestorage.app",
+            messagingSenderId: "803651036609",
+            appId: "1:803651036609:web:5b11a565d4aa705e28bb40",
+            measurementId: "G-L31X649B5T"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -390,7 +401,7 @@
             if (user) {
                 currentUser = user;
                 
-                // Monitoramento de Ganhos Totais (do perfil do usuário)
+                // Monitoramento de Ganhos Totais (Saldo Lucro/Comissão)
                 onSnapshot(doc(db, "users", user.uid), (docSnap) => {
                     if(docSnap.exists()){
                         const data = docSnap.data();
@@ -405,7 +416,7 @@
                 
                 document.getElementById('shortIdDisplay').innerText = shortId;
                 document.getElementById('inviteLinkDisplay').innerText = shortInviteLink;
-                document.getElementById('qrCodeBox').innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${shortInviteLink}" alt="QR Code NIO">`;
+                document.getElementById('qrCodeBox').innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(shortInviteLink)}" alt="Samsung Rewards QR">`;
                 
                 await buildNetwork(user.uid);
                 renderLevel(1);
@@ -419,7 +430,7 @@
             document.getElementById('teamContainer').innerHTML = '';
             
             try {
-                // BUSCA NÍVEL 1
+                // BUSCA NÍVEL 1 (Indicados diretos)
                 const q1 = query(collection(db, "users"), where("indicadoPor", "==", userId));
                 const snap1 = await getDocs(q1);
                 networkData.level1 = snap1.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -442,7 +453,7 @@
                 const resultsLv3 = await Promise.all(lv3Promises);
                 networkData.level3 = resultsLv3.flat();
 
-                // ATUALIZAR CONTADORES VISUAIS
+                // Atualizar Contadores
                 const l1 = networkData.level1.length;
                 const l2 = networkData.level2.length;
                 const l3 = networkData.level3.length;
@@ -453,7 +464,7 @@
                 document.getElementById('countLv3').innerText = `(${l3})`;
 
             } catch (err) {
-                console.error("Erro ao construir rede:", err);
+                console.error("Erro na rede:", err);
             } finally {
                 document.getElementById('mainLoader').style.display = 'none';
             }
@@ -481,7 +492,6 @@
 
             empty.style.display = "none";
             data.forEach(user => {
-                // Formatação de data simples caso exista o timestamp do Firestore
                 let dateStr = 'N/A';
                 if(user.dataRegistro) {
                     const d = user.dataRegistro.toDate ? user.dataRegistro.toDate() : new Date(user.dataRegistro);
@@ -493,14 +503,14 @@
                 const html = `
                     <div class="member-card">
                         <div class="member-info">
-                            <div class="member-avatar"><i class="fa-solid fa-user"></i></div>
+                            <div class="member-avatar"><i class="fa-solid fa-user-check"></i></div>
                             <div class="member-details">
-                                <h4>${user.nome || 'Usuário NIO'}</h4>
-                                <p>Ingresso: ${dateStr}</p>
+                                <h4>${user.nome || 'Usuário Samsung'}</h4>
+                                <p>Cadastrado em: ${dateStr}</p>
                             </div>
                         </div>
                         <span class="status-badge ${totalInv > 0 ? 'status-active' : 'status-pending'}">
-                            ${totalInv > 0 ? 'INVESTIDOR' : 'FREE'}
+                            ${totalInv > 0 ? 'Ativo' : 'Pendente'}
                         </span>
                     </div>
                 `;
@@ -514,19 +524,19 @@
 
         window.copyMyInviteLink = () => {
             const link = document.getElementById('inviteLinkDisplay').innerText;
-            if (link.includes("Carregando")) return;
+            if (link.includes("Aguardando")) return;
 
             navigator.clipboard.writeText(link).then(() => {
                 Swal.fire({
                     icon: 'success',
-                    title: 'COPIADO!',
-                    text: 'Seu link de convite está pronto para ser compartilhado.',
+                    title: 'LINK COPIADO',
+                    text: 'O link de convite Samsung Rewards foi copiado para sua área de transferência.',
                     toast: true,
                     position: 'top',
                     showConfirmButton: false,
                     timer: 3000,
-                    background: '#010409',
-                    color: '#fff'
+                    background: '#ffffff',
+                    color: '#034EA2'
                 });
             });
         };
