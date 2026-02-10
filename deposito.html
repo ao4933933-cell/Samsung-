@@ -3,274 +3,294 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NIO - Depósito Instantâneo</title>
+    <title>Samsung Pay - Depósito Pix</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --nio-blue: #00a3e0;
-            --dark-bg: #010409;
-            --glass-card: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --nio-gradient: linear-gradient(135deg, #00a3e0 0%, #005a87 100%);
-            --active-green: #00ff88;
+            /* PALETA SAMSUNG ONE UI */
+            --samsung-blue: #034EA2; 
+            --samsung-bg: #f4f4f4;
+            --samsung-card: #ffffff;
+            --samsung-border: #dddddd;
+            --samsung-text-main: #000000;
+            --samsung-text-sub: #555555;
+            --samsung-success: #2fb13b;
+            --samsung-gradient: linear-gradient(135deg, #034EA2 0%, #002e67 100%);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Samsung One', 'Inter', 'Segoe UI', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--dark-bg);
-            color: white;
-            background-image: 
-                radial-gradient(circle at 50% -20%, #00a3e022 0%, transparent 50%),
-                radial-gradient(circle at 100% 100%, #005a8711 0%, transparent 40%);
+            background-color: var(--samsung-bg);
+            color: var(--samsung-text-main);
             min-height: 100vh;
             padding-bottom: 40px;
         }
 
         .premium-header {
-            padding: 50px 25px 20px;
+            padding: 20px 25px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            background: #fff;
+            border-bottom: 1px solid var(--samsung-border);
         }
 
         .btn-back {
-            background: var(--glass-card);
-            border: 1px solid var(--glass-border);
-            color: white;
-            width: 45px;
-            height: 45px;
-            border-radius: 15px;
+            background: #f8f9fa;
+            border: 1px solid var(--samsung-border);
+            color: var(--samsung-text-main);
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-decoration: none;
+            transition: 0.3s;
         }
 
         .header-title h1 {
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 800;
-            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--samsung-text-main);
         }
 
         .deposit-container {
-            padding: 0 20px;
+            padding: 25px 20px;
             max-width: 500px;
             margin: 0 auto;
         }
 
         .balance-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--glass-border);
-            border-radius: 30px;
-            padding: 25px;
+            background: var(--samsung-card);
+            border: 1px solid var(--samsung-border);
+            border-radius: 28px;
+            padding: 30px;
             text-align: center;
             margin-bottom: 25px;
-            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
         .balance-card span {
-            font-size: 11px;
-            color: rgba(255,255,255,0.4);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
+            font-size: 12px;
+            color: var(--samsung-text-sub);
+            font-weight: 600;
+            text-transform: none;
+            letter-spacing: 0;
         }
 
         .balance-card h2 {
-            font-size: 2.2rem;
+            font-size: 2.4rem;
             margin-top: 5px;
             font-weight: 800;
+            color: var(--samsung-blue);
         }
 
         .section-label {
-            font-size: 11px;
-            color: var(--nio-blue);
-            font-weight: 800;
-            text-transform: uppercase;
+            font-size: 13px;
+            color: var(--samsung-text-main);
+            font-weight: 700;
             margin-bottom: 15px;
             display: block;
-            letter-spacing: 1px;
+            margin-left: 10px;
         }
 
         .quick-amounts {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 25px;
         }
 
         .quick-btn {
-            background: var(--glass-card);
-            border: 1px solid var(--glass-border);
-            padding: 15px 5px;
-            border-radius: 16px;
-            color: white;
+            background: #fff;
+            border: 1px solid var(--samsung-border);
+            padding: 16px 5px;
+            border-radius: 18px;
+            color: var(--samsung-text-main);
             font-weight: 700;
-            font-size: 13px;
+            font-size: 14px;
             cursor: pointer;
             transition: 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
 
         .quick-btn:active {
-            background: var(--nio-blue);
+            background: var(--samsung-blue);
+            color: white;
+            border-color: var(--samsung-blue);
             transform: scale(0.95);
         }
 
         .input-box {
-            background: rgba(255,255,255,0.04);
-            border: 2px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 18px;
+            background: #fff;
+            border: 1px solid var(--samsung-border);
+            border-radius: 22px;
+            padding: 20px;
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             transition: 0.3s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
         }
 
         .input-box:focus-within {
-            border-color: var(--nio-blue);
+            border-color: var(--samsung-blue);
+            box-shadow: 0 0 0 3px rgba(3, 78, 162, 0.1);
         }
 
         .input-box span {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--nio-blue);
-            margin-right: 10px;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--samsung-blue);
+            margin-right: 12px;
         }
 
         .input-box input {
             background: transparent;
             border: none;
-            color: white;
-            font-size: 22px;
+            color: var(--samsung-text-main);
+            font-size: 24px;
             font-weight: 800;
             width: 100%;
             outline: none;
         }
 
         .info-grid {
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 24px;
-            padding: 20px;
-            margin-bottom: 25px;
-            border: 1px solid var(--glass-border);
+            background: #fff;
+            border-radius: 28px;
+            padding: 22px;
+            margin-bottom: 30px;
+            border: 1px solid var(--samsung-border);
         }
 
         .info-item {
             display: flex;
             align-items: center;
             gap: 15px;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
 
         .info-item:last-child { margin-bottom: 0; }
 
         .info-icon {
-            width: 35px;
-            height: 35px;
-            background: rgba(0, 163, 224, 0.1);
-            border-radius: 10px;
+            width: 42px;
+            height: 42px;
+            background: #f1f3f5;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--nio-blue);
-            font-size: 14px;
+            color: var(--samsung-blue);
+            font-size: 16px;
         }
 
         .info-text h4 {
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 700;
             margin-bottom: 2px;
+            color: var(--samsung-text-main);
         }
 
         .info-text p {
-            font-size: 10px;
-            color: rgba(255,255,255,0.5);
+            font-size: 12px;
+            color: var(--samsung-text-sub);
+            font-weight: 500;
         }
 
         .btn-generate {
-            background: var(--nio-gradient);
+            background: var(--samsung-gradient);
             color: white;
             border: none;
             width: 100%;
-            padding: 20px;
-            border-radius: 20px;
-            font-size: 15px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            padding: 22px;
+            border-radius: 22px;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: none;
             cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0, 163, 224, 0.2);
+            box-shadow: 0 8px 15px rgba(3, 78, 162, 0.2);
+            transition: 0.3s;
+        }
+
+        .btn-generate:active {
+            transform: scale(0.98);
         }
 
         #pixContainer {
             display: none;
             text-align: center;
-            animation: fadeIn 0.5s ease;
+            animation: fadeInSamsung 0.6s ease-out;
         }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInSamsung { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .qr-card {
             background: white;
-            padding: 15px;
-            border-radius: 25px;
+            padding: 25px;
+            border-radius: 30px;
             display: inline-block;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            border: 1px solid var(--samsung-border);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
 
         .copy-box {
-            background: rgba(255,255,255,0.05);
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 20px;
-            border: 1px dashed var(--glass-border);
+            background: #f8f9fa;
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 25px;
+            border: 1px dashed var(--samsung-border);
         }
 
         .pix-code {
-            font-size: 10px;
+            font-size: 12px;
             word-break: break-all;
-            color: rgba(255,255,255,0.7);
+            color: var(--samsung-text-sub);
+            font-weight: 500;
         }
 
         .btn-copy {
             background: #fff;
-            color: #000;
-            border: none;
+            color: var(--samsung-blue);
+            border: 1px solid var(--samsung-blue);
             width: 100%;
             padding: 18px;
-            border-radius: 15px;
-            font-weight: 800;
+            border-radius: 18px;
+            font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-copy:active {
+            background: #f0f4f9;
         }
 
         .status-badge {
-            background: rgba(0, 255, 136, 0.1);
-            color: var(--active-green);
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 10px;
+            background: #e7f6ed;
+            color: var(--samsung-success);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 11px;
             font-weight: 800;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            margin-bottom: 20px;
+            gap: 8px;
+            margin-bottom: 25px;
         }
     </style>
 </head>
@@ -279,18 +299,18 @@
     <header class="premium-header">
         <a href="home.html" class="btn-back"><i class="fa-solid fa-chevron-left"></i></a>
         <div class="header-title"><h1>Depósito Pix</h1></div>
-        <div style="width: 45px;"></div>
+        <div style="width: 40px;"></div>
     </header>
 
     <main class="deposit-container">
         
         <div id="depositForm">
             <div class="balance-card">
-                <span>Saldo de Depósito</span>
+                <span>Saldo atual disponível</span>
                 <h2 id="displayCurrentBalance">R$ 0,00</h2>
             </div>
 
-            <span class="section-label">Selecione ou digite o valor</span>
+            <span class="section-label">Valor para depósito</span>
             
             <div class="quick-amounts">
                 <button class="quick-btn" onclick="setAmount(30)">R$ 30</button>
@@ -303,29 +323,29 @@
 
             <div class="input-box">
                 <span>R$</span>
-                <input type="number" id="depositAmount" placeholder="Outro valor" min="30">
+                <input type="number" id="depositAmount" placeholder="Digite o valor" min="30">
             </div>
 
             <div class="info-grid">
                 <div class="info-item">
                     <div class="info-icon"><i class="fa-solid fa-bolt"></i></div>
                     <div class="info-text">
-                        <h4>Crédito Instantâneo</h4>
-                        <p>O saldo cai na conta assim que o Pix for pago.</p>
+                        <h4>Compensação Imediata</h4>
+                        <p>O saldo é liberado instantaneamente após o pagamento.</p>
                     </div>
                 </div>
                 <div class="info-item">
-                    <div class="info-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="info-icon"><i class="fa-solid fa-shield-check"></i></div>
                     <div class="info-text">
-                        <h4>Conexão Criptografada</h4>
-                        <p>Sua transação é processada em um ambiente 100% seguro.</p>
+                        <h4>Transação Segura</h4>
+                        <p>Sua segurança protegida pelo sistema Samsung Pay.</p>
                     </div>
                 </div>
                 <div class="info-item">
-                    <div class="info-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                    <div class="info-icon"><i class="fa-solid fa-circle-exclamation"></i></div>
                     <div class="info-text">
-                        <h4>Valor Mínimo</h4>
-                        <p>O aporte mínimo permitido é de R$ 30,00.</p>
+                        <h4>Aporte Mínimo</h4>
+                        <p>O valor mínimo para processamento é de R$ 30,00.</p>
                     </div>
                 </div>
             </div>
@@ -340,24 +360,24 @@
                 <i class="fa-solid fa-circle-dot fa-beat"></i> AGUARDANDO PAGAMENTO
             </div>
             
-            <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 10px;">Escaneie o QR Code</h2>
-            <p style="font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 25px;">Utilize o app do seu banco para pagar.</p>
+            <h2 style="font-size: 1.5rem; font-weight: 700; color: #000; margin-bottom: 10px;">Pagar com Pix</h2>
+            <p style="font-size: 13px; color: var(--samsung-text-sub); margin-bottom: 25px;">Escaneie o QR Code abaixo no app do seu banco.</p>
 
             <div class="qr-card">
                 <div id="qrcode"></div>
             </div>
 
             <div class="copy-box">
-                <p style="font-size: 9px; color: var(--nio-blue); font-weight: 800; margin-bottom: 8px; text-transform: uppercase;">Pix Copia e Cola</p>
-                <div id="pixStringText" class="pix-code">Carregando código...</div>
+                <p style="font-size: 10px; color: var(--samsung-blue); font-weight: 700; margin-bottom: 8px; text-transform: uppercase;">Copia e Cola</p>
+                <div id="pixStringText" class="pix-code">Processando chave de pagamento...</div>
             </div>
 
             <button class="btn-copy" onclick="copyPixCode()">
-                <i class="fa-solid fa-copy"></i> COPIAR CÓDIGO PIX
+                <i class="fa-solid fa-copy"></i> Copiar Código Pix
             </button>
 
-            <p style="margin-top: 30px; font-size: 11px; color: rgba(255,255,255,0.3); text-decoration: underline; cursor: pointer;" onclick="location.reload()">
-                Cancelar e voltar
+            <p style="margin-top: 30px; font-size: 13px; color: var(--samsung-blue); font-weight: 600; cursor: pointer;" onclick="location.reload()">
+                Cancelar e voltar ao início
             </p>
         </div>
 
@@ -365,31 +385,28 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
         import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // Your web app's Firebase configuration
+        // NOVO FIREBASE CONFIG (SAMSUNG PROJECT)
         const firebaseConfig = {
-          apiKey: "AIzaSyB2c4YTETLBLpYMW8ZnsdBWZoO8sj64Ql8",
-          authDomain: "nio0-dad5d.firebaseapp.com",
-          projectId: "nio0-dad5d",
-          storageBucket: "nio0-dad5d.firebasestorage.app",
-          messagingSenderId: "251157805045",
-          appId: "1:251157805045:web:6209ee6229fb7de31352bc",
-          measurementId: "G-5QP9TDBLQM"
+            apiKey: "AIzaSyBEwr-HGUXvLZwH15TFWbXI6Q4sdxbqsTw",
+            authDomain: "sasung-4e6c1.firebaseapp.com",
+            projectId: "sasung-4e6c1",
+            storageBucket: "sasung-4e6c1.firebasestorage.app",
+            messagingSenderId: "803651036609",
+            appId: "1:803651036609:web:5b11a565d4aa705e28bb40",
+            measurementId: "G-L31X649B5T"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
         const db = getFirestore(app);
         const auth = getAuth(app);
 
         let userUID = null;
         let userData = null;
-        // MANTENHA A URL DO PIPEDREAM ATUALIZADA AQUI
-        const PIPEDREAM_URL = "https://eoj436mi1cazadb.m.pipedream.net";
+        // URL ATUALIZADA DO PIPEDREAM
+        const PIPEDREAM_URL = "https://eoy1zbkrvq827ne.m.pipedream.net";
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -409,7 +426,16 @@
         window.copyPixCode = () => {
             const text = document.getElementById('pixStringText').innerText;
             navigator.clipboard.writeText(text);
-            Swal.fire({ toast: true, position: 'top', icon: 'success', title: 'Copiado!', showConfirmButton: false, timer: 2000 });
+            Swal.fire({ 
+                toast: true, 
+                position: 'top', 
+                icon: 'success', 
+                title: 'Copiado para o clipboard!', 
+                showConfirmButton: false, 
+                timer: 2000,
+                background: '#ffffff',
+                color: '#000000'
+            });
         };
 
         window.handleDeposit = async () => {
@@ -417,12 +443,16 @@
             const amount = parseFloat(amountInput.value);
             const btn = document.getElementById('btnSubmit');
 
+            if (!userUID) {
+                return Swal.fire({title: "Aguarde", text: "Sincronizando conta...", icon: "info", confirmButtonColor: '#034EA2'});
+            }
+
             if (isNaN(amount) || amount < 30) {
-                return Swal.fire("Valor Inválido", "O depósito mínimo é de R$ 30,00", "warning");
+                return Swal.fire({title: "Valor inválido", text: "O depósito mínimo permitido é de R$ 30,00", icon: "warning", confirmButtonColor: '#034EA2'});
             }
 
             btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> GERANDO PIX...';
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> GERANDO PIX...';
 
             try {
                 const res = await fetch(PIPEDREAM_URL, {
@@ -431,16 +461,18 @@
                     body: JSON.stringify({ 
                         userId: userUID, 
                         amount: amount, 
-                        userName: userData?.nome || "Cliente NIO" 
+                        userName: userData?.nome || "Cliente Samsung",
+                        email: userData?.email || "contato@samsung.com",
+                        cpf: userData?.cpf || "00000000000"
                     })
                 });
 
                 if (!res.ok) throw new Error("Erro na rede");
 
                 const data = await res.json();
-                console.log("Resposta Pipedream:", data);
-
-                const brCode = data.pix_code || data.qrcode || (data.body && data.body.pix_code);
+                
+                // Busca o código do PIX em diferentes estruturas possíveis de retorno
+                const brCode = data.pix_code || data.qrcode || (data.pix && data.pix.payload) || (data.body && data.body.pix_code);
 
                 if (brCode) {
                     document.getElementById('depositForm').style.display = 'none';
@@ -452,21 +484,21 @@
                     
                     new QRCode(qrDiv, { 
                         text: brCode, 
-                        width: 200, 
-                        height: 200,
+                        width: 180, 
+                        height: 180,
+                        colorDark: "#000000",
+                        colorLight: "#ffffff",
                         correctLevel : QRCode.CorrectLevel.M
                     });
                 } else { 
-                    console.error("Payload recebido sem código PIX:", data);
                     throw new Error("Resposta inválida do servidor"); 
                 }
             } catch (e) {
-                console.error("Erro completo:", e);
                 Swal.fire({
                     icon: 'error',
-                    title: 'Falha na Conexão',
-                    text: 'Não foi possível gerar o QR Code. Verifique se o valor é válido e tente novamente.',
-                    confirmButtonColor: '#00a3e0'
+                    title: 'Erro de comunicação',
+                    text: 'Não foi possível estabelecer conexão para gerar o pagamento. Tente novamente mais tarde.',
+                    confirmButtonColor: '#034EA2'
                 });
                 btn.disabled = false;
                 btn.innerText = "Gerar Pagamento";
