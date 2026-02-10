@@ -3,287 +3,472 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NIO - Experience Progress</title>
-    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+    <title>Samsung - Progress & Experience Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
-            --nio-blue: #00a3e0;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --neon-glow: rgba(0, 163, 224, 0.3);
-        }
-
-        /* REMOVE A BORDA AZUL E REALCE DE TOQUE */
-        *:focus {
-            outline: none !important;
+            /* PALETA SAMSUNG: AZUL, BRANCO E CINZA */
+            --nio-blue: #034EA2; 
+            --dark-bg: #f4f4f4;
+            --card-bg: #ffffff;
+            --border-glass: #dddddd;
+            --nio-gradient: linear-gradient(135deg, #034EA2 0%, #002e67 100%);
+            --popular-gold: #ffd700;
+            --locked-red: #e11f26;
+            --text-main: #000000;
+            --text-sub: #555555;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', 'Segoe UI', sans-serif;
-            -webkit-tap-highlight-color: transparent; 
+            font-family: 'Samsung One', 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: #02060d;
-            height: 100vh;
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            padding-bottom: 110px;
+            overflow-x: hidden;
+            background-image: none;
+        }
+
+        .fab-roleta {
+            position: fixed;
+            bottom: 120px;
+            right: 20px;
+            width: 65px;
+            height: 65px;
+            background: var(--nio-gradient);
+            border-radius: 50%;
             display: flex;
-            justify-content: center;
             align-items: center;
-            overflow: hidden;
-            background-image: 
-                radial-gradient(circle at center, #0a1a2f 0%, #02060d 100%);
-        }
-
-        .premium-card {
-            width: 90%;
-            max-width: 390px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border);
-            border-radius: 40px;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
-            position: relative;
-            z-index: 1;
-        }
-
-        .banner-wrapper {
-            width: 100%;
-            height: 280px;
-            position: relative;
-            overflow: hidden;
-            border-radius: 40px 40px 0 0;
-        }
-
-        .banner-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transform: scale(1.05);
-        }
-
-        .banner-wrapper::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 70%;
-            background: linear-gradient(to top, rgba(2, 6, 13, 1) 0%, transparent 100%);
-        }
-
-        .content-area {
-            padding: 10px 35px 45px;
-            text-align: center;
-        }
-
-        .brand-title {
-            font-size: 2.8rem;
-            font-weight: 200;
-            letter-spacing: 20px;
-            text-transform: uppercase;
-            color: #fff;
-            margin-right: -20px;
-            margin-bottom: 35px;
-            opacity: 0.9;
-        }
-
-        .input-wrapper {
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .input-wrapper input {
-            width: 100%;
-            padding: 20px 20px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            color: white;
-            font-size: 15px;
-            outline: none;
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .input-wrapper input:focus {
-            border-color: var(--nio-blue);
-            background: rgba(0, 0, 0, 0.7);
-            box-shadow: 0 0 25px var(--neon-glow);
-        }
-
-        .btn-glow {
-            width: 100%;
-            padding: 20px;
-            background: var(--nio-blue);
-            color: white;
-            border: none;
-            border-radius: 20px;
-            font-size: 15px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(3, 78, 162, 0.4);
+            z-index: 9999;
             cursor: pointer;
-            transition: 0.4s;
-            box-shadow: 0 15px 30px rgba(0, 163, 224, 0.2);
-            margin-top: 10px;
-        }
-
-        .btn-glow:active {
-            transform: scale(0.98);
-        }
-
-        .btn-outline {
-            display: block;
-            width: 100%;
-            padding: 18px;
-            background: transparent;
-            color: rgba(255, 255, 255, 0.4);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            font-size: 13px;
+            border: 2px solid #ffffff;
+            animation: bounce 2s infinite;
             text-decoration: none;
-            margin-top: 20px;
+        }
+
+        .fab-roleta i {
+            font-size: 30px;
+            color: white;
+            animation: spin 4s infinite linear;
+        }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        .header-slider {
+            width: 92%;
+            height: 220px;
+            margin: 15px auto;
+            overflow: hidden;
+            border-radius: 20px;
+            border: 1px solid var(--border-glass);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            background: #fff;
+        }
+
+        .swiper-container { width: 100%; height: 100%; }
+        .swiper-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            padding: 10px 20px 20px;
+        }
+
+        .action-item { text-align: center; text-decoration: none; color: var(--text-main); }
+
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            background: #ffffff;
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-size: 22px;
+            color: var(--nio-blue);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .action-item span { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-sub); }
+
+        .tabs-container { display: flex; padding: 0 20px; gap: 10px; margin-bottom: 25px; }
+
+        .tab-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 15px;
+            border: 1px solid var(--border-glass);
+            background: #ffffff;
+            color: var(--text-sub);
+            font-weight: 800;
+            text-align: center;
+            font-size: 12px;
+            cursor: pointer;
             transition: 0.3s;
         }
 
-        .btn-outline:hover {
+        .tab-btn.active { background: var(--nio-blue); color: white; border-color: var(--nio-blue); box-shadow: 0 5px 15px rgba(3, 78, 162, 0.2); }
+
+        .plans-list { padding: 0 20px; }
+
+        .plan-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glass);
+            border-radius: 25px;
+            margin-bottom: 35px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+        }
+
+        .plan-card.locked { opacity: 0.7; filter: grayscale(0.5); }
+
+        .plan-img-container { width: 100%; height: 250px; position: relative; background: #fff; overflow: hidden; }
+        .plan-img-container img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        .plan-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--nio-blue);
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            z-index: 2;
             color: white;
-            border-color: white;
-            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
-        ::placeholder { color: rgba(255, 255, 255, 0.2); }
+        .plan-badge.popular { background: var(--popular-gold); color: black; }
+        .plan-badge.locked-badge { background: var(--locked-red); color: white; }
 
-        /* ESTILIZAÇÃO COMPACTA DO SWEETALERT NIO */
-        .nio-swal-popup {
-            width: 300px !important; /* Menor largura */
-            background: rgba(10, 26, 47, 0.98) !important;
-            backdrop-filter: blur(10px) !important;
-            border: 1px solid var(--nio-blue) !important;
-            border-radius: 20px !important;
-            color: #fff !important;
-            padding: 15px !important;
+        .plan-info { padding: 20px; }
+
+        .plan-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .plan-title { font-size: 1.1rem; font-weight: 600; color: var(--text-main); }
+        .plan-price { font-size: 1.4rem; color: var(--nio-blue); font-weight: 800; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid #eee;
         }
-        .nio-swal-title {
-            font-size: 18px !important;
-            font-weight: 600 !important;
+
+        .stat-box { text-align: center; }
+        .stat-box h4 { font-size: 14px; color: var(--nio-blue); font-weight: 700; }
+        .stat-box p { font-size: 9px; color: var(--text-sub); margin-top: 4px; text-transform: uppercase; font-weight: bold; }
+
+        .btn-buy {
+            width: 100%;
+            padding: 18px;
+            background: var(--nio-gradient);
+            color: white;
+            border: none;
+            border-radius: 18px;
+            font-weight: 900;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 8px 20px rgba(3, 78, 162, 0.2);
+            cursor: pointer;
+            transition: 0.3s;
         }
-        .nio-swal-html {
-            font-size: 14px !important;
+
+        .btn-buy:disabled { background: #bbb; box-shadow: none; cursor: not-allowed; }
+        .btn-buy:active:not(:disabled) { transform: scale(0.95); }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0 30px;
+            border-top: 1px solid var(--border-glass);
+            z-index: 1000;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
         }
-        .nio-swal-button {
-            background: var(--nio-blue) !important;
-            border-radius: 12px !important;
-            padding: 8px 25px !important;
-            font-size: 13px !important;
-            font-weight: 700 !important;
-            text-transform: uppercase !important;
-        }
+
+        .nav-item { text-align: center; color: #999; text-decoration: none; font-size: 10px; font-weight: 700; }
+        .nav-item.active { color: var(--nio-blue); }
+        .nav-item i { font-size: 22px; display: block; margin-bottom: 6px; }
     </style>
 </head>
 <body>
 
-    <div class="premium-card">
-        <div class="banner-wrapper">
-            <img src="carronio.jpg" alt="NIO Vision">
+    <a href="roleta.html" class="fab-roleta">
+        <i class="fa-solid fa-dharmachakra"></i>
+    </a>
+
+    <section class="header-slider">
+        <div class="swiper swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="logo1.jpg" alt="Logo 1"></div>
+                <div class="swiper-slide"><img src="logo2.jpg" alt="Logo 2"></div>
+                <div class="swiper-slide"><img src="logo1.jpg" alt="Logo 1"></div>
+            </div>
         </div>
+    </section>
 
-        <div class="content-area">
-            <h1 class="brand-title">NIO</h1>
-            
-            <form id="loginForm">
-                <div class="input-wrapper">
-                    <input type="email" id="email" placeholder="Seu e-mail" required>
-                </div>
-
-                <div class="input-wrapper">
-                    <input type="password" id="password" placeholder="Senha de segurança" required>
-                </div>
-
-                <button type="submit" class="btn-glow" id="btnLogin">Conectar</button>
-                <a href="registro.html" class="btn-outline">Criar nova conta NIO</a>
-            </form>
-        </div>
+    <div class="action-grid">
+        <a href="deposito.html" class="action-item"><div class="icon-box"><i class="fa-solid fa-bolt-lightning"></i></div><span>Recarga</span></a>
+        <a href="saque.html" class="action-item"><div class="icon-box"><i class="fa-solid fa-receipt"></i></div><span>Retirada</span></a>
+        <a href="https://t.me/Sansung0000" class="action-item" target="_blank"><div class="icon-box"><i class="fa-solid fa-network-wired"></i></div><span>Grupo</span></a>
+        <a href="https://t.me/Sansung000" class="action-item" target="_blank"><div class="icon-box"><i class="fa-solid fa-headset"></i></div><span>Suporte</span></a>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <div class="tabs-container">
+        <div class="tab-btn active" id="tab-estabilizar">ESTABILIZAR</div>
+        <div class="tab-btn" id="tab-avancado">AVANÇADO</div>
+    </div>
 
+    <div class="plans-list" id="render-plans"></div>
+
+    <nav class="bottom-nav">
+        <a href="home.html" class="nav-item active"><i class="fa-solid fa-house-chimney"></i>HOME</a>
+        <a href="ativos.html" class="nav-item"><i class="fa-solid fa-microchip"></i>ATIVOS</a>
+        <a href="indicacao.html" class="nav-item"><i class="fa-solid fa-share-nodes"></i>CONVITE</a>
+        <a href="perfil.html" class="nav-item"><i class="fa-solid fa-user-astronaut"></i>PERFIL</a>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-        
-        const firebaseConfig = {
-          apiKey: "AIzaSyB2c4YTETLBLpYMW8ZnsdBWZoO8sj64Ql8",
-          authDomain: "nio0-dad5d.firebaseapp.com",
-          projectId: "nio0-dad5d",
-          storageBucket: "nio0-dad5d.firebasestorage.app",
-          messagingSenderId: "251157805045",
-          appId: "1:251157805045:web:6209ee6229fb7de31352bc",
-          measurementId: "G-5QP9TDBLQM"
-        };
+        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, serverTimestamp, increment, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBEwr-HGUXvLZwH15TFWbXI6Q4sdxbqsTw",
+            authDomain: "sasung-4e6c1.firebaseapp.com",
+            projectId: "sasung-4e6c1",
+            storageBucket: "sasung-4e6c1.firebasestorage.app",
+            messagingSenderId: "803651036609",
+            appId: "1:803651036609:web:5b11a565d4aa705e28bb40",
+            measurementId: "G-L31X649B5T"
+        };
+        
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // FUNÇÃO DE ALERTA COMPACTO NIO
-        const nioAlert = (title, text, icon) => {
-            return Swal.fire({
-                title: title,
-                text: text,
-                icon: icon,
-                width: '300px',
-                position: 'center',
-                showConfirmButton: true,
-                customClass: {
-                    popup: 'nio-swal-popup',
-                    title: 'nio-swal-title',
-                    htmlContainer: 'nio-swal-html',
-                    confirmButton: 'nio-swal-button'
-                },
-                buttonsStyling: false
+        const planosEstabilizar = [
+            { id: 1, nome: "Samsung Galaxy S24 Ultra", valor: 30, img: "ativo1.jpg", badge: "Popular", status: "disponivel" },
+            { id: 2, nome: "Samsung Galaxy Z Fold5", valor: 50, img: "ativo2.jpg", badge: "Premium", status: "disponivel" },
+            { id: 3, nome: "Samsung Galaxy S23 FE", valor: 100, img: "ativo3.jpg", badge: "Premium", status: "disponivel" },
+            { id: 4, nome: "Samsung S-Series Pro", valor: 200, img: "ativo4.jpg", badge: "Premium", status: "disponivel" },
+            { id: 5, nome: "Samsung Fold Vision", valor: 400, img: "ativo5.jpg", badge: "Premium", status: "disponivel" },
+            { id: 6, nome: "Samsung Galaxy X-Max", valor: 600, img: "ativo6.jpg", badge: "Premium", status: "disponivel" },
+            { id: 7, nome: "Samsung Ultimate S25", valor: 800, img: "ativo7.jpg", badge: "Premium", status: "disponivel" }
+        ];
+
+        const planosAvancados = [
+            { id: 101, nome: "Samsung Enterprise X1", valor: 1000, img: "ativo8.jpg", badge: "Indisponível", status: "bloqueado" },
+            { id: 102, nome: "Samsung Enterprise X2", valor: 1500, img: "ativo9.jpg", badge: "Indisponível", status: "bloqueado" },
+            { id: 103, nome: "Samsung Enterprise X3", valor: 2000, img: "ativo10.jpg", badge: "Indisponível", status: "bloqueado" }
+        ];
+
+        let abaAtual = 'estabilizar';
+
+        function renderPlanos() {
+            const container = document.getElementById('render-plans');
+            if (!container) return;
+            container.innerHTML = '';
+            const listaParaRenderizar = (abaAtual === 'estabilizar') ? planosEstabilizar : planosAvancados;
+
+            listaParaRenderizar.forEach(plano => {
+                const lucroDiario = plano.valor * 0.20;
+                const lucroTotal = lucroDiario * 120;
+                const isLocked = plano.status === 'bloqueado';
+                const badgeClass = plano.id === 1 ? 'popular' : (isLocked ? 'locked-badge' : '');
+                
+                container.innerHTML += `
+                    <div class="plan-card ${isLocked ? 'locked' : ''}">
+                        <div class="plan-img-container">
+                            <span class="plan-badge ${badgeClass}">${plano.badge}</span>
+                            <img src="${plano.img}" alt="${plano.nome}">
+                        </div>
+                        <div class="plan-info">
+                            <div class="plan-header">
+                                <h2 class="plan-title">${plano.nome}</h2>
+                                <span class="plan-price">R$ ${plano.valor}</span>
+                            </div>
+                            <div class="stats-grid">
+                                <div class="stat-box"><h4>R$ ${lucroDiario.toFixed(2)}</h4><p>Lucro Diário</p></div>
+                                <div class="stat-box"><h4>R$ ${lucroTotal.toFixed(2)}</h4><p>Retorno Final</p></div>
+                                <div class="stat-box"><h4>120 dias</h4><p>Ciclo</p></div>
+                            </div>
+                            <button class="btn-buy" 
+                                    ${isLocked ? 'disabled' : ''} 
+                                    onclick="comprarPlano(${plano.id}, ${plano.valor}, '${abaAtual}')">
+                                ${isLocked ? 'Em Breve' : 'Investir Agora'}
+                            </button>
+                        </div>
+                    </div>`;
             });
+        }
+
+        async function processarBonusRede(userData, valorPlano) {
+            if (userData.hasMadeFirstPurchase === true) return;
+            const rede = [
+                { uid: userData.indicadoPor, porc: 0.15, nivel: 1 },
+                { uid: userData.nivel2, porc: 0.03, nivel: 2 },
+                { uid: userData.nivel3, porc: 0.01, nivel: 3 }
+            ];
+            for (const el of rede) {
+                if (el.uid && el.uid !== "direto" && el.uid !== "") {
+                    try {
+                        const padrinhoRef = doc(db, "users", el.uid);
+                        const padrinhoSnap = await getDoc(padrinhoRef);
+                        if (padrinhoSnap.exists()) {
+                            const bonusMoney = Number((valorPlano * el.porc).toFixed(2));
+                            let updates = {
+                                saldoLucro: increment(bonusMoney),
+                                totalComissaoRede: increment(bonusMoney)
+                            };
+                            if (el.nivel === 1) {
+                                updates.girosRoleta = increment(1);
+                            }
+                            await updateDoc(padrinhoRef, updates);
+                            await addDoc(collection(db, "transacoes"), {
+                                userId: el.uid,
+                                tipo: "comissao_rede",
+                                valor: bonusMoney,
+                                nivel: el.nivel,
+                                de: userData.nome || "Novo Membro",
+                                data: serverTimestamp()
+                            });
+                        }
+                    } catch (e) {
+                        console.error("Erro ao processar bônus para " + el.uid, e);
+                    }
+                }
+            }
+        }
+
+        window.comprarPlano = async (id, preco, tipoAba) => {
+            const user = auth.currentUser;
+            if (!user) {
+                Swal.fire("Acesso Negado", "Realize login para investir.", "error");
+                return;
+            }
+            try {
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+                if (!userSnap.exists()) return;
+                const userData = userSnap.data();
+                const saldoAtual = Number(userData.saldo || 0);
+                if (saldoAtual < preco) {
+                    Swal.fire("Saldo Insuficiente", "Recarregue sua conta para prosseguir.", "warning");
+                    return;
+                }
+                const result = await Swal.fire({
+                    title: 'Confirmar Ativação?',
+                    text: `O valor de R$ ${preco} será debitado do seu saldo.`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#034EA2',
+                    cancelButtonColor: '#333',
+                    confirmButtonText: 'ATIVAR AGORA',
+                    cancelButtonText: 'CANCELAR'
+                });
+                if (result.isConfirmed) {
+                    const btn = event.target;
+                    btn.disabled = true;
+                    btn.innerText = "PROCESSANDO...";
+                    if (!userData.hasMadeFirstPurchase) {
+                        await processarBonusRede(userData, preco);
+                    }
+                    await updateDoc(userRef, {
+                        saldo: increment(-Number(preco)),
+                        totalInvestido: increment(Number(preco)),
+                        hasMadeFirstPurchase: true,
+                        isVip: true
+                    });
+                    const listaSource = (tipoAba === 'estabilizar') ? planosEstabilizar : planosAvancados;
+                    const infoPlano = listaSource.find(p => p.id === id);
+                    const timestampAgora = Date.now();
+                    await addDoc(collection(db, "ativos"), {
+                        userId: user.uid,
+                        planoId: id,
+                        nome: infoPlano.nome,
+                        valorInvestido: Number(preco),
+                        lucroDiario: Number((preco * 0.20).toFixed(2)),
+                        dataCompra: serverTimestamp(),
+                        timestampCompra: timestampAgora,
+                        ultimoPagamento: timestampAgora,
+                        cicloRestante: 120,
+                        status: "ativo",
+                        totalColhido: 0,
+                        lucroTotalAcumulado: 0
+                    });
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Investimento Ativado!',
+                        text: 'Seu plano Samsung já está gerando rendimentos.',
+                        confirmButtonColor: '#034EA2'
+                    }).then(() => {
+                        window.location.href = "ativos.html";
+                    });
+                }
+            } catch (err) {
+                console.error(err);
+                Swal.fire("Erro Operacional", "Não foi possível concluir a compra. Tente novamente.", "error");
+            }
         };
 
-        const form = document.getElementById('loginForm');
-        const btnLogin = document.getElementById('btnLogin');
+        const btnEst = document.getElementById('tab-estabilizar');
+        const btnAva = document.getElementById('tab-avancado');
+        if(btnEst) {
+            btnEst.addEventListener('click', () => {
+                abaAtual = 'estabilizar';
+                btnEst.classList.add('active');
+                if(btnAva) btnAva.classList.remove('active');
+                renderPlanos();
+            });
+        }
+        if(btnAva) {
+            btnAva.addEventListener('click', () => {
+                abaAtual = 'avancado';
+                btnAva.classList.add('active');
+                if(btnEst) btnEst.classList.remove('active');
+                renderPlanos();
+            });
+        }
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+        new Swiper('.swiper-container', {
+            loop: true,
+            autoplay: { delay: 4000, disableOnInteraction: false },
+            speed: 800
+        });
 
-            btnLogin.disabled = true;
-            btnLogin.innerText = "CONECTANDO...";
-
-            try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                nioAlert('Sucesso', 'Conexão estabelecida com sucesso!', 'success').then(() => {
-                    window.location.href = "home.html";
-                });
-
-            } catch (error) {
-                console.error(error);
-                let msg = "Erro ao conectar. Verifique seus dados.";
-                
-                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-                    msg = "E-mail ou senha incorretos.";
-                } else if (error.code === 'auth/too-many-requests') {
-                    msg = "Muitas tentativas. Tente mais tarde.";
-                }
-
-                nioAlert('Falha', msg, 'error');
-                btnLogin.disabled = false;
-                btnLogin.innerText = "CONECTAR";
-            }
+        onAuthStateChanged(auth, (user) => {
+            renderPlanos();
         });
     </script>
 </body>
