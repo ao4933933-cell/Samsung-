@@ -3,22 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Samsung Pay - Retirada</title>
+    <title>Samsung - Rewards & Loyalty</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
     <style>
         :root {
-            /* PALETA SAMSUNG ONE UI */
+            /* PALETA SAMSUNG ATUALIZADA */
             --samsung-blue: #034EA2; 
-            --samsung-bg: #f4f4f4;
-            --samsung-card: #ffffff;
-            --samsung-border: #dddddd;
-            --samsung-text-main: #000000;
-            --samsung-text-sub: #555555;
-            --samsung-success: #2fb13b;
-            --samsung-error: #e52e2e;
+            --dark-bg: #f4f4f4;
+            --card-bg: #ffffff;
+            --border-color: #dddddd;
+            --text-main: #000000;
+            --text-sub: #555555;
+            --profit-green: #2fb13b;
             --samsung-gradient: linear-gradient(135deg, #034EA2 0%, #002e67 100%);
+        }
+
+        /* REMOVE A BORDA AZUL E REALCE DE TOQUE */
+        *:focus {
+            outline: none !important;
         }
 
         * {
@@ -26,459 +29,457 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Samsung One', 'Inter', 'Segoe UI', sans-serif;
-            -webkit-tap-highlight-color: transparent;
+            -webkit-tap-highlight-color: transparent; 
         }
 
         body {
-            background-color: var(--samsung-bg);
-            color: var(--samsung-text-main);
+            background-color: var(--dark-bg);
+            color: var(--text-main);
             min-height: 100vh;
-            padding-bottom: 40px;
-        }
-
-        /* Estilização SweetAlert Samsung Style */
-        .premium-swal-popup {
-            background: #ffffff !important;
-            border-radius: 28px !important;
-            padding: 1.5em !important;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
-        }
-        .premium-swal-title {
-            color: #000 !important;
-            font-weight: 700 !important;
-            font-size: 1.4rem !important;
-        }
-        .premium-swal-html {
-            color: #555 !important;
-            font-size: 0.95rem !important;
-        }
-        .premium-swal-confirm {
-            background: var(--samsung-blue) !important;
-            border-radius: 50px !important;
-            padding: 12px 35px !important;
-            font-weight: 700 !important;
-            margin: 10px !important;
-        }
-        .premium-swal-cancel {
-            background: #eee !important;
-            color: #333 !important;
-            border-radius: 50px !important;
-            padding: 12px 35px !important;
-            font-weight: 700 !important;
-            margin: 10px !important;
-        }
-
-        .premium-header {
-            padding: 20px 25px;
             display: flex;
+            flex-direction: column;
             align-items: center;
+            padding: 20px 20px 100px 20px;
+            overflow-x: hidden;
+        }
+
+        /* NAVEGAÇÃO SUPERIOR */
+        .top-nav {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
             justify-content: space-between;
-            background: #fff;
-            border-bottom: 1px solid var(--samsung-border);
+            align-items: center;
+            margin-bottom: 30px;
         }
 
         .btn-back {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .user-stats { text-align: right; }
+        .user-stats span { display: block; font-size: 10px; color: var(--samsung-blue); font-weight: 800; text-transform: uppercase; }
+        .user-stats h4 { font-size: 18px; color: var(--profit-green); font-weight: 700; }
+
+        /* HEADER */
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { font-weight: 700; letter-spacing: 2px; font-size: 28px; text-transform: uppercase; color: var(--samsung-blue); }
+        .header p { color: var(--text-sub); font-size: 12px; font-weight: 500; margin-top: 5px; }
+
+        /* PAINEL DE INSTRUÇÕES */
+        .info-panel {
+            width: 100%;
+            max-width: 500px;
+            background: #fff;
+            border-left: 4px solid var(--samsung-blue);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 12px;
+            line-height: 1.6;
+            color: var(--text-sub);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        /* CARDS GERAIS */
+        .section-card {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .card-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title h3 { font-size: 14px; letter-spacing: 1px; font-weight: 700; text-transform: uppercase; color: var(--text-main); }
+
+        /* GRID CHECK-IN */
+        .checkin-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .day-box {
             background: #f8f9fa;
-            border: 1px solid var(--samsung-border);
-            color: var(--samsung-text-main);
-            width: 40px;
-            height: 40px;
+            border: 1px solid var(--border-color);
+            aspect-ratio: 1/1;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        .header-title h1 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--samsung-text-main);
-        }
-
-        .withdraw-container {
-            padding: 25px 20px;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .balance-card {
-            background: var(--samsung-card);
-            border: 1px solid var(--samsung-border);
-            border-radius: 28px;
-            padding: 30px;
-            text-align: center;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-        }
-
-        .balance-card span {
             font-size: 12px;
-            color: var(--samsung-text-sub);
+            color: var(--text-sub);
+            transition: 0.3s;
             font-weight: 600;
         }
 
-        .balance-card h2 {
-            font-size: 2.4rem;
-            margin-top: 5px;
-            font-weight: 800;
-            color: var(--samsung-success);
-        }
+        .day-box.completed { border-color: var(--profit-green); color: var(--profit-green); background: rgba(47, 177, 59, 0.05); }
+        .day-box.current { border-color: var(--samsung-blue); color: #fff; background: var(--samsung-blue); transform: scale(1.05); font-weight: 900; }
 
-        .lock-notice {
-            background: #fff;
-            border: 1px solid var(--samsung-border);
-            border-radius: 22px;
+        .btn-main {
+            width: 100%;
             padding: 18px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        .lock-notice.open {
-            border-left: 5px solid var(--samsung-blue);
-        }
-
-        .lock-notice i { color: var(--samsung-blue); font-size: 20px; }
-        .lock-notice p { font-size: 12px; color: var(--samsung-text-sub); line-height: 1.5; font-weight: 500; }
-
-        .time-badge {
-            background: #eef2f7;
-            color: var(--samsung-blue);
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-weight: 700;
-        }
-
-        .pix-type-selector {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .type-option {
-            background: #fff;
-            border: 1px solid var(--samsung-border);
-            padding: 15px;
             border-radius: 18px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--samsung-text-sub);
-        }
-
-        .type-option.active {
-            border-color: var(--samsung-blue);
-            color: var(--samsung-blue);
-            background: #f0f4f9;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            color: var(--samsung-text-main);
-            margin-bottom: 10px;
-            font-weight: 700;
-            padding-left: 5px;
-        }
-
-        .input-box {
-            background: #fff;
-            border: 1px solid var(--samsung-border);
-            border-radius: 20px;
-            padding: 18px;
-            display: flex;
-            align-items: center;
-            transition: 0.3s;
-        }
-
-        .input-box:focus-within {
-            border-color: var(--samsung-blue);
-            box-shadow: 0 0 0 3px rgba(3, 78, 162, 0.1);
-        }
-
-        .input-box i {
-            color: var(--samsung-blue);
-            margin-right: 15px;
-            font-size: 18px;
-        }
-
-        .input-box input {
-            background: transparent;
             border: none;
-            color: #000;
-            font-size: 15px;
-            width: 100%;
-            outline: none;
-            font-weight: 600;
-        }
-
-        .btn-withdraw {
             background: var(--samsung-gradient);
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 22px;
-            border-radius: 50px;
-            font-size: 16px;
+            color: #fff;
             font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
             cursor: pointer;
-            box-shadow: 0 8px 15px rgba(3, 78, 162, 0.2);
             transition: 0.3s;
-            margin-top: 15px;
-        }
-        .btn-withdraw:active { transform: scale(0.98); }
-        .btn-withdraw:disabled {
-            background: #ccc;
-            box-shadow: none;
-            cursor: not-allowed;
+            box-shadow: 0 10px 20px rgba(3, 78, 162, 0.2);
         }
 
-        .rules-list {
-            margin-top: 30px;
-            padding: 20px;
+        .btn-main:disabled { background: #ccc; color: #888; cursor: not-allowed; opacity: 0.8; box-shadow: none; }
+
+        /* ROLETA */
+        .wheel-container { display: flex; flex-direction: column; align-items: center; position: relative; }
+        
+        .wheel-wrap {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 20px 0;
+        }
+
+        .wheel-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 8px solid #fff;
+            overflow: hidden;
+            transition: transform 5s cubic-bezier(0.1, 0, 0.1, 1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             background: #fff;
-            border-radius: 22px;
-            border: 1px solid var(--samsung-border);
         }
 
-        .rules-list p {
-            font-size: 11px;
-            color: var(--samsung-text-sub);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 500;
+        canvas { width: 100%; height: 100%; }
+
+        .spins-count {
+            background: rgba(3, 78, 162, 0.05);
+            padding: 8px 20px;
+            border-radius: 50px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: var(--samsung-blue);
+            font-weight: 700;
+            border: 1px solid rgba(3, 78, 162, 0.1);
         }
-        .rules-list p:last-child { margin-bottom: 0; }
+
+        /* CUSTOM SWEETALERT STYLES SAMSUNG */
+        .nio-swal-popup {
+            background: #ffffff !important;
+            border: 1px solid var(--samsung-blue) !important;
+            border-radius: 25px !important;
+            padding: 1.5rem !important;
+            width: 320px !important;
+        }
+        .nio-swal-title {
+            color: var(--samsung-blue) !important;
+            font-size: 20px !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+        }
+        .nio-swal-content {
+            color: var(--text-sub) !important;
+            font-size: 14px !important;
+        }
+        .nio-swal-confirm {
+            background: var(--samsung-gradient) !important;
+            border-radius: 12px !important;
+            padding: 12px 30px !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            font-size: 12px !important;
+            border: none !important;
+            color: #fff !important;
+            margin-top: 10px !important;
+        }
     </style>
 </head>
 <body>
 
-    <header class="premium-header">
-        <a href="perfil.html" class="btn-back"><i class="fa-solid fa-chevron-left"></i></a>
-        <div class="header-title"><h1>Retirada de Saldo</h1></div>
-        <div style="width: 40px;"></div>
-    </header>
+    <nav class="top-nav">
+        <a href="home.html" class="btn-back">
+            <i class="fa-solid fa-chevron-left"></i> VOLTAR
+        </a>
+        <div class="user-stats">
+            <span>Saldo Lucro</span>
+            <h4 id="displaySaldoLucro">R$ 0,00</h4>
+        </div>
+    </nav>
 
-    <main class="withdraw-container">
+    <div class="header">
+        <h1>SAMSUNG</h1>
+        <p>Experiência de Recompensas</p>
+    </div>
+
+    <div class="info-panel">
+        <i class="fa-solid fa-circle-info" style="color: var(--samsung-blue)"></i> 
+        <b>Informativo:</b> Os giros são liberados após validação de indicações. O ciclo de fidelidade é atualizado automaticamente à meia-noite.
+    </div>
+
+    <div class="section-card">
+        <div class="card-title">
+            <h3>Check-in de Fidelidade</h3>
+            <i class="fa-solid fa-calendar-check" style="color: var(--samsung-blue)"></i>
+        </div>
+        <div class="checkin-grid" id="checkinGrid"></div>
+        <button class="btn-main" id="checkinBtn">Coletar Recompensa</button>
+    </div>
+
+    <div class="section-card wheel-container">
+        <div class="card-title" style="width: 100%;">
+            <h3>Giro da Sorte</h3>
+            <i class="fa-solid fa-贈物" style="color: var(--samsung-blue)"></i>
+        </div>
+        <div class="spins-count" id="girosDisponiveis">Giros: 0</div>
         
-        <div class="balance-card">
-            <span>Lucros Disponíveis</span>
-            <h2 id="userBalance">R$ 0,00</h2>
-        </div>
-
-        <div class="lock-notice open" id="timeLockNotice">
-            <i class="fa-solid fa-clock"></i>
-            <p id="lockMessage">Janela de saque ativa das <span class="time-badge">10:00</span> às <span class="time-badge">17:00</span>. Processamento via Samsung Finance.</p>
-        </div>
-
-        <div class="form-group">
-            <label>Tipo de Chave PIX</label>
-            <div class="pix-type-selector">
-                <div class="type-option active" onclick="selectPixType('cpf', this)">CPF</div>
-                <div class="type-option" onclick="selectPixType('email', this)">E-MAIL</div>
+        <div class="wheel-wrap">
+            <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); z-index: 100; color: var(--samsung-blue); font-size: 35px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));">
+                <i class="fa-solid fa-location-pin"></i>
             </div>
-        </div>
-
-        <div class="form-group">
-            <label id="pixLabel">Chave CPF Cadastrada</label>
-            <div class="input-box">
-                <i class="fa-solid fa-user-shield" id="pixIcon"></i>
-                <input type="text" id="pixKey" placeholder="000.000.000-00">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Valor para Resgate</label>
-            <div class="input-box">
-                <i class="fa-solid fa-money-bill-transfer"></i>
-                <input type="number" id="withdrawAmount" placeholder="Mínimo R$ 35,00" step="0.01">
-            </div>
-        </div>
-
-        <button class="btn-withdraw" id="btnAction" onclick="requestWithdraw()">Solicitar Resgate</button>
-
-        <div class="rules-list">
-            <p><i class="fa-solid fa-check-circle" style="color: var(--samsung-success);"></i> Saque exclusivo para lucros operacionais.</p>
-            <p><i class="fa-solid fa-percentage" style="color: var(--samsung-blue);"></i> Taxa de processamento bancário: 10%.</p>
-            <p><i class="fa-solid fa-shield-halved" style="color: var(--samsung-blue);"></i> Verificação de segurança obrigatória.</p>
-        </div>
-
-    </main>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, onSnapshot, collection, addDoc, serverTimestamp, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-        // NOVO FIREBASE CONFIG (SAMSUNG PROJECT)
-        const firebaseConfig = {
-            apiKey: "AIzaSyBEwr-HGUXvLZwH15TFWbXI6Q4sdxbqsTw",
-            authDomain: "sasung-4e6c1.firebaseapp.com",
-            projectId: "sasung-4e6c1",
-            storageBucket: "sasung-4e6c1.firebasestorage.app",
-            messagingSenderId: "803651036609",
-            appId: "1:803651036609:web:5b11a565d4aa705e28bb40",
-            measurementId: "G-L31X649B5T"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-
-        let userUID = null;
-        let userDataGlobal = null;
-        let currentSaldoLucro = 0; 
-        let selectedPixType = 'cpf';
-
-        // Helper para SweetAlert Estilo One UI
-        const Toast = Swal.mixin({
-            customClass: {
-                popup: 'premium-swal-popup',
-                title: 'premium-swal-title',
-                htmlContainer: 'premium-swal-html',
-                confirmButton: 'premium-swal-confirm',
-                cancelButton: 'premium-swal-cancel'
-            },
-            buttonsStyling: false,
-            background: 'transparent'
-        });
-
-        window.selectPixType = function(type, el) {
-            selectedPixType = type;
-            document.querySelectorAll('.type-option').forEach(opt => opt.classList.remove('active'));
-            el.classList.add('active');
             
-            const label = document.getElementById('pixLabel');
-            const input = document.getElementById('pixKey');
-            const icon = document.getElementById('pixIcon');
+            <div class="wheel-inner" id="wheel">
+                <canvas id="canvas"></canvas>
+            </div>
+        </div>
+        
+        <button class="btn-main" id="spinBtn">Girar Agora</button>
+    </div>
 
-            if(type === 'cpf') {
-                label.innerText = "Chave CPF Cadastrada";
-                input.placeholder = "000.000.000-00";
-                icon.className = "fa-solid fa-user-shield";
-            } else if(type === 'email') {
-                label.innerText = "Chave E-mail Cadastrada";
-                input.placeholder = "exemplo@email.com";
-                icon.className = "fa-solid fa-envelope";
-            }
-        }
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, updateDoc, increment, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                userUID = user.uid;
-                checkTimeWindow();
-                onSnapshot(doc(db, "users", user.uid), (docSnap) => {
-                    if (docSnap.exists()) {
-                        userDataGlobal = docSnap.data();
-                        currentSaldoLucro = userDataGlobal.saldoLucro || 0; 
-                        document.getElementById('userBalance').innerText = `R$ ${currentSaldoLucro.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-                    }
-                });
-            } else {
-                window.location.href = "login.html";
-            }
+    // Firebase configuration conforme solicitado
+    const firebaseConfig = {
+      apiKey: "AIzaSyBEwr-HGUXvLZwH15TFWbXI6Q4sdxbqsTw",
+      authDomain: "sasung-4e6c1.firebaseapp.com",
+      projectId: "sasung-4e6c1",
+      storageBucket: "sasung-4e6c1.firebasestorage.app",
+      messagingSenderId: "803651036609",
+      appId: "1:803651036609:web:5b11a565d4aa705e28bb40",
+      measurementId: "G-L31X649B5T"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const nioAlert = Swal.mixin({
+        customClass: {
+            popup: 'nio-swal-popup',
+            title: 'nio-swal-title',
+            htmlContainer: 'nio-swal-content',
+            confirmButton: 'nio-swal-confirm'
+        },
+        buttonsStyling: false,
+        background: '#fff',
+        confirmButtonText: 'CONTINUAR'
+    });
+
+    let currentRotation = 0;
+    let isSpinning = false;
+
+    // Prêmios com cores Samsung e pesos de probabilidade
+    const prizes = [
+        { label: "R$ 2", value: 2, color: "#034EA2", weight: 33 },
+        { label: "R$ 4", value: 4, color: "#002e67", weight: 33 },
+        { label: "R$ 6", value: 6, color: "#034EA2", weight: 33 },
+        { label: "R$ 8", value: 8, color: "#002e67", weight: 0.2 },
+        { label: "R$ 10", value: 10, color: "#034EA2", weight: 0.2 },
+        { label: "R$ 12", value: 12, color: "#002e67", weight: 0.2 },
+        { label: "R$ 14", value: 14, color: "#034EA2", weight: 0.2 },
+        { label: "R$ 16", value: 16, color: "#002e67", weight: 0.2 }
+    ];
+
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const size = 300;
+    canvas.width = size;
+    canvas.height = size;
+    const arc = (2 * Math.PI) / prizes.length;
+
+    function drawWheel() {
+        ctx.clearRect(0, 0, size, size);
+        prizes.forEach((p, i) => {
+            const angle = i * arc;
+            ctx.beginPath();
+            ctx.fillStyle = p.color;
+            ctx.moveTo(size/2, size/2);
+            ctx.arc(size/2, size/2, size/2, angle, angle + arc);
+            ctx.fill();
+            ctx.strokeStyle = "rgba(255,255,255,0.2)";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            ctx.save();
+            ctx.translate(size/2, size/2);
+            ctx.rotate(angle + arc/2);
+            ctx.fillStyle = "#fff";
+            ctx.font = "bold 13px Inter";
+            ctx.textAlign = "right";
+            ctx.fillText(p.label, size/2 - 20, 5);
+            ctx.restore();
         });
+    }
+    drawWheel();
 
-        function checkTimeWindow() {
-            const hour = new Date().getHours();
-            const btn = document.getElementById('btnAction');
-            if (hour < 10 || hour >= 17) {
-                btn.disabled = true;
-                btn.innerText = "SISTEMA FECHADO";
-                document.getElementById('timeLockNotice').style.borderLeftColor = "#ccc";
-            } else {
-                btn.disabled = false;
-                btn.innerText = "Solicitar Resgate";
-                document.getElementById('timeLockNotice').style.borderLeftColor = "var(--samsung-blue)";
-            }
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            onSnapshot(doc(db, "users", user.uid), (docSnap) => {
+                const data = docSnap.data();
+                if(!data) return;
+
+                document.getElementById('displaySaldoLucro').innerText = `R$ ${(data.saldoLucro || 0).toFixed(2)}`;
+                document.getElementById('girosDisponiveis').innerText = `Giros: ${data.girosRoleta || 0}`;
+                
+                const lastCheckin = data.ultimoCheckin?.toDate() || new Date(0);
+                const now = new Date();
+                const isSameDay = lastCheckin.getDate() === now.getDate() && 
+                                  lastCheckin.getMonth() === now.getMonth() && 
+                                  lastCheckin.getFullYear() === now.getFullYear();
+
+                const btn = document.getElementById('checkinBtn');
+                if(isSameDay) {
+                    btn.disabled = true;
+                    btn.innerText = "Coletado Hoje";
+                } else {
+                    btn.disabled = false;
+                    btn.innerText = "Coletar Recompensa";
+                }
+
+                renderGrid(data.diaCheckin || 1);
+            });
+        } else {
+            window.location.href = "index.html";
         }
+    });
 
-        window.requestWithdraw = async function() {
-            const amount = parseFloat(document.getElementById('withdrawAmount').value);
-            const pix = document.getElementById('pixKey').value;
-            const btn = document.getElementById('btnAction');
+    function renderGrid(currentDay) {
+        const grid = document.getElementById('checkinGrid');
+        grid.innerHTML = "";
+        for (let i = 1; i <= 30; i++) {
+            const div = document.createElement('div');
+            div.className = 'day-box';
+            if(i < currentDay) div.classList.add('completed');
+            if(i === currentDay) div.classList.add('current');
+            div.innerText = i;
+            grid.appendChild(div);
+        }
+    }
 
-            if (btn.disabled) return;
-
-            if (!pix || pix.length < 5) {
-                Toast.fire({ title: 'Atenção', text: 'Informe uma chave PIX válida.', icon: 'warning' });
-                return;
-            }
-
-            if (isNaN(amount) || amount < 35) {
-                Toast.fire({ title: 'Valor Mínimo', text: 'O valor mínimo para resgate é R$ 35,00.', icon: 'info' });
-                return;
-            }
-
-            if (amount > currentSaldoLucro) {
-                Toast.fire({ title: 'Saldo Insuficiente', text: 'Você não possui lucro suficiente para este saque.', icon: 'error' });
-                return;
-            }
-
-            const tax = amount * 0.10;
-            const netAmount = amount - tax;
-
-            const confirm = await Toast.fire({
-                title: 'Confirmar Resgate?',
-                html: `Você receberá <b>R$ ${netAmount.toFixed(2)}</b> em sua conta.<br><small>Taxa administrativa de 10% inclusa.</small>`,
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Confirmar',
-                cancelButtonText: 'Cancelar'
+    document.getElementById('checkinBtn').onclick = async () => {
+        const user = auth.currentUser;
+        const reward = parseFloat((Math.random() * (0.90 - 0.20) + 0.20).toFixed(2));
+        
+        try {
+            await updateDoc(doc(db, "users", user.uid), {
+                saldoLucro: increment(reward),
+                ultimoCheckin: serverTimestamp(),
+                diaCheckin: increment(1)
             });
 
-            if (!confirm.isConfirmed) return;
+            nioAlert.fire({
+                title: 'SUCESSO',
+                html: `Recompensa de fidelidade creditada:<br><b style="color:var(--profit-green); font-size: 22px;">+ R$ ${reward}</b>`,
+                icon: 'success'
+            });
+        } catch (error) {
+            console.error(error);
+            nioAlert.fire({ title: 'Erro', text: 'Tente novamente em instantes.', icon: 'error' });
+        }
+    };
 
-            btn.disabled = true;
-            btn.innerText = "PROCESSANDO...";
+    function getWeightedPrize() {
+        const totalWeight = prizes.reduce((sum, item) => sum + item.weight, 0);
+        let random = Math.random() * totalWeight;
+        for (let i = 0; i < prizes.length; i++) {
+            if (random < prizes[i].weight) return i;
+            random -= prizes[i].weight;
+        }
+        return 0;
+    }
 
+    document.getElementById('spinBtn').onclick = async () => {
+        if (isSpinning) return;
+        
+        const user = auth.currentUser;
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        const spins = userSnap.data().girosRoleta || 0;
+
+        if (spins <= 0) {
+            nioAlert.fire({
+                title: 'SEM GIROS',
+                text: 'Você não possui giros disponíveis. Convide novos usuários para ganhar.',
+                icon: 'warning'
+            });
+            return;
+        }
+
+        isSpinning = true;
+        document.getElementById('spinBtn').disabled = true;
+
+        const winnerIndex = getWeightedPrize();
+        const prize = prizes[winnerIndex];
+
+        const segmentAngleRad = (winnerIndex * arc) + (arc / 2);
+        const segmentAngleDeg = segmentAngleRad * (180 / Math.PI);
+        const extraSpins = 360 * 10;
+        const currentMod = currentRotation % 360;
+        let targetRotation = (270 - segmentAngleDeg);
+        
+        if (targetRotation < currentMod) targetRotation += 360;
+        
+        currentRotation = currentRotation + extraSpins + (targetRotation - currentMod);
+        document.getElementById('wheel').style.transform = `rotate(${currentRotation}deg)`;
+
+        setTimeout(async () => {
             try {
-                await runTransaction(db, async (transaction) => {
-                    const userRef = doc(db, "users", userUID);
-                    const userDoc = await transaction.get(userRef);
-                    
-                    const actualBalance = userDoc.data().saldoLucro || 0;
-                    if (actualBalance < amount) throw "Erro: Saldo insuficiente ou desatualizado.";
-
-                    const newBalance = actualBalance - amount;
-                    transaction.update(userRef, { saldoLucro: newBalance });
-
-                    const adminRef = collection(db, "solicitacoes_saque");
-                    const logSolicitacao = {
-                        uid: userUID,
-                        nomeUsuario: userDataGlobal.nome || "Usuário Samsung",
-                        valorBruto: amount,
-                        valorLiquido: netAmount,
-                        chavePix: pix,
-                        pixType: selectedPixType,
-                        status: "pendente",
-                        dataSolicitacao: serverTimestamp()
-                    };
-                    
-                    const newDocRef = doc(adminRef);
-                    transaction.set(newDocRef, logSolicitacao);
+                await updateDoc(userRef, {
+                    girosRoleta: increment(-1),
+                    saldoLucro: increment(prize.value)
                 });
 
-                Toast.fire({ title: 'Solicitado!', text: 'Sua retirada está em análise e será paga em breve.', icon: 'success' });
-                setTimeout(() => { window.location.href = "extrato.html"; }, 2500);
-
-            } catch (e) {
-                Toast.fire({ title: 'Erro no Processo', text: e.toString(), icon: 'error' });
-                btn.disabled = false;
-                btn.innerText = "Solicitar Resgate";
+                nioAlert.fire({
+                    title: 'PARABÉNS',
+                    html: `Você ganhou:<br><b style="color:var(--samsung-blue); font-size: 22px;">${prize.label}</b>`,
+                    icon: 'success'
+                });
+            } catch (error) {
+                console.error(error);
             }
-        }
-    </script>
+            isSpinning = false;
+            document.getElementById('spinBtn').disabled = false;
+        }, 5100);
+    };
+</script>
 </body>
 </html>
