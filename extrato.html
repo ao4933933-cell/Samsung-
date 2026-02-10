@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIO Premium - Extrato</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --nio-blue: #00e5ff;
+            --nio-blue-dark: #00a3e0;
+            --dark-bg: #030712;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --income: #00ffa3;
+            --outcome: #ff3366;
+            --gold: #ffc107;
+            --accent-gradient: linear-gradient(135deg, #00e5ff 0%, #0077ff 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: #ffffff;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(0, 229, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(0, 119, 255, 0.05) 0%, transparent 40%);
+            padding-bottom: 50px;
+            overflow-x: hidden;
+        }
+
+        .premium-nav {
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .btn-back-lux {
+            width: 45px;
+            height: 45px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .header-section {
+            padding: 0 25px 30px;
+            text-align: left;
+        }
+
+        .header-section h1 {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-section p {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        .filter-wrapper {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 25px 30px;
+            gap: 12px;
+            scrollbar-width: none;
+        }
+        .filter-wrapper::-webkit-scrollbar { display: none; }
+
+        .chip {
+            padding: 10px 20px;
+            border-radius: 20px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+
+        .chip.active {
+            background: white;
+            color: var(--dark-bg);
+            border-color: white;
+        }
+
+        .timeline { padding: 0 20px; }
+
+        .date-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin: 30px 0 15px 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .date-label::after { content: ""; height: 1px; flex: 1; background: linear-gradient(90deg, var(--glass-border), transparent); }
+
+        .lux-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(12px);
+            animation: fadeIn 0.6s ease-out backwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .lux-left { display: flex; align-items: center; gap: 16px; }
+
+        .lux-icon-box {
+            width: 54px;
+            height: 54px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            position: relative;
+        }
+
+        .lux-icon-box::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            opacity: 0.15;
+            background: currentColor;
+            border-radius: 18px;
+        }
+
+        .lux-info h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-bottom: 2px;
+        }
+
+        .lux-info p {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .lux-right { text-align: right; }
+
+        .lux-amount {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .lux-badge {
+            font-size: 9px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+            color: #94a3b8;
+            text-transform: uppercase;
+        }
+
+        .empty-premium {
+            text-align: center;
+            padding: 80px 40px;
+        }
+
+        /* CORES */
+        .color-income { color: var(--income) !important; }
+        .color-outcome { color: var(--outcome) !important; }
+        .type-income { color: var(--income); }
+        .type-outcome { color: var(--outcome); }
+        .type-comissao { color: var(--gold); }
+    </style>
+</head>
+<body>
+
+    <nav class="premium-nav">
+        <a href="perfil.html" class="btn-back-lux">
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
+    </nav>
+
+    <section class="header-section">
+        <h1>Meu Extrato</h1>
+        <p>Histórico completo de transações e ativos.</p>
+    </section>
+
+    <div class="filter-wrapper" id="filterContainer">
+        <div class="chip active" data-type="all">Tudo</div>
+        <div class="chip" data-type="deposito">Depósitos</div>
+        <div class="chip" data-type="saque">Saques</div>
+        <div class="chip" data-type="comissao_rede">Comissões</div>
+        <div class="chip" data-type="rendimento">Rendimentos</div>
+    </div>
+
+    <main class="timeline" id="mainTimeline">
+        <div class="empty-premium">
+            <i class="fa-solid fa-compass fa-spin"></i>
+            <p style="color: #64748b;">Sincronizando com a rede...</p>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, query, where, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDyahOcB_wXbU_E0IzEXHBMsyw8uqJR2Es",
+            authDomain: "ironpay-cc5e1.firebaseapp.com",
+            projectId: "ironpay-cc5e1",
+            storageBucket: "ironpay-cc5e1.firebasestorage.app",
+            messagingSenderId: "283629903594",
+            appId: "1:283629903594:web:07b39ed18372335c758193"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        let userUID = null;
+        let currentFilter = "all";
+        let masterData = [];
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                userUID = user.uid;
+                startNioScanner();
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+
+        // Configuração de Filtros
+        document.querySelectorAll('.chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                currentFilter = chip.getAttribute('data-type');
+                renderPremiumUI();
+            });
+        });
+
+        function parseLuxDate(d) {
+            if (!d) return new Date();
+            if (d.toDate) return d.toDate();
+            if (d.seconds) return new Date(d.seconds * 1000);
+            return new Date(d);
+        }
+
+        function startNioScanner() {
+            // Monitora a coleção principal de transações
+            // O Firebase deve ter as coleções: "transacoes" e "ativos"
+            const colecoes = ["transacoes", "ativos"];
+            
+            colecoes.forEach(col => {
+                const q = query(collection(db, col), where("userId", "==", userUID));
+                
+                onSnapshot(q, (snapshot) => {
+                    // Remove itens antigos dessa coleção para não duplicar
+                    masterData = masterData.filter(item => item.from !== col);
+                    
+                    snapshot.forEach(docSnap => {
+                        const data = docSnap.data();
+                        masterData.push({
+                            ...data,
+                            id: docSnap.id,
+                            from: col,
+                            dateObj: parseLuxDate(data.data || data.dataCompra || data.timestamp)
+                        });
+                    });
+                    renderPremiumUI();
+                });
+            });
+        }
+
+        function renderPremiumUI() {
+            const container = document.getElementById('mainTimeline');
+            let displayList = [...masterData].sort((a, b) => b.dateObj - a.dateObj);
+
+            // Aplicar Filtro
+            if (currentFilter !== "all") {
+                displayList = displayList.filter(item => {
+                    const tipo = (item.tipo || item.type || "").toLowerCase();
+                    return tipo.includes(currentFilter);
+                });
+            }
+
+            container.innerHTML = "";
+
+            if (displayList.length === 0) {
+                container.innerHTML = `<div class="empty-premium"><i class="fa-solid fa-receipt"></i><p>Nenhuma transação encontrada.</p></div>`;
+                return;
+            }
+
+            let lastDate = "";
+
+            displayList.forEach((tx) => {
+                const dateStr = tx.dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' });
+                
+                if (dateStr !== lastDate) {
+                    const label = document.createElement('div');
+                    label.className = 'date-label';
+                    label.innerText = dateStr;
+                    container.appendChild(label);
+                    lastDate = dateStr;
+                }
+
+                // Lógica de valores e ícones
+                const tipo = (tx.tipo || tx.type || (tx.from === "ativos" ? "plano" : "operacao")).toLowerCase();
+                const valor = tx.valor || tx.amount || tx.valorInvestido || 0;
+                
+                // Define se é saída (vermelho) ou entrada (verde)
+                const isOutcome = tipo.includes("saque") || tipo.includes("plano") || tx.from === "ativos";
+                
+                const card = document.createElement('div');
+                card.className = 'lux-card';
+                card.innerHTML = `
+                    <div class="lux-left">
+                        <div class="lux-icon-box ${getIconClass(tipo)}">
+                            <i class="fa-solid ${getIcon(tipo)}"></i>
+                        </div>
+                        <div class="lux-info">
+                            <h4>${formatTitulo(tx)}</h4>
+                            <p>${formatDesc(tx)}</p>
+                        </div>
+                    </div>
+                    <div class="lux-right">
+                        <div class="lux-amount ${isOutcome ? 'color-outcome' : 'color-income'}">
+                            ${isOutcome ? '-' : '+'} R$ ${parseFloat(valor).toLocaleString('pt-BR', {minimumFractionDigits: 2})}
+                        </div>
+                        <div class="lux-badge">${tx.status || 'concluído'}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function getIcon(tipo) {
+            if (tipo.includes("deposito")) return "fa-wallet";
+            if (tipo.includes("saque")) return "fa-hand-holding-dollar";
+            if (tipo.includes("comissao")) return "fa-users";
+            if (tipo.includes("rendimento") || tipo.includes("lucro")) return "fa-chart-line";
+            if (tipo.includes("plano")) return "fa-car-side";
+            return "fa-circle-dot";
+        }
+
+        function getIconClass(tipo) {
+            if (tipo.includes("deposito") || tipo.includes("rendimento")) return "type-income";
+            if (tipo.includes("saque") || tipo.includes("plano")) return "type-outcome";
+            if (tipo.includes("comissao")) return "type-comissao";
+            return "";
+        }
+
+        function formatTitulo(tx) {
+            if (tx.titulo) return tx.titulo;
+            const tipo = (tx.tipo || "").toLowerCase();
+            if (tipo.includes("deposito")) return "Depósito PIX";
+            if (tipo.includes("saque")) return "Saque Solicitado";
+            if (tipo.includes("comissao")) return "Bônus de Equipe";
+            if (tipo.includes("plano") || tx.from === "ativos") return tx.nome || "Ativação de Ativo";
+            return "Transação NIO";
+        }
+
+        function formatDesc(tx) {
+            if (tx.compradorNome) return `De: ${tx.compradorNome}`;
+            if (tx.metodo) return `Via ${tx.metodo}`;
+            return "Processado via Blockchain";
+        }
+
+    </script>
+</body>
+</html>

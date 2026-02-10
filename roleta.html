@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIO HUB | Quantum Rewards</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --nio-blue: #00a3e0;
+            --nio-neon: #00f2ff;
+            --dark-bg: #010409;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --profit-green: #00ff88;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: var(--dark-bg);
+            color: #f0f6fc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 20px 100px 20px;
+            background-image: radial-gradient(circle at 50% -20%, #0a1a2f 0%, transparent 80%);
+            overflow-x: hidden;
+        }
+
+        /* NAVEGAÇÃO SUPERIOR */
+        .top-nav {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .btn-back {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        .user-stats { text-align: right; }
+        .user-stats span { display: block; font-size: 10px; color: var(--nio-blue); font-weight: 800; text-transform: uppercase; }
+        .user-stats h4 { font-size: 18px; color: var(--profit-green); }
+
+        /* HEADER */
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { font-weight: 100; letter-spacing: 12px; font-size: 28px; text-transform: uppercase; color: #fff; }
+        .header p { color: var(--nio-blue); font-size: 10px; font-weight: 800; letter-spacing: 4px; margin-top: 5px; }
+
+        /* PAINEL DE INSTRUÇÕES */
+        .info-panel {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(0, 163, 224, 0.05);
+            border-left: 4px solid var(--nio-blue);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        /* CARDS GERAIS */
+        .section-card {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 25px;
+            backdrop-filter: blur(20px);
+            margin-bottom: 30px;
+        }
+
+        .card-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title h3 { font-size: 14px; letter-spacing: 2px; font-weight: 400; text-transform: uppercase; }
+
+        /* GRID CHECK-IN */
+        .checkin-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .day-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--glass-border);
+            aspect-ratio: 1/1;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: rgba(255,255,255,0.3);
+            transition: 0.3s;
+        }
+
+        .day-box.completed { border-color: var(--profit-green); color: var(--profit-green); background: rgba(0, 255, 136, 0.05); }
+        .day-box.current { border-color: var(--nio-blue); color: #fff; background: rgba(0, 163, 224, 0.2); transform: scale(1.05); font-weight: 900; }
+
+        .btn-main {
+            width: 100%;
+            padding: 18px;
+            border-radius: 18px;
+            border: none;
+            background: linear-gradient(135deg, var(--nio-blue), #006699);
+            color: #fff;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-main:disabled { background: #1a1a1a; color: #444; cursor: not-allowed; opacity: 0.6; }
+
+        /* ROLETA */
+        .wheel-container { display: flex; flex-direction: column; align-items: center; position: relative; }
+        
+        .wheel-wrap {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 20px 0;
+        }
+
+        .wheel-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 6px solid #0d1117;
+            overflow: hidden;
+            transition: transform 5s cubic-bezier(0.1, 0, 0.1, 1);
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            background: #000;
+        }
+
+        canvas { width: 100%; height: 100%; }
+
+        .spins-count {
+            background: rgba(0, 242, 255, 0.1);
+            padding: 8px 20px;
+            border-radius: 50px;
+            margin-bottom: 10px;
+            font-size: 12px;
+            color: var(--nio-neon);
+            font-weight: 700;
+            border: 1px solid rgba(0, 242, 255, 0.2);
+        }
+
+        /* CUSTOM SWEETALERT STYLES */
+        .nio-swal-popup {
+            background: #0a0d14 !important;
+            border: 1px solid var(--nio-blue) !important;
+            border-radius: 20px !important;
+            padding: 1.5rem !important;
+            width: 320px !important;
+        }
+        .nio-swal-title {
+            color: #fff !important;
+            font-size: 18px !important;
+            font-weight: 700 !important;
+            letter-spacing: 1px !important;
+            text-transform: uppercase !important;
+        }
+        .nio-swal-content {
+            color: rgba(255, 255, 255, 0.7) !important;
+            font-size: 14px !important;
+        }
+        .nio-swal-confirm {
+            background: linear-gradient(135deg, var(--nio-blue), #006699) !important;
+            border-radius: 12px !important;
+            padding: 10px 30px !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            font-size: 12px !important;
+            border: none !important;
+            box-shadow: 0 4px 15px rgba(0, 163, 224, 0.3) !important;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="home.html" class="btn-back">
+            <i class="fa-solid fa-chevron-left"></i> VOLTAR
+        </a>
+        <div class="user-stats">
+            <span>Saldo Lucro</span>
+            <h4 id="displaySaldoLucro">R$ 0,00</h4>
+        </div>
+    </nav>
+
+    <div class="header">
+        <h1>NIO HUB</h1>
+        <p>Quantum Rewards System</p>
+    </div>
+
+    <div class="info-panel">
+        <i class="fa-solid fa-shield-halved" style="color: var(--nio-blue)"></i> 
+        <b>Segurança Ativa:</b> Giros são creditados apenas após a primeira compra de um indicado direto. O Check-in reseta diariamente às 00:00.
+    </div>
+
+    <div class="section-card">
+        <div class="card-title">
+            <h3>Fidelidade Diária</h3>
+            <i class="fa-solid fa-calendar-day" style="color: var(--nio-blue)"></i>
+        </div>
+        <div class="checkin-grid" id="checkinGrid"></div>
+        <button class="btn-main" id="checkinBtn">Coletar Check-in</button>
+    </div>
+
+    <div class="section-card wheel-container">
+        <div class="card-title" style="width: 100%;">
+            <h3>Roleta da Sorte</h3>
+            <i class="fa-solid fa-dharmachakra" style="color: var(--nio-neon)"></i>
+        </div>
+        <div class="spins-count" id="girosDisponiveis">Giros: 0</div>
+        
+        <div class="wheel-wrap">
+            <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); z-index: 100; color: var(--nio-neon); font-size: 30px;">
+                <i class="fa-solid fa-caret-down"></i>
+            </div>
+            
+            <div class="wheel-inner" id="wheel">
+                <canvas id="canvas"></canvas>
+            </div>
+        </div>
+        
+        <button class="btn-main" id="spinBtn" style="background: linear-gradient(135deg, #00f2ff, #00a3e0); color: #000;">Girar Roleta</button>
+    </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, updateDoc, increment, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDyahOcB_wXbU_E0IzEXHBMsyw8uqJR2Es",
+        authDomain: "ironpay-cc5e1.firebaseapp.com",
+        projectId: "ironpay-cc5e1",
+        appId: "1:283629903594:web:07b39ed18372335c758193"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const nioAlert = Swal.mixin({
+        customClass: {
+            popup: 'nio-swal-popup',
+            title: 'nio-swal-title',
+            htmlContainer: 'nio-swal-content',
+            confirmButton: 'nio-swal-confirm'
+        },
+        buttonsStyling: false,
+        background: '#0a0d14',
+        color: '#fff',
+        confirmButtonText: 'ENTENDIDO'
+    });
+
+    let currentRotation = 0;
+    let isSpinning = false;
+
+    // DEFINIÇÃO DOS PRÊMIOS COM PESO (Probabilidade)
+    // weight: Peso relativo para o sorteio.
+    const prizes = [
+        { label: "R$ 2", value: 2, color: "#010409", weight: 33 },
+        { label: "R$ 4", value: 4, color: "#0a1a2f", weight: 33 },
+        { label: "R$ 6", value: 6, color: "#010409", weight: 33 },
+        { label: "R$ 8", value: 8, color: "#0a1a2f", weight: 0.2 },
+        { label: "R$ 10", value: 10, color: "#00a3e0", weight: 0.2 },
+        { label: "R$ 12", value: 12, color: "#0a1a2f", weight: 0.2 },
+        { label: "R$ 14", value: 14, color: "#010409", weight: 0.2 },
+        { label: "R$ 16", value: 16, color: "#00f2ff", weight: 0.2 }
+    ];
+    // Nota: 33+33+33 = 99. Os restantes somam 1.
+
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const size = 300;
+    canvas.width = size;
+    canvas.height = size;
+    const arc = (2 * Math.PI) / prizes.length;
+
+    function drawWheel() {
+        ctx.clearRect(0, 0, size, size);
+        prizes.forEach((p, i) => {
+            const angle = i * arc;
+            ctx.beginPath();
+            ctx.fillStyle = p.color;
+            ctx.moveTo(size/2, size/2);
+            ctx.arc(size/2, size/2, size/2, angle, angle + arc);
+            ctx.fill();
+            ctx.stroke();
+            
+            ctx.save();
+            ctx.translate(size/2, size/2);
+            ctx.rotate(angle + arc/2);
+            ctx.fillStyle = "#fff";
+            ctx.font = "bold 14px Inter";
+            ctx.fillText(p.label, 65, 5); // Ajuste da posição do texto
+            ctx.restore();
+        });
+    }
+    drawWheel();
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            onSnapshot(doc(db, "users", user.uid), (docSnap) => {
+                const data = docSnap.data();
+                if(!data) return;
+
+                document.getElementById('displaySaldoLucro').innerText = `R$ ${(data.saldoLucro || 0).toFixed(2)}`;
+                document.getElementById('girosDisponiveis').innerText = `Giros: ${data.girosRoleta || 0}`;
+                
+                // Lógica do Check-in
+                const lastCheckin = data.ultimoCheckin?.toDate() || new Date(0);
+                const now = new Date();
+                const isSameDay = lastCheckin.getDate() === now.getDate() && 
+                                  lastCheckin.getMonth() === now.getMonth() && 
+                                  lastCheckin.getFullYear() === now.getFullYear();
+
+                const btn = document.getElementById('checkinBtn');
+                if(isSameDay) {
+                    btn.disabled = true;
+                    btn.innerText = "Check-in Realizado Hoje";
+                } else {
+                    btn.disabled = false;
+                    btn.innerText = "Coletar Check-in";
+                }
+
+                renderGrid(data.diaCheckin || 1);
+            });
+        } else {
+            window.location.href = "login.html";
+        }
+    });
+
+    function renderGrid(currentDay) {
+        const grid = document.getElementById('checkinGrid');
+        grid.innerHTML = "";
+        for (let i = 1; i <= 30; i++) {
+            const div = document.createElement('div');
+            div.className = 'day-box';
+            if(i < currentDay) div.classList.add('completed');
+            if(i === currentDay) div.classList.add('current');
+            div.innerText = i;
+            grid.appendChild(div);
+        }
+    }
+
+    document.getElementById('checkinBtn').onclick = async () => {
+        const user = auth.currentUser;
+        // Valor aleatório para o checkin entre 0.20 e 0.90
+        const reward = parseFloat((Math.random() * (0.90 - 0.20) + 0.20).toFixed(2));
+        
+        try {
+            await updateDoc(doc(db, "users", user.uid), {
+                saldoLucro: increment(reward),
+                ultimoCheckin: serverTimestamp(),
+                diaCheckin: increment(1)
+            });
+
+            nioAlert.fire({
+                title: 'CHECK-IN REALIZADO',
+                html: `Você ganhou:<br><b style="color:var(--profit-green); font-size: 20px;">+ R$ ${reward}</b>`,
+                icon: 'success'
+            });
+        } catch (error) {
+            console.error("Erro no checkin:", error);
+            nioAlert.fire({ title: 'Erro', text: 'Tente novamente mais tarde.', icon: 'error' });
+        }
+    };
+
+    // Função para sortear com base nos pesos (Probabilidade)
+    function getWeightedPrize() {
+        const totalWeight = prizes.reduce((sum, item) => sum + item.weight, 0);
+        let random = Math.random() * totalWeight;
+        
+        for (let i = 0; i < prizes.length; i++) {
+            if (random < prizes[i].weight) {
+                return i;
+            }
+            random -= prizes[i].weight;
+        }
+        return 0; // Fallback
+    }
+
+    document.getElementById('spinBtn').onclick = async () => {
+        if (isSpinning) return;
+        
+        const user = auth.currentUser;
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        const spins = userSnap.data().girosRoleta || 0;
+
+        if (spins <= 0) {
+            nioAlert.fire({
+                title: 'SEM GIROS',
+                text: 'Indique amigos que comprem um plano para ganhar novos giros.',
+                icon: 'warning'
+            });
+            return;
+        }
+
+        isSpinning = true;
+        document.getElementById('spinBtn').disabled = true;
+
+        // 1. Determina o vencedor com base na probabilidade
+        const winnerIndex = getWeightedPrize();
+        const prize = prizes[winnerIndex];
+
+        // 2. Cálculo Matemático da Rotação
+        // O canvas desenha partindo do ângulo 0 (3 horas).
+        // Cada prêmio ocupa um arco (360 / prizes.length).
+        // O centro do prêmio sorteado está em: (winnerIndex * arc) + (arc / 2).
+        // O marcador (seta) está no TOPO, que corresponde a 270 graus (ou 3*PI/2) no canvas.
+        
+        const segmentAngleRad = (winnerIndex * arc) + (arc / 2); // Ângulo central do prêmio em radianos
+        const segmentAngleDeg = segmentAngleRad * (180 / Math.PI); // Convertendo para graus
+        
+        // A rotação necessária é: Destino (270) - Onde o prêmio está (segmentAngleDeg).
+        // Adicionamos rotações extras (10 voltas completas) para animação.
+        const extraSpins = 360 * 10;
+        
+        // O "% 360" normaliza a rotação atual para evitar números gigantescos indefinidamente
+        const currentMod = currentRotation % 360;
+        
+        // Cálculo final do alvo
+        let targetRotation = (270 - segmentAngleDeg);
+        
+        // Ajuste para garantir que a roda sempre gire no sentido horário
+        if (targetRotation < currentMod) {
+             targetRotation += 360;
+        }
+        
+        // Atualiza a variável global
+        currentRotation = currentRotation + extraSpins + (targetRotation - currentMod);
+
+        // Aplica a rotação CSS
+        document.getElementById('wheel').style.transform = `rotate(${currentRotation}deg)`;
+
+        // 3. Aguarda o fim da animação e processa o prêmio
+        setTimeout(async () => {
+            try {
+                await updateDoc(userRef, {
+                    girosRoleta: increment(-1),
+                    saldoLucro: increment(prize.value)
+                });
+
+                nioAlert.fire({
+                    title: 'PARABÉNS!',
+                    html: `A roleta parou em:<br><b style="color:var(--nio-neon); font-size: 20px;">${prize.label}</b>`,
+                    icon: 'success'
+                });
+            } catch (error) {
+                console.error("Erro ao salvar prêmio:", error);
+            }
+
+            isSpinning = false;
+            document.getElementById('spinBtn').disabled = false;
+        }, 5100); // 5 segundos de animação + 100ms de margem
+    };
+</script>
+</body>
+</html>

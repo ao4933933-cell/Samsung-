@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIO - Meus Ativos Reais</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --nio-blue: #00a3e0;
+            --nio-light: #40c4ff;
+            --dark-bg: #010409;
+            --glass-card: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --nio-gradient: linear-gradient(135deg, #00a3e0 0%, #005a87 100%);
+            --active-green: #00ff88;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            padding-bottom: 120px;
+            background-image: radial-gradient(circle at 50% 0%, #0a1a2f 0%, transparent 50%);
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .assets-header {
+            padding: 50px 25px 30px;
+            text-align: center;
+        }
+
+        .assets-header h1 {
+            font-weight: 200;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        /* CARD DE RENDIMENTO TOTAL */
+        .total-earning-card {
+            background: var(--nio-gradient);
+            margin: 0 20px 40px;
+            padding: 25px;
+            border-radius: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 15px 35px rgba(0, 163, 224, 0.3);
+            animation: fadeInDown 0.8s ease;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .earning-info p {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+
+        .earning-info h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-top: 5px;
+        }
+
+        /* LISTAGEM */
+        .section-label {
+            padding: 0 25px;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--nio-blue);
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .assets-container {
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* CARD DE PLANO REAL */
+        .active-plan-card {
+            background: var(--glass-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 20px;
+            backdrop-filter: blur(20px);
+            position: relative;
+            transition: 0.3s;
+            overflow: hidden;
+        }
+
+        .plan-visual {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .plan-visual img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .plan-name-box h3 { 
+            font-size: 16px; 
+            font-weight: 600; 
+            margin-bottom: 4px;
+        }
+
+        .plan-tag {
+            display: inline-block;
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--active-green);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .yield-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 20px;
+        }
+
+        .yield-item p { font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; margin-bottom: 4px; }
+        .yield-item span { font-size: 15px; font-weight: 700; }
+
+        .progress-container {
+            padding: 0 5px;
+        }
+
+        .progress-bar-bg {
+            width: 100%; height: 8px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--nio-gradient);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ESTADO VAZIO */
+        #emptyState {
+            text-align: center;
+            padding: 60px 20px;
+            display: none;
+        }
+
+        #emptyState i { font-size: 40px; color: var(--nio-blue); opacity: 0.5; margin-bottom: 15px; }
+
+        /* NAV INFERIOR */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: rgba(5, 10, 20, 0.98);
+            backdrop-filter: blur(25px);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0 35px;
+            border-top: 1px solid var(--glass-border);
+            z-index: 2000;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: rgba(255,255,255,0.3);
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .nav-item.active { color: var(--nio-blue); }
+        .nav-item i { font-size: 24px; display: block; margin-bottom: 6px; }
+
+        /* LOADING */
+        .loader {
+            width: 30px; height: 30px;
+            border: 3px solid var(--glass-border);
+            border-top-color: var(--nio-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 40px auto;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <header class="assets-header">
+        <h1>Meus Ativos</h1>
+    </header>
+
+    <div class="total-earning-card">
+        <div class="earning-info">
+            <p>Lucro Total Acumulado</p>
+            <h2 id="totalYieldDisplay">R$ 0,00</h2>
+        </div>
+        <i class="fa-solid fa-microchip" style="font-size: 35px; opacity: 0.5;"></i>
+    </div>
+
+    <div class="section-label">
+        <i class="fa-solid fa-circle-play"></i> Frota em Operação
+    </div>
+
+    <main class="assets-container" id="realAssetsList">
+        <div class="loader" id="mainLoader"></div>
+    </main>
+
+    <div id="emptyState">
+        <i class="fa-solid fa-car-side"></i>
+        <p style="opacity: 0.5;">Você ainda não possui veículos na frota.</p>
+        <button onclick="window.location.href='home.html'" style="margin-top:20px; background:var(--nio-blue); border:none; color:white; padding:12px 25px; border-radius:15px; font-weight:700; font-size:12px;">ADQUIRIR AGORA</button>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="home.html" class="nav-item">
+            <i class="fa-solid fa-house-chimney"></i>HOME
+        </a>
+        <a href="ativos.html" class="nav-item active">
+            <i class="fa-solid fa-microchip"></i>ATIVOS
+        </a>
+        <a href="indicacao.html" class="nav-item">
+            <i class="fa-solid fa-share-nodes"></i>CONVITE
+        </a>
+        <a href="perfil.html" class="nav-item">
+            <i class="fa-solid fa-user-astronaut"></i>PERFIL
+        </a>
+    </nav>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, query, where, onSnapshot, getDocs, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDyahOcB_wXbU_E0IzEXHBMsyw8uqJR2Es",
+            authDomain: "ironpay-cc5e1.firebaseapp.com",
+            projectId: "ironpay-cc5e1",
+            storageBucket: "ironpay-cc5e1.firebasestorage.app",
+            messagingSenderId: "283629903594",
+            appId: "1:283629903594:web:07b39ed18372335c758193"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        const imagensPlanos = {
+            1: "Plano1.jpg", 2: "plano2.jpg", 3: "plano3.jpg", 
+            4: "plano4.jpg", 5: "plano5.jpg", 6: "plano6.jpg", 7: "plano7.jpg"
+        };
+
+        const assetsList = document.getElementById('realAssetsList');
+        const mainLoader = document.getElementById('mainLoader');
+        const emptyState = document.getElementById('emptyState');
+        const totalDisplay = document.getElementById('totalYieldDisplay');
+
+        // MOTOR DE PROCESSAMENTO CRONOLÓGICO (HORÁRIO FIXO)
+        async function processarRendimentos(uid) {
+            const agora = Date.now();
+            const vinteQuatroHoras = 24 * 60 * 60 * 1000;
+            const q = query(collection(db, "ativos"), where("userId", "==", uid), where("status", "==", "ativo"));
+            const querySnapshot = await getDocs(q);
+
+            querySnapshot.forEach(async (docSnap) => {
+                const dados = docSnap.data();
+                
+                // DATA DE ANCORAGEM: Calculamos exatamente quando o próximo lucro deve cair
+                // Com base na hora exata da COMPRA original
+                const diasPassadosDesdeCompra = Math.floor((agora - dados.timestampCompra) / vinteQuatroHoras);
+                const diasPagosJa = 15 - dados.cicloRestante;
+                
+                // Se o tempo passado desde a compra (em dias inteiros) for maior que os dias já pagos
+                if (diasPassadosDesdeCompra > diasPagosJa && dados.cicloRestante > 0) {
+                    
+                    // Calculamos quantos dias o sistema "deve" para o usuário
+                    const diasDevidos = diasPassadosDesdeCompra - diasPagosJa;
+                    const lucroPagar = dados.lucroDiario * diasDevidos;
+
+                    try {
+                        // 1. Atualiza SALDO LUCRO do Usuário
+                        const userRef = doc(db, "users", uid);
+                        await updateDoc(userRef, {
+                            saldoLucro: increment(lucroPagar)
+                        });
+
+                        // 2. Atualiza o Ativo - Mantendo a data fixa de aniversário
+                        await updateDoc(docSnap.ref, {
+                            // O ultimoPagamento vira exatamente a hora do "aniversário" da compra
+                            ultimoPagamento: dados.timestampCompra + (diasPassadosDesdeCompra * vinteQuatroHoras),
+                            lucroTotalAcumulado: increment(lucroPagar),
+                            cicloRestante: increment(-diasDevidos)
+                        });
+
+                        // SweetAlert Minimalista Premium (Toast)
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 4000,
+                            timerProgressBar: true,
+                            background: '#02060d',
+                            color: '#00a3e0',
+                            iconColor: '#00ff88',
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: `<span style="color:white; font-weight:700;">Lucro Creditado!</span>`,
+                            html: `<span style="color:rgba(255,255,255,0.7); font-size:12px;">+ R$ ${lucroPagar.toFixed(2)} adicionados ao seu saldo de ativos.</span>`
+                        });
+
+                    } catch (e) { 
+                        console.error("Erro na sincronização de lucro:", e); 
+                    }
+                } 
+                
+                // Finaliza o contrato se o ciclo acabar
+                if (dados.cicloRestante <= 0) {
+                    await updateDoc(docSnap.ref, { status: "finalizado" });
+                }
+            });
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Executa o motor assim que o usuário loga/entra na página
+                processarRendimentos(user.uid);
+                renderUserAssets(user.uid);
+            } else {
+                window.location.href = "index.html";
+            }
+        });
+
+        function renderUserAssets(uid) {
+            const q = query(collection(db, "ativos"), where("userId", "==", uid));
+
+            onSnapshot(q, (snapshot) => {
+                assetsList.innerHTML = "";
+                mainLoader.style.display = "none";
+                
+                if (snapshot.empty) {
+                    emptyState.style.display = "block";
+                    totalDisplay.innerText = "R$ 0,00";
+                    return;
+                }
+
+                emptyState.style.display = "none";
+                let totalGeral = 0;
+
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const id = docSnap.id;
+                    totalGeral += parseFloat(data.lucroTotalAcumulado || 0);
+                    
+                    const cicloMax = 15;
+                    const diasRestantes = data.cicloRestante || 0;
+                    const diasPassados = cicloMax - diasRestantes;
+                    const porcentagem = (diasPassados / cicloMax) * 100;
+                    const imagem = imagensPlanos[data.planoId] || "Plano1.jpg";
+
+                    const card = `
+                        <div class="active-plan-card">
+                            <div class="plan-visual">
+                                <img src="${imagem}" alt="NIO Vehicle">
+                                <div class="plan-name-box">
+                                    <p style="font-size: 8px; color: var(--nio-blue); margin-bottom:2px; letter-spacing:1px;">ID OPERACIONAL: ${id.slice(0,10).toUpperCase()}</p>
+                                    <h3>${data.nome}</h3>
+                                    <span class="plan-tag"><i class="fa-solid fa-satellite-dish" style="margin-right:4px;"></i> ${data.status.toUpperCase()}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="yield-grid">
+                                <div class="yield-item">
+                                    <p>Lucro/Dia</p>
+                                    <span>R$ ${parseFloat(data.lucroDiario).toFixed(2)}</span>
+                                </div>
+                                <div class="yield-item">
+                                    <p>Total Gerado</p>
+                                    <span style="color: var(--active-green);">R$ ${parseFloat(data.lucroTotalAcumulado).toFixed(2)}</span>
+                                </div>
+                            </div>
+
+                            <div class="progress-container">
+                                <div style="display:flex; justify-content:space-between; font-size:10px; opacity:0.6; margin-bottom:4px;">
+                                    <span>Evolução do Contrato</span>
+                                    <span>Dia ${diasPassados} de ${cicloMax}</span>
+                                </div>
+                                <div class="progress-bar-bg">
+                                    <div class="progress-fill" style="width: ${porcentagem}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    assetsList.insertAdjacentHTML('beforeend', card);
+                });
+                totalDisplay.innerText = `R$ ${totalGeral.toFixed(2)}`;
+            });
+        }
+    </script>
+</body>
+</html>

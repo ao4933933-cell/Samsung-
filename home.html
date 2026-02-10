@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIO - Progress & Experience Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            /* NOVA PALETA SAMSUNG: AZUL, BRANCO E CINZA */
+            --nio-blue: #034EA2; 
+            --dark-bg: #f4f4f4;
+            --card-bg: #ffffff;
+            --border-glass: #dddddd;
+            --nio-gradient: linear-gradient(135deg, #034EA2 0%, #002e67 100%);
+            --popular-gold: #ffd700;
+            --locked-red: #e11f26;
+            --text-main: #000000;
+            --text-sub: #555555;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Samsung One', 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            padding-bottom: 110px;
+            overflow-x: hidden;
+            background-image: none;
+        }
+
+        .fab-roleta {
+            position: fixed;
+            bottom: 120px;
+            right: 20px;
+            width: 65px;
+            height: 65px;
+            background: var(--nio-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(3, 78, 162, 0.4);
+            z-index: 9999;
+            cursor: pointer;
+            border: 2px solid #ffffff;
+            animation: bounce 2s infinite;
+            text-decoration: none;
+        }
+
+        .fab-roleta i {
+            font-size: 30px;
+            color: white;
+            animation: spin 4s infinite linear;
+        }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        .header-slider {
+            width: 92%;
+            height: 220px;
+            margin: 15px auto;
+            overflow: hidden;
+            border-radius: 20px;
+            border: 1px solid var(--border-glass);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            background: #fff;
+        }
+
+        .swiper-container { width: 100%; height: 100%; }
+        .swiper-slide img { width: 100%; height: 100%; object-fit: contain; background: #fff; }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            padding: 10px 20px 20px;
+        }
+
+        .action-item { text-align: center; text-decoration: none; color: var(--text-main); }
+
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            background: #ffffff;
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-size: 22px;
+            color: var(--nio-blue);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .action-item span { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-sub); }
+
+        .tabs-container { display: flex; padding: 0 20px; gap: 10px; margin-bottom: 25px; }
+
+        .tab-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 15px;
+            border: 1px solid var(--border-glass);
+            background: #ffffff;
+            color: var(--text-sub);
+            font-weight: 800;
+            text-align: center;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .tab-btn.active { background: var(--nio-blue); color: white; border-color: var(--nio-blue); box-shadow: 0 5px 15px rgba(3, 78, 162, 0.2); }
+
+        .plans-list { padding: 0 20px; }
+
+        .plan-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glass);
+            border-radius: 25px;
+            margin-bottom: 35px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+        }
+
+        .plan-card.locked { opacity: 0.7; filter: grayscale(0.5); }
+
+        .plan-img-container { width: 100%; height: 200px; position: relative; background: #fff; }
+        .plan-img-container img { width: 100%; height: 100%; object-fit: contain; }
+
+        .plan-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--nio-blue);
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            z-index: 2;
+            color: white;
+        }
+
+        .plan-badge.popular { background: var(--popular-gold); color: black; }
+        .plan-badge.locked-badge { background: var(--locked-red); color: white; }
+
+        .plan-info { padding: 20px; }
+
+        .plan-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .plan-title { font-size: 1.1rem; font-weight: 600; color: var(--text-main); }
+        .plan-price { font-size: 1.4rem; color: var(--nio-blue); font-weight: 800; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid #eee;
+        }
+
+        .stat-box { text-align: center; }
+        .stat-box h4 { font-size: 14px; color: var(--nio-blue); font-weight: 700; }
+        .stat-box p { font-size: 9px; color: var(--text-sub); margin-top: 4px; text-transform: uppercase; font-weight: bold; }
+
+        .btn-buy {
+            width: 100%;
+            padding: 18px;
+            background: var(--nio-gradient);
+            color: white;
+            border: none;
+            border-radius: 18px;
+            font-weight: 900;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 8px 20px rgba(3, 78, 162, 0.2);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-buy:disabled { background: #bbb; box-shadow: none; cursor: not-allowed; }
+        .btn-buy:active:not(:disabled) { transform: scale(0.95); }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0 30px;
+            border-top: 1px solid var(--border-glass);
+            z-index: 1000;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+        }
+
+        .nav-item { text-align: center; color: #999; text-decoration: none; font-size: 10px; font-weight: 700; }
+        .nav-item.active { color: var(--nio-blue); }
+        .nav-item i { font-size: 22px; display: block; margin-bottom: 6px; }
+    </style>
+</head>
+<body>
+
+    <a href="roleta.html" class="fab-roleta">
+        <i class="fa-solid fa-dharmachakra"></i>
+    </a>
+
+    <section class="header-slider">
+        <div class="swiper swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="logo1.jpg" alt="Logo 1"></div>
+                <div class="swiper-slide"><img src="logo2.jpg" alt="Logo 2"></div>
+                <div class="swiper-slide"><img src="logo1.jpg" alt="Logo 1"></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="action-grid">
+        <a href="deposito.html" class="action-item"><div class="icon-box"><i class="fa-solid fa-bolt-lightning"></i></div><span>Recarga</span></a>
+        <a href="saque.html" class="action-item"><div class="icon-box"><i class="fa-solid fa-receipt"></i></div><span>Retirada</span></a>
+        <a href="https://chat.whatsapp.com/B5OsSHzPSGh0AgWN9DJlFx?mode=gi_t" class="action-item" target="_blank"><div class="icon-box"><i class="fa-solid fa-network-wired"></i></div><span>Grupo</span></a>
+        <a href="http://wa.me/5521965141548" class="action-item" target="_blank"><div class="icon-box"><i class="fa-solid fa-headset"></i></div><span>Suporte</span></a>
+    </div>
+
+    <div class="tabs-container">
+        <div class="tab-btn active" id="tab-estabilizar">ESTABILIZAR</div>
+        <div class="tab-btn" id="tab-avancado">AVANÇADO</div>
+    </div>
+
+    <div class="plans-list" id="render-plans"></div>
+
+    <nav class="bottom-nav">
+        <a href="home.html" class="nav-item active"><i class="fa-solid fa-house-chimney"></i>HOME</a>
+        <a href="ativos.html" class="nav-item"><i class="fa-solid fa-microchip"></i>ATIVOS</a>
+        <a href="indicacao.html" class="nav-item"><i class="fa-solid fa-share-nodes"></i>CONVITE</a>
+        <a href="perfil.html" class="nav-item"><i class="fa-solid fa-user-astronaut"></i>PERFIL</a>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, serverTimestamp, increment, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDyahOcB_wXbU_E0IzEXHBMsyw8uqJR2Es",
+            authDomain: "ironpay-cc5e1.firebaseapp.com",
+            projectId: "ironpay-cc5e1",
+            storageBucket: "ironpay-cc5e1.firebasestorage.app",
+            messagingSenderId: "283629903594",
+            appId: "1:283629903594:web:07b39ed18372335c758193"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // SUBSTITUIÇÃO DAS FOTOS DOS PLANOS
+        const planosEstabilizar = [
+            { id: 1, nome: "Samsung Galaxy S24 Ultra", valor: 30, img: "ativo1.jpg", badge: "Popular", status: "disponivel" },
+            { id: 2, nome: "Samsung Galaxy Z Fold5", valor: 50, img: "ativo2.jpg", badge: "Premium", status: "disponivel" },
+            { id: 3, nome: "Samsung Galaxy S23 FE", valor: 100, img: "ativo3.jpg", badge: "Premium", status: "disponivel" },
+            { id: 4, nome: "Samsung S-Series Pro", valor: 200, img: "ativo1.jpg", badge: "Premium", status: "disponivel" },
+            { id: 5, nome: "Samsung Fold Vision", valor: 400, img: "ativo2.jpg", badge: "Premium", status: "disponivel" },
+            { id: 6, nome: "Samsung Galaxy X-Max", valor: 600, img: "ativo3.jpg", badge: "Premium", status: "disponivel" },
+            { id: 7, nome: "Samsung Ultimate S25", valor: 800, img: "ativo1.jpg", badge: "Premium", status: "disponivel" }
+        ];
+
+        const planosAvancados = [
+            { id: 101, nome: "NIO Advanced X1", valor: 1000, img: "ativo1.jpg", badge: "Indisponível", status: "bloqueado" },
+            { id: 102, nome: "NIO Advanced X2", valor: 1500, img: "ativo2.jpg", badge: "Indisponível", status: "bloqueado" },
+            { id: 103, nome: "NIO Advanced X3", valor: 2000, img: "ativo3.jpg", badge: "Indisponível", status: "bloqueado" }
+        ];
+
+        let abaAtual = 'estabilizar';
+
+        function renderPlanos() {
+            const container = document.getElementById('render-plans');
+            if (!container) return;
+            container.innerHTML = '';
+            const listaParaRenderizar = (abaAtual === 'estabilizar') ? planosEstabilizar : planosAvancados;
+
+            listaParaRenderizar.forEach(plano => {
+                const lucroDiario = plano.valor * 0.20;
+                const lucroTotal = lucroDiario * 15;
+                const isLocked = plano.status === 'bloqueado';
+                const badgeClass = plano.id === 1 ? 'popular' : (isLocked ? 'locked-badge' : '');
+                
+                container.innerHTML += `
+                    <div class="plan-card ${isLocked ? 'locked' : ''}">
+                        <div class="plan-img-container">
+                            <span class="plan-badge ${badgeClass}">${plano.badge}</span>
+                            <img src="${plano.img}" alt="${plano.nome}">
+                        </div>
+                        <div class="plan-info">
+                            <div class="plan-header">
+                                <h2 class="plan-title">${plano.nome}</h2>
+                                <span class="plan-price">R$ ${plano.valor}</span>
+                            </div>
+                            <div class="stats-grid">
+                                <div class="stat-box"><h4>R$ ${lucroDiario.toFixed(2)}</h4><p>Lucro Diário</p></div>
+                                <div class="stat-box"><h4>R$ ${lucroTotal.toFixed(2)}</h4><p>Retorno Final</p></div>
+                                <div class="stat-box"><h4>15 dias</h4><p>Ciclo</p></div>
+                            </div>
+                            <button class="btn-buy" 
+                                    ${isLocked ? 'disabled' : ''} 
+                                    onclick="comprarPlano(${plano.id}, ${plano.valor}, '${abaAtual}')">
+                                ${isLocked ? 'Em Breve' : 'Investir Agora'}
+                            </button>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        async function processarBonusRede(userData, valorPlano) {
+            if (userData.hasMadeFirstPurchase === true) return;
+            const rede = [
+                { uid: userData.indicadoPor, porc: 0.15, nivel: 1 },
+                { uid: userData.nivel2, porc: 0.03, nivel: 2 },
+                { uid: userData.nivel3, porc: 0.01, nivel: 3 }
+            ];
+            for (const el of rede) {
+                if (el.uid && el.uid !== "direto" && el.uid !== "") {
+                    try {
+                        const padrinhoRef = doc(db, "users", el.uid);
+                        const padrinhoSnap = await getDoc(padrinhoRef);
+                        if (padrinhoSnap.exists()) {
+                            const bonusMoney = Number((valorPlano * el.porc).toFixed(2));
+                            let updates = {
+                                saldoLucro: increment(bonusMoney),
+                                totalComissaoRede: increment(bonusMoney)
+                            };
+                            if (el.nivel === 1) {
+                                updates.girosRoleta = increment(1);
+                            }
+                            await updateDoc(padrinhoRef, updates);
+                            await addDoc(collection(db, "transacoes"), {
+                                userId: el.uid,
+                                tipo: "comissao_rede",
+                                valor: bonusMoney,
+                                nivel: el.nivel,
+                                de: userData.nome || "Novo Membro",
+                                data: serverTimestamp()
+                            });
+                        }
+                    } catch (e) {
+                        console.error("Erro ao processar bônus para " + el.uid, e);
+                    }
+                }
+            }
+        }
+
+        window.comprarPlano = async (id, preco, tipoAba) => {
+            const user = auth.currentUser;
+            if (!user) {
+                Swal.fire("Acesso Negado", "Realize login para investir.", "error");
+                return;
+            }
+            try {
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+                if (!userSnap.exists()) return;
+                const userData = userSnap.data();
+                const saldoAtual = Number(userData.saldo || 0);
+                if (saldoAtual < preco) {
+                    Swal.fire("Saldo Insuficiente", "Recarregue sua conta para prosseguir.", "warning");
+                    return;
+                }
+                const result = await Swal.fire({
+                    title: 'Confirmar Ativação?',
+                    text: `O valor de R$ ${preco} será debitado do seu saldo.`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#034EA2',
+                    cancelButtonColor: '#333',
+                    confirmButtonText: 'ATIVAR AGORA',
+                    cancelButtonText: 'CANCELAR'
+                });
+                if (result.isConfirmed) {
+                    const btn = event.target;
+                    btn.disabled = true;
+                    btn.innerText = "PROCESSANDO...";
+                    if (!userData.hasMadeFirstPurchase) {
+                        await processarBonusRede(userData, preco);
+                    }
+                    await updateDoc(userRef, {
+                        saldo: increment(-Number(preco)),
+                        totalInvestido: increment(Number(preco)),
+                        hasMadeFirstPurchase: true,
+                        isVip: true
+                    });
+                    const listaSource = (tipoAba === 'estabilizar') ? planosEstabilizar : planosAvancados;
+                    const infoPlano = listaSource.find(p => p.id === id);
+                    const timestampAgora = Date.now();
+                    await addDoc(collection(db, "ativos"), {
+                        userId: user.uid,
+                        planoId: id,
+                        nome: infoPlano.nome,
+                        valorInvestido: Number(preco),
+                        lucroDiario: Number((preco * 0.20).toFixed(2)),
+                        dataCompra: serverTimestamp(),
+                        timestampCompra: timestampAgora,
+                        ultimoPagamento: timestampAgora,
+                        cicloRestante: 15,
+                        status: "ativo",
+                        totalColhido: 0,
+                        lucroTotalAcumulado: 0
+                    });
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'NIO Ativado!',
+                        text: 'Seu veículo já está gerando rendimentos.',
+                        confirmButtonColor: '#034EA2'
+                    }).then(() => {
+                        window.location.href = "ativos.html";
+                    });
+                }
+            } catch (err) {
+                console.error(err);
+                Swal.fire("Erro Operacional", "Não foi possível concluir a compra. Tente novamente.", "error");
+            }
+        };
+
+        const btnEst = document.getElementById('tab-estabilizar');
+        const btnAva = document.getElementById('tab-avancado');
+        if(btnEst) {
+            btnEst.addEventListener('click', () => {
+                abaAtual = 'estabilizar';
+                btnEst.classList.add('active');
+                if(btnAva) btnAva.classList.remove('active');
+                renderPlanos();
+            });
+        }
+        if(btnAva) {
+            btnAva.addEventListener('click', () => {
+                abaAtual = 'avancado';
+                btnAva.classList.add('active');
+                if(btnEst) btnEst.classList.remove('active');
+                renderPlanos();
+            });
+        }
+
+        new Swiper('.swiper-container', {
+            loop: true,
+            autoplay: { delay: 4000, disableOnInteraction: false },
+            speed: 800
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            renderPlanos();
+        });
+    </script>
+</body>
+</html>

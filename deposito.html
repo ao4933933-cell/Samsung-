@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIO - Depósito Instantâneo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --nio-blue: #00a3e0;
+            --dark-bg: #010409;
+            --glass-card: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --nio-gradient: linear-gradient(135deg, #00a3e0 0%, #005a87 100%);
+            --active-green: #00ff88;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            background-image: 
+                radial-gradient(circle at 50% -20%, #00a3e022 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, #005a8711 0%, transparent 40%);
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        .premium-header {
+            padding: 50px 25px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .btn-back {
+            background: var(--glass-card);
+            border: 1px solid var(--glass-border);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .header-title h1 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .deposit-container {
+            padding: 0 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .balance-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .balance-card span {
+            font-size: 11px;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .balance-card h2 {
+            font-size: 2.2rem;
+            margin-top: 5px;
+            font-weight: 800;
+        }
+
+        .section-label {
+            font-size: 11px;
+            color: var(--nio-blue);
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            display: block;
+            letter-spacing: 1px;
+        }
+
+        .quick-amounts {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .quick-btn {
+            background: var(--glass-card);
+            border: 1px solid var(--glass-border);
+            padding: 15px 5px;
+            border-radius: 16px;
+            color: white;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .quick-btn:active {
+            background: var(--nio-blue);
+            transform: scale(0.95);
+        }
+
+        .input-box {
+            background: rgba(255,255,255,0.04);
+            border: 2px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        .input-box:focus-within {
+            border-color: var(--nio-blue);
+        }
+
+        .input-box span {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--nio-blue);
+            margin-right: 10px;
+        }
+
+        .input-box input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 22px;
+            font-weight: 800;
+            width: 100%;
+            outline: none;
+        }
+
+        .info-grid {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .info-item:last-child { margin-bottom: 0; }
+
+        .info-icon {
+            width: 35px;
+            height: 35px;
+            background: rgba(0, 163, 224, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--nio-blue);
+            font-size: 14px;
+        }
+
+        .info-text h4 {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .info-text p {
+            font-size: 10px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .btn-generate {
+            background: var(--nio-gradient);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 20px;
+            border-radius: 20px;
+            font-size: 15px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 163, 224, 0.2);
+        }
+
+        #pixContainer {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .qr-card {
+            background: white;
+            padding: 15px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .copy-box {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px dashed var(--glass-border);
+        }
+
+        .pix-code {
+            font-size: 10px;
+            word-break: break-all;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .btn-copy {
+            background: #fff;
+            color: #000;
+            border: none;
+            width: 100%;
+            padding: 18px;
+            border-radius: 15px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .status-badge {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--active-green);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="premium-header">
+        <a href="home.html" class="btn-back"><i class="fa-solid fa-chevron-left"></i></a>
+        <div class="header-title"><h1>Depósito Pix</h1></div>
+        <div style="width: 45px;"></div>
+    </header>
+
+    <main class="deposit-container">
+        
+        <div id="depositForm">
+            <div class="balance-card">
+                <span>Saldo de Depósito</span>
+                <h2 id="displayCurrentBalance">R$ 0,00</h2>
+            </div>
+
+            <span class="section-label">Selecione ou digite o valor</span>
+            
+            <div class="quick-amounts">
+                <button class="quick-btn" onclick="setAmount(30)">R$ 30</button>
+                <button class="quick-btn" onclick="setAmount(50)">R$ 50</button>
+                <button class="quick-btn" onclick="setAmount(100)">R$ 100</button>
+                <button class="quick-btn" onclick="setAmount(200)">R$ 200</button>
+                <button class="quick-btn" onclick="setAmount(400)">R$ 400</button>
+                <button class="quick-btn" onclick="setAmount(600)">R$ 600</button>
+            </div>
+
+            <div class="input-box">
+                <span>R$</span>
+                <input type="number" id="depositAmount" placeholder="Outro valor" min="30">
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-icon"><i class="fa-solid fa-bolt"></i></div>
+                    <div class="info-text">
+                        <h4>Crédito Instantâneo</h4>
+                        <p>O saldo cai na conta assim que o Pix for pago.</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="info-text">
+                        <h4>Conexão Criptografada</h4>
+                        <p>Sua transação é processada em um ambiente 100% seguro.</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                    <div class="info-text">
+                        <h4>Valor Mínimo</h4>
+                        <p>O aporte mínimo permitido é de R$ 30,00.</p>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-generate" id="btnSubmit" onclick="handleDeposit()">
+                Gerar Pagamento
+            </button>
+        </div>
+
+        <div id="pixContainer">
+            <div class="status-badge">
+                <i class="fa-solid fa-circle-dot fa-beat"></i> AGUARDANDO PAGAMENTO
+            </div>
+            
+            <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 10px;">Escaneie o QR Code</h2>
+            <p style="font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 25px;">Utilize o app do seu banco para pagar.</p>
+
+            <div class="qr-card">
+                <div id="qrcode"></div>
+            </div>
+
+            <div class="copy-box">
+                <p style="font-size: 9px; color: var(--nio-blue); font-weight: 800; margin-bottom: 8px; text-transform: uppercase;">Pix Copia e Cola</p>
+                <div id="pixStringText" class="pix-code">Carregando código...</div>
+            </div>
+
+            <button class="btn-copy" onclick="copyPixCode()">
+                <i class="fa-solid fa-copy"></i> COPIAR CÓDIGO PIX
+            </button>
+
+            <p style="margin-top: 30px; font-size: 11px; color: rgba(255,255,255,0.3); text-decoration: underline; cursor: pointer;" onclick="location.reload()">
+                Cancelar e voltar
+            </p>
+        </div>
+
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyB2c4YTETLBLpYMW8ZnsdBWZoO8sj64Ql8",
+          authDomain: "nio0-dad5d.firebaseapp.com",
+          projectId: "nio0-dad5d",
+          storageBucket: "nio0-dad5d.firebasestorage.app",
+          messagingSenderId: "251157805045",
+          appId: "1:251157805045:web:6209ee6229fb7de31352bc",
+          measurementId: "G-5QP9TDBLQM"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        let userUID = null;
+        let userData = null;
+        // MANTENHA A URL DO PIPEDREAM ATUALIZADA AQUI
+        const PIPEDREAM_URL = "https://eoj436mi1cazadb.m.pipedream.net";
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                userUID = user.uid;
+                onSnapshot(doc(db, "users", user.uid), (docSnap) => {
+                    if (docSnap.exists()) {
+                        userData = docSnap.data();
+                        document.getElementById('displayCurrentBalance').innerText = 
+                            (userData.saldo || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                    }
+                });
+            } else { window.location.href = "login.html"; }
+        });
+
+        window.setAmount = (val) => document.getElementById('depositAmount').value = val;
+
+        window.copyPixCode = () => {
+            const text = document.getElementById('pixStringText').innerText;
+            navigator.clipboard.writeText(text);
+            Swal.fire({ toast: true, position: 'top', icon: 'success', title: 'Copiado!', showConfirmButton: false, timer: 2000 });
+        };
+
+        window.handleDeposit = async () => {
+            const amountInput = document.getElementById('depositAmount');
+            const amount = parseFloat(amountInput.value);
+            const btn = document.getElementById('btnSubmit');
+
+            if (isNaN(amount) || amount < 30) {
+                return Swal.fire("Valor Inválido", "O depósito mínimo é de R$ 30,00", "warning");
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> GERANDO PIX...';
+
+            try {
+                const res = await fetch(PIPEDREAM_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        userId: userUID, 
+                        amount: amount, 
+                        userName: userData?.nome || "Cliente NIO" 
+                    })
+                });
+
+                if (!res.ok) throw new Error("Erro na rede");
+
+                const data = await res.json();
+                console.log("Resposta Pipedream:", data);
+
+                const brCode = data.pix_code || data.qrcode || (data.body && data.body.pix_code);
+
+                if (brCode) {
+                    document.getElementById('depositForm').style.display = 'none';
+                    document.getElementById('pixContainer').style.display = 'block';
+                    document.getElementById('pixStringText').innerText = brCode;
+                    
+                    const qrDiv = document.getElementById("qrcode");
+                    qrDiv.innerHTML = "";
+                    
+                    new QRCode(qrDiv, { 
+                        text: brCode, 
+                        width: 200, 
+                        height: 200,
+                        correctLevel : QRCode.CorrectLevel.M
+                    });
+                } else { 
+                    console.error("Payload recebido sem código PIX:", data);
+                    throw new Error("Resposta inválida do servidor"); 
+                }
+            } catch (e) {
+                console.error("Erro completo:", e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Falha na Conexão',
+                    text: 'Não foi possível gerar o QR Code. Verifique se o valor é válido e tente novamente.',
+                    confirmButtonColor: '#00a3e0'
+                });
+                btn.disabled = false;
+                btn.innerText = "Gerar Pagamento";
+            }
+        };
+    </script>
+</body>
+</html>

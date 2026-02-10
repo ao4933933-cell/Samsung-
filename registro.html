@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIO - Join the Future</title>
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --nio-blue: #00a3e0;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --neon-glow: rgba(0, 163, 224, 0.3);
+        }
+
+        *:focus {
+            outline: none !important;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #02060d;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: radial-gradient(circle at center, #0a1a2f 0%, #02060d 100%);
+            padding: 40px 0;
+        }
+
+        .register-card {
+            width: 90%;
+            max-width: 420px;
+            background: var(--glass);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+            margin-bottom: 20px;
+        }
+
+        .banner {
+            width: 100%;
+            height: 200px;
+            position: relative;
+        }
+
+        .banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .banner::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            background: linear-gradient(to top, rgba(2, 6, 13, 1), transparent);
+        }
+
+        .form-container {
+            padding: 0 35px 45px;
+            text-align: center;
+        }
+
+        .brand-name {
+            font-size: 2.2rem;
+            font-weight: 200;
+            letter-spacing: 15px;
+            text-transform: uppercase;
+            color: #fff;
+            margin-bottom: 25px;
+            margin-right: -15px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            color: white;
+            font-size: 14px;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .input-group input:focus {
+            border-color: var(--nio-blue);
+            background: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 20px var(--neon-glow);
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 18px;
+            background: var(--nio-blue);
+            color: white;
+            border: none;
+            border-radius: 18px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 10px 25px rgba(0, 163, 224, 0.3);
+            transition: 0.4s;
+        }
+
+        .btn-register:disabled {
+            background: #444;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .btn-login-link {
+            display: block;
+            margin-top: 25px;
+            color: rgba(255, 255, 255, 0.4);
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .btn-login-link b { color: var(--nio-blue); }
+
+        /* Estilo SweetAlert Premium Minimalista */
+        .nio-swal-popup {
+            background: rgba(7, 13, 23, 0.95) !important;
+            backdrop-filter: blur(15px) !important;
+            border: 1px solid var(--glass-border) !important;
+            border-radius: 25px !important;
+        }
+        .nio-swal-title {
+            color: #fff !important;
+            font-size: 1.2rem !important;
+            font-weight: 700 !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .nio-swal-content {
+            color: rgba(255,255,255,0.7) !important;
+            font-size: 0.9rem !important;
+        }
+        .nio-swal-button {
+            background: var(--nio-blue) !important;
+            border-radius: 12px !important;
+            padding: 10px 30px !important;
+            font-weight: 600 !important;
+            text-transform: uppercase !important;
+            font-size: 0.8rem !important;
+            letter-spacing: 1px !important;
+            margin-top: 10px !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-card">
+        <div class="banner">
+            <img src="carronio.jpg" alt="NIO Registration">
+        </div>
+
+        <div class="form-container">
+            <h1 class="brand-name">NIO</h1>
+            
+            <form id="registerForm">
+                <div class="input-group">
+                    <input type="text" id="regName" placeholder="Seu Nome Completo" required>
+                </div>
+
+                <div class="input-group">
+                    <input type="email" id="regEmail" placeholder="Seu E-mail" required>
+                </div>
+
+                <div class="input-group">
+                    <input type="email" id="confirmEmail" placeholder="Confirmar E-mail" required>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" id="regPass" placeholder="Criar Senha" required>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" id="confirmPass" placeholder="Confirmar Senha" required>
+                </div>
+
+                <div class="input-group">
+                    <input type="text" id="inviteCode" placeholder="Código de Convite (Opcional)">
+                </div>
+
+                <button type="submit" class="btn-register" id="btnSubmit">Criar Conta</button>
+                <a href="index.html" class="btn-login-link">Já possui acesso? <b>Entrar</b></a>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, query, getDocs, serverTimestamp, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyB2c4YTETLBLpYMW8ZnsdBWZoO8sj64Ql8",
+          authDomain: "nio0-dad5d.firebaseapp.com",
+          projectId: "nio0-dad5d",
+          storageBucket: "nio0-dad5d.firebasestorage.app",
+          messagingSenderId: "251157805045",
+          appId: "1:251157805045:web:6209ee6229fb7de31352bc",
+          measurementId: "G-5QP9TDBLQM"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const nioNotify = (title, text, icon) => {
+            return Swal.fire({
+                title: title,
+                text: text,
+                icon: icon,
+                customClass: {
+                    popup: 'nio-swal-popup',
+                    title: 'nio-swal-title',
+                    htmlContainer: 'nio-swal-content',
+                    confirmButton: 'nio-swal-button'
+                },
+                buttonsStyling: false
+            });
+        };
+
+        // Capturar código de convite via URL (se existir)
+        const urlParams = new URLSearchParams(window.location.search);
+        const refCode = urlParams.get('ref');
+        if (refCode) {
+            const inputInvite = document.getElementById('inviteCode');
+            inputInvite.value = refCode;
+            inputInvite.readOnly = true; 
+            inputInvite.style.opacity = "0.6";
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const emailConfirm = document.getElementById('confirmEmail').value;
+            const pass = document.getElementById('regPass').value;
+            const confirm = document.getElementById('confirmPass').value;
+            const shortCode = document.getElementById('inviteCode').value.trim();
+
+            // Validações Básicas
+            if(email !== emailConfirm) {
+                nioNotify('Atenção', 'Os e-mails informados não coincidem.', 'warning');
+                return;
+            }
+
+            if(pass !== confirm) {
+                nioNotify('Atenção', 'As senhas informadas não coincidem.', 'warning');
+                return;
+            }
+
+            if(pass.length < 6) {
+                nioNotify('Segurança', 'A senha deve conter no mínimo 6 caracteres.', 'info');
+                return;
+            }
+
+            const btn = document.getElementById('btnSubmit');
+            btn.disabled = true;
+            btn.innerText = "Sincronizando Rede...";
+
+            try {
+                // Configuração inicial da rede (Herança)
+                let nivel1 = "direto";
+                let nivel2 = "direto";
+                let nivel3 = "direto";
+
+                // --- MOTOR DE BUSCA E HERANÇA DE GENEALOGIA ---
+                if (shortCode && shortCode !== "" && shortCode !== "direto") {
+                    const usersRef = collection(db, "users");
+                    const q = query(usersRef);
+                    const querySnapshot = await getDocs(q);
+                    
+                    let sponsorData = null;
+                    let sponsorFullId = null;
+
+                    querySnapshot.forEach((docSnap) => {
+                        if (docSnap.id.substring(0, 8).toLowerCase() === shortCode.toLowerCase()) {
+                            sponsorFullId = docSnap.id;
+                            sponsorData = docSnap.data();
+                        }
+                    });
+
+                    if (sponsorFullId && sponsorData) {
+                        nivel1 = sponsorFullId; 
+                        nivel2 = sponsorData.indicadoPor || "direto";
+                        nivel3 = sponsorData.nivel2 || "direto";
+                        console.log("Rede Identificada - N1:", nivel1, "N2:", nivel2, "N3:", nivel3);
+                    }
+                }
+
+                btn.innerText = "Finalizando Registro...";
+
+                const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+                const user = userCredential.user;
+
+                await setDoc(doc(db, "users", user.uid), {
+                    nome: name,
+                    email: email,
+                    userId: user.uid,
+                    uid: user.uid,
+                    indicadoPor: nivel1,
+                    nivel2: nivel2,      
+                    nivel3: nivel3,      
+                    saldo: 0,            
+                    saldoLucro: 0,       
+                    totalInvestido: 0,
+                    totalComissaoRede: 0,
+                    totalGanhos: 0,
+                    dataRegistro: serverTimestamp(),
+                    isVip: false,
+                    status: "ativo"
+                });
+
+                nioNotify('Bem-vindo', 'Sua conta NIO foi criada com sucesso.', 'success').then(() => {
+                    window.location.href = "home.html";
+                });
+
+            } catch (error) {
+                console.error(error);
+                let msg = "Não foi possível completar o registro.";
+                if(error.code === 'auth/email-already-in-use') msg = "Este e-mail já está em uso.";
+                if(error.code === 'auth/invalid-email') msg = "E-mail inválido.";
+                if(error.code === 'auth/weak-password') msg = "A senha é muito fraca.";
+                
+                nioNotify('Falha', msg, 'error');
+                btn.disabled = false;
+                btn.innerText = "Criar Conta";
+            }
+        });
+    </script>
+</body>
+</html>

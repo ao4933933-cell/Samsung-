@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIO - Experience Progress</title>
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+    <style>
+        :root {
+            --nio-blue: #00a3e0;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --neon-glow: rgba(0, 163, 224, 0.3);
+        }
+
+        /* REMOVE A BORDA AZUL E REALCE DE TOQUE */
+        *:focus {
+            outline: none !important;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            -webkit-tap-highlight-color: transparent; 
+        }
+
+        body {
+            background-color: #02060d;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background-image: 
+                radial-gradient(circle at center, #0a1a2f 0%, #02060d 100%);
+        }
+
+        .premium-card {
+            width: 90%;
+            max-width: 390px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+            position: relative;
+            z-index: 1;
+        }
+
+        .banner-wrapper {
+            width: 100%;
+            height: 280px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 40px 40px 0 0;
+        }
+
+        .banner-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.05);
+        }
+
+        .banner-wrapper::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70%;
+            background: linear-gradient(to top, rgba(2, 6, 13, 1) 0%, transparent 100%);
+        }
+
+        .content-area {
+            padding: 10px 35px 45px;
+            text-align: center;
+        }
+
+        .brand-title {
+            font-size: 2.8rem;
+            font-weight: 200;
+            letter-spacing: 20px;
+            text-transform: uppercase;
+            color: #fff;
+            margin-right: -20px;
+            margin-bottom: 35px;
+            opacity: 0.9;
+        }
+
+        .input-wrapper {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 20px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .input-wrapper input:focus {
+            border-color: var(--nio-blue);
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 25px var(--neon-glow);
+        }
+
+        .btn-glow {
+            width: 100%;
+            padding: 20px;
+            background: var(--nio-blue);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.4s;
+            box-shadow: 0 15px 30px rgba(0, 163, 224, 0.2);
+            margin-top: 10px;
+        }
+
+        .btn-glow:active {
+            transform: scale(0.98);
+        }
+
+        .btn-outline {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            font-size: 13px;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        .btn-outline:hover {
+            color: white;
+            border-color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::placeholder { color: rgba(255, 255, 255, 0.2); }
+
+        /* ESTILIZAÇÃO COMPACTA DO SWEETALERT NIO */
+        .nio-swal-popup {
+            width: 300px !important; /* Menor largura */
+            background: rgba(10, 26, 47, 0.98) !important;
+            backdrop-filter: blur(10px) !important;
+            border: 1px solid var(--nio-blue) !important;
+            border-radius: 20px !important;
+            color: #fff !important;
+            padding: 15px !important;
+        }
+        .nio-swal-title {
+            font-size: 18px !important;
+            font-weight: 600 !important;
+        }
+        .nio-swal-html {
+            font-size: 14px !important;
+        }
+        .nio-swal-button {
+            background: var(--nio-blue) !important;
+            border-radius: 12px !important;
+            padding: 8px 25px !important;
+            font-size: 13px !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="premium-card">
+        <div class="banner-wrapper">
+            <img src="carronio.jpg" alt="NIO Vision">
+        </div>
+
+        <div class="content-area">
+            <h1 class="brand-title">NIO</h1>
+            
+            <form id="loginForm">
+                <div class="input-wrapper">
+                    <input type="email" id="email" placeholder="Seu e-mail" required>
+                </div>
+
+                <div class="input-wrapper">
+                    <input type="password" id="password" placeholder="Senha de segurança" required>
+                </div>
+
+                <button type="submit" class="btn-glow" id="btnLogin">Conectar</button>
+                <a href="registro.html" class="btn-outline">Criar nova conta NIO</a>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+        
+        const firebaseConfig = {
+          apiKey: "AIzaSyB2c4YTETLBLpYMW8ZnsdBWZoO8sj64Ql8",
+          authDomain: "nio0-dad5d.firebaseapp.com",
+          projectId: "nio0-dad5d",
+          storageBucket: "nio0-dad5d.firebasestorage.app",
+          messagingSenderId: "251157805045",
+          appId: "1:251157805045:web:6209ee6229fb7de31352bc",
+          measurementId: "G-5QP9TDBLQM"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+
+        // FUNÇÃO DE ALERTA COMPACTO NIO
+        const nioAlert = (title, text, icon) => {
+            return Swal.fire({
+                title: title,
+                text: text,
+                icon: icon,
+                width: '300px',
+                position: 'center',
+                showConfirmButton: true,
+                customClass: {
+                    popup: 'nio-swal-popup',
+                    title: 'nio-swal-title',
+                    htmlContainer: 'nio-swal-html',
+                    confirmButton: 'nio-swal-button'
+                },
+                buttonsStyling: false
+            });
+        };
+
+        const form = document.getElementById('loginForm');
+        const btnLogin = document.getElementById('btnLogin');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            btnLogin.disabled = true;
+            btnLogin.innerText = "CONECTANDO...";
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                nioAlert('Sucesso', 'Conexão estabelecida com sucesso!', 'success').then(() => {
+                    window.location.href = "home.html";
+                });
+
+            } catch (error) {
+                console.error(error);
+                let msg = "Erro ao conectar. Verifique seus dados.";
+                
+                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+                    msg = "E-mail ou senha incorretos.";
+                } else if (error.code === 'auth/too-many-requests') {
+                    msg = "Muitas tentativas. Tente mais tarde.";
+                }
+
+                nioAlert('Falha', msg, 'error');
+                btnLogin.disabled = false;
+                btnLogin.innerText = "CONECTAR";
+            }
+        });
+    </script>
+</body>
+</html>

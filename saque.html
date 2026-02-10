@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIO - Retirada Segura</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --nio-blue: #00a3e0;
+            --dark-bg: #010409;
+            --glass-card: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --nio-gradient: linear-gradient(135deg, #00a3e0 0%, #005a87 100%);
+            --error: #ff4d4d;
+            --success: #00ff88;
+            --warning: #ffcc00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            background-image: radial-gradient(circle at 50% 0%, #0a1a2f 0%, transparent 70%);
+            min-height: 100vh;
+            padding-bottom: 40px;
+            overflow-x: hidden;
+        }
+
+        /* Estilização Premium SweetAlert */
+        .premium-swal-popup {
+            background: rgba(13, 20, 30, 0.95) !important;
+            backdrop-filter: blur(20px) !important;
+            border: 1px solid var(--glass-border) !important;
+            border-radius: 30px !important;
+            padding: 2em !important;
+        }
+        .premium-swal-title {
+            color: white !important;
+            font-weight: 800 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1px !important;
+        }
+        .premium-swal-html {
+            color: rgba(255,255,255,0.7) !important;
+            font-size: 0.95rem !important;
+        }
+        .premium-swal-confirm {
+            background: var(--nio-gradient) !important;
+            border-radius: 15px !important;
+            padding: 12px 30px !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1px !important;
+            box-shadow: 0 5px 15px rgba(0, 163, 224, 0.3) !important;
+        }
+
+        .premium-header {
+            padding: 40px 25px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .btn-back {
+            background: var(--glass-card);
+            border: 1px solid var(--glass-border);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .btn-back:active { transform: scale(0.9); }
+
+        .header-title h1 {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: var(--nio-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .withdraw-container {
+            padding: 0 25px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .balance-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid var(--glass-border);
+            border-radius: 35px;
+            padding: 35px 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            backdrop-filter: blur(25px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--nio-blue), transparent);
+        }
+
+        .balance-card span {
+            font-size: 10px;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .balance-card h2 {
+            font-size: 2.5rem;
+            margin-top: 10px;
+            font-weight: 800;
+            color: var(--success);
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+
+        .lock-notice {
+            background: rgba(0, 163, 224, 0.05);
+            border: 1px solid rgba(0, 163, 224, 0.2);
+            border-radius: 20px;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .lock-notice i { color: var(--nio-blue); font-size: 22px; }
+        .lock-notice p { font-size: 11px; color: rgba(255,255,255,0.7); line-height: 1.6; }
+
+        .pix-type-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .type-option {
+            background: var(--glass-card);
+            border: 1px solid var(--glass-border);
+            padding: 15px;
+            border-radius: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 11px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .type-option.active {
+            border-color: var(--nio-blue);
+            color: white;
+            background: rgba(0, 163, 224, 0.15);
+            box-shadow: 0 0 20px rgba(0, 163, 224, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 10px;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 800;
+            padding-left: 5px;
+            letter-spacing: 1px;
+        }
+
+        .input-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 22px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .input-box:focus-within {
+            border-color: var(--nio-blue);
+            background: rgba(255,255,255,0.06);
+            box-shadow: 0 0 25px rgba(0, 163, 224, 0.1);
+        }
+
+        .input-box i {
+            color: var(--nio-blue);
+            margin-right: 18px;
+            font-size: 20px;
+        }
+
+        .input-box input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 16px;
+            width: 100%;
+            outline: none;
+            font-weight: 600;
+        }
+        .input-box input::placeholder { color: rgba(255,255,255,0.2); }
+
+        .btn-withdraw {
+            background: var(--nio-gradient);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 25px;
+            border-radius: 22px;
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            box-shadow: 0 15px 35px rgba(0, 163, 224, 0.3);
+            transition: 0.4s;
+            margin-top: 15px;
+        }
+        .btn-withdraw:active { transform: scale(0.96); }
+
+        .rules-list {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 20px;
+        }
+
+        .rules-list p {
+            font-size: 10px;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="premium-header">
+        <a href="perfil.html" class="btn-back"><i class="fa-solid fa-chevron-left"></i></a>
+        <div class="header-title"><h1>Safe Withdrawal</h1></div>
+        <div style="width: 45px;"></div>
+    </header>
+
+    <main class="withdraw-container">
+        
+        <div class="balance-card">
+            <span>Lucros Disponíveis</span>
+            <h2 id="userBalance">R$ 0,00</h2>
+        </div>
+
+        <div class="lock-notice">
+            <i class="fa-solid fa-bolt"></i>
+            <p>Janela de saque operacional aberta 24/7. Processamento prioritário via Protocolo NIO.</p>
+        </div>
+
+        <div class="form-group">
+            <label>Protocolo de Chave PIX</label>
+            <div class="pix-type-selector">
+                <div class="type-option active" onclick="selectPixType('cpf', this)">CPF</div>
+                <div class="type-option" onclick="selectPixType('email', this)">E-MAIL</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label id="pixLabel">Chave CPF Cadastrada</label>
+            <div class="input-box">
+                <i class="fa-solid fa-shield-check" id="pixIcon"></i>
+                <input type="text" id="pixKey" placeholder="000.000.000-00">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Montante para Resgate</label>
+            <div class="input-box">
+                <i class="fa-solid fa-wallet"></i>
+                <input type="number" id="withdrawAmount" placeholder="Min. 35.00" step="0.01">
+            </div>
+        </div>
+
+        <button class="btn-withdraw" id="btnAction" onclick="requestWithdraw()">Solicitar Resgate</button>
+
+        <div class="rules-list">
+            <p><i class="fa-solid fa-circle-check" style="color: var(--nio-blue);"></i> Retirada de lucros operacionais liberada.</p>
+            <p><i class="fa-solid fa-bolt" style="color: var(--warning);"></i> Taxa de processamento da rede: 10%.</p>
+        </div>
+
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, onSnapshot, collection, addDoc, serverTimestamp, runTransaction, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDyahOcB_wXbU_E0IzEXHBMsyw8uqJR2Es",
+            authDomain: "ironpay-cc5e1.firebaseapp.com",
+            projectId: "ironpay-cc5e1",
+            storageBucket: "ironpay-cc5e1.firebasestorage.app",
+            messagingSenderId: "283629903594",
+            appId: "1:283629903594:web:07b39ed18372335c758193"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        let userUID = null;
+        let userDataGlobal = null;
+        let currentSaldoLucro = 0; 
+        let selectedPixType = 'cpf';
+
+        const Toast = Swal.mixin({
+            customClass: {
+                popup: 'premium-swal-popup',
+                title: 'premium-swal-title',
+                htmlContainer: 'premium-swal-html',
+                confirmButton: 'premium-swal-confirm'
+            },
+            buttonsStyling: false,
+            background: 'transparent'
+        });
+
+        window.selectPixType = function(type, el) {
+            selectedPixType = type;
+            document.querySelectorAll('.type-option').forEach(opt => opt.classList.remove('active'));
+            el.classList.add('active');
+            
+            const label = document.getElementById('pixLabel');
+            const input = document.getElementById('pixKey');
+            const icon = document.getElementById('pixIcon');
+
+            if(type === 'cpf') {
+                label.innerText = "Chave CPF Cadastrada";
+                input.placeholder = "000.000.000-00";
+                icon.className = "fa-solid fa-shield-check";
+            } else if(type === 'email') {
+                label.innerText = "Chave E-mail Cadastrada";
+                input.placeholder = "nome@exemplo.com";
+                icon.className = "fa-solid fa-at";
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                userUID = user.uid;
+                onSnapshot(doc(db, "users", user.uid), (docSnap) => {
+                    if (docSnap.exists()) {
+                        userDataGlobal = docSnap.data();
+                        currentSaldoLucro = userDataGlobal.saldoLucro || 0; 
+                        document.getElementById('userBalance').innerText = `R$ ${currentSaldoLucro.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+                    }
+                });
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+
+        window.requestWithdraw = async function() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const pix = document.getElementById('pixKey').value;
+            const btn = document.getElementById('btnAction');
+
+            if (!pix || pix.length < 5) {
+                Toast.fire({ title: 'Dados Inválidos', text: 'Informe uma chave PIX correta.', icon: 'error' });
+                return;
+            }
+
+            if (isNaN(amount) || amount < 35) {
+                Toast.fire({ title: 'Limite Mínimo', text: 'O valor mínimo para retirada é R$ 35,00.', icon: 'warning' });
+                return;
+            }
+
+            if (amount > currentSaldoLucro) {
+                Toast.fire({ title: 'Saldo Insuficiente', text: 'Você não possui esse montante em lucros.', icon: 'error' });
+                return;
+            }
+
+            const tax = amount * 0.10;
+            const netAmount = amount - tax;
+
+            const confirm = await Toast.fire({
+                title: 'Confirmar Saque?',
+                html: `Você receberá <b>R$ ${netAmount.toFixed(2)}</b><br><small>Desconto de 10% da rede aplicado.</small>`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Confirmar Resgate',
+                cancelButtonText: 'Cancelar'
+            });
+
+            if (!confirm.isConfirmed) return;
+
+            btn.disabled = true;
+            btn.innerText = "PROCESSANDO...";
+
+            try {
+                await runTransaction(db, async (transaction) => {
+                    const userRef = doc(db, "users", userUID);
+                    const userDoc = await transaction.get(userRef);
+                    
+                    const actualBalance = userDoc.data().saldoLucro || 0;
+                    if (actualBalance < amount) throw "Saldo insuficiente no servidor.";
+
+                    const newBalance = actualBalance - amount;
+                    transaction.update(userRef, { saldoLucro: newBalance });
+
+                    const withdrawRef = doc(collection(db, "solicitacoes_saque"));
+                    transaction.set(withdrawRef, {
+                        uid: userUID,
+                        nomeUsuario: userDataGlobal.nome || "Usuário NIO",
+                        valorBruto: amount,
+                        valorLiquido: netAmount,
+                        chavePix: pix,
+                        pixType: selectedPixType,
+                        status: "pendente",
+                        dataSolicitacao: serverTimestamp()
+                    });
+                });
+
+                Toast.fire({ title: 'Solicitado!', text: 'Seu resgate foi encaminhado para processamento.', icon: 'success' });
+                setTimeout(() => { window.location.href = "extrato.html"; }, 2000);
+
+            } catch (e) {
+                Toast.fire({ title: 'Erro', text: e.toString(), icon: 'error' });
+                btn.disabled = false;
+                btn.innerText = "Solicitar Resgate";
+            }
+        }
+    </script>
+</body>
+</html>

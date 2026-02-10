@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIO | Visionary Admin Control</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --nio-blue: #00a3e0;
+            --nio-neon: #00f2ff;
+            --dark-bg: #02060d;
+            --card-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --danger: #ff4d4d;
+            --success: #00ff88;
+            --accent-glow: rgba(0, 163, 224, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; }
+
+        body {
+            background-color: var(--dark-bg);
+            color: #e6edf3;
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% -20%, #0a1a2f 0%, #02060d 80%);
+        }
+
+        /* SIDEBAR PREMIUM */
+        .sidebar {
+            width: 280px;
+            background: rgba(2, 6, 13, 0.9);
+            backdrop-filter: blur(25px);
+            border-right: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            padding: 40px 25px;
+            height: 100vh;
+            position: fixed;
+            z-index: 1000;
+        }
+
+        .brand { 
+            font-size: 28px; 
+            font-weight: 100; 
+            letter-spacing: 12px; 
+            color: white; 
+            margin-bottom: 60px; 
+            text-align: center;
+            text-shadow: 0 0 20px var(--nio-blue);
+        }
+
+        .nav-link {
+            padding: 18px 20px;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-link i { font-size: 18px; width: 25px; }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--card-bg);
+            color: var(--nio-blue);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transform: translateX(5px);
+        }
+
+        /* MAIN CONTENT */
+        .main-content { margin-left: 280px; flex: 1; padding: 50px; width: calc(100% - 280px); }
+
+        .page-title { font-size: 24px; font-weight: 300; margin-bottom: 40px; letter-spacing: 2px; color: var(--nio-blue); }
+
+        /* STATS CARDS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 30px;
+            transition: 0.3s;
+            min-width: 0;
+        }
+
+        .stat-card:hover { border-color: var(--nio-blue); background: rgba(0, 163, 224, 0.03); }
+
+        .stat-card p { font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
+        .stat-card h2 { 
+            font-size: clamp(18px, 2vw, 26px); 
+            font-weight: 700; 
+            color: #fff; 
+            word-break: break-all;
+        }
+
+        /* TABLES & SECTIONS */
+        .admin-section {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 35px;
+            padding: 35px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+            overflow-x: auto;
+        }
+
+        table { width: 100%; border-collapse: separate; border-spacing: 0 10px; min-width: 800px; }
+        th { text-align: left; padding: 15px 20px; color: rgba(255,255,255,0.3); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+        td { padding: 20px; background: rgba(255,255,255,0.01); font-size: 14px; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); white-space: nowrap; }
+        td:first-child { border-left: 1px solid var(--glass-border); border-radius: 15px 0 0 15px; }
+        td:last-child { border-right: 1px solid var(--glass-border); border-radius: 0 15px 15px 0; }
+
+        /* BUTTONS */
+        .btn-action {
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            transition: 0.3s;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-approve { background: var(--success); color: #000; }
+        .btn-reject { background: var(--danger); color: #fff; }
+        .btn-edit { background: var(--nio-blue); color: #fff; }
+
+        .search-input {
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--glass-border);
+            padding: 20px 30px;
+            border-radius: 25px;
+            color: white;
+            font-size: 16px;
+            margin-bottom: 20px;
+            outline: none;
+            transition: 0.4s;
+        }
+
+        .hidden { display: none !important; }
+
+        #loading-overlay {
+            position: fixed; top:0; left:0; width: 100%; height: 100%;
+            background: var(--dark-bg); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            font-weight: 100; letter-spacing: 10px; color: var(--nio-blue);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loading-overlay">AUTHENTICATING NIO CORE...</div>
+
+    <aside class="sidebar">
+        <div class="brand">NIO</div>
+        <nav>
+            <div class="nav-link active" onclick="showSection('dashboard', this)"><i class="fa-solid fa-house-chimney-window"></i> Dashboard</div>
+            <div class="nav-link" onclick="showSection('financeiro', this)"><i class="fa-solid fa-vault"></i> Financeiro</div>
+            <div class="nav-link" onclick="showSection('usuarios', this)"><i class="fa-solid fa-user-gear"></i> Gestão Direta</div>
+            <div class="nav-link" onclick="showSection('contratados', this)"><i class="fa-solid fa-id-card-clip"></i> Contratados</div>
+            <div class="nav-link" onclick="location.href='home.html'"><i class="fa-solid fa-power-off"></i> Sair</div>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        
+        <section id="dashboard">
+            <h1 class="page-title">Overview da Rede</h1>
+            <div class="stats-grid">
+                <div class="stat-card"><p>Liquidez Total</p><h2 id="stat-total-platform">R$ 0,00</h2></div>
+                <div class="stat-card"><p>Ganhos Injetados</p><h2 id="stat-total-profit">R$ 0,00</h2></div>
+                <div class="stat-card"><p>Saques em Espera</p><h2 id="stat-pending-withdraw">R$ 0,00</h2></div>
+                <div class="stat-card"><p>Base de Usuários</p><h2 id="stat-users-today">0</h2></div>
+            </div>
+
+            <div class="admin-section">
+                <h3>Recém Chegados</h3>
+                <table>
+                    <thead><tr><th>E-mail</th><th>Indicação</th><th>Registro</th><th>Saldo Atual</th></tr></thead>
+                    <tbody id="table-new-users"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="financeiro" class="hidden">
+            <h1 class="page-title">Centro de Pagamentos (PIX)</h1>
+            <div class="admin-section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Investidor</th>
+                            <th>Valor Bruto</th>
+                            <th>Líquido (-10%)</th>
+                            <th>Tipo Chave</th>
+                            <th>Chave Pix</th>
+                            <th>Operação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-withdrawals"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="usuarios" class="hidden">
+            <h1 class="page-title">Editor de Parâmetros</h1>
+            <div style="display: flex; gap: 15px;">
+                <input type="text" id="searchInput" class="search-input" placeholder="Insira o e-mail do investidor...">
+                <button class="btn-action btn-edit" style="height: 60px; padding: 0 40px; border-radius: 25px;" onclick="searchUser()">Localizar</button>
+            </div>
+
+            <div id="userDetails" class="admin-section hidden">
+                <div class="user-panel">
+                    <div class="info-card" style="background: rgba(255,255,255,0.02); padding: 25px; border-radius: 20px; border: 1px solid var(--glass-border);">
+                        <div class="editable-field" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);"><label style="color: gray; font-size: 12px;">UID</label><span id="u-uid" style="font-weight: 600;">-</span></div>
+                        <div class="editable-field" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);"><label style="color: gray; font-size: 12px;">E-mail</label><span id="u-email" style="font-weight: 600;">-</span></div>
+                        <div class="editable-field" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer;" onclick="editData('saldo', 'Saldo')"><label style="color: gray; font-size: 12px;">Saldo Principal</label><span id="u-balance" style="color: var(--nio-blue);">R$ 0,00</span></div>
+                        <div class="editable-field" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer;" onclick="editData('saldoLucro', 'Saldo de Lucro')"><label style="color: gray; font-size: 12px;">Saldo de Lucro</label><span id="u-profit" style="color: var(--success);">R$ 0,00</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contratados" class="hidden">
+            <h1 class="page-title">Membros em Contrato</h1>
+            <div class="admin-section">
+                <table>
+                    <thead><tr><th>Membro</th><th>Saldo Principal</th><th>Saldo Lucro</th><th>Ações de Contrato</th></tr></thead>
+                    <tbody id="table-contratados"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs, doc, updateDoc, onSnapshot, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDyahOcB_wXbU_E0IzEXHBMsyw8uqJR2Es",
+            authDomain: "ironpay-cc5e1.firebaseapp.com",
+            projectId: "ironpay-cc5e1",
+            storageBucket: "ironpay-cc5e1.firebasestorage.app",
+            messagingSenderId: "283629903594",
+            appId: "1:283629903594:web:07b39ed18372335c758193"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        const ADMIN_EMAIL = "ao981017448@gmail.com";
+        const MAKE_WEBHOOK_URL = "https://hook.us2.make.com/1i8cv3gfh95c5oyhw8h3yanjxgqchq7r";
+        let currentSearchUid = null;
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user || user.email !== ADMIN_EMAIL) {
+                window.location.href = "login.html";
+                return;
+            }
+            document.getElementById('loading-overlay').classList.add('hidden');
+            initCore();
+        });
+
+        window.showSection = (id, el) => {
+            document.querySelectorAll('main section').forEach(s => s.classList.add('hidden'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.getElementById(id).classList.remove('hidden');
+            el.classList.add('active');
+        };
+
+        function formatBRL(val) {
+            return (val || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function initCore() {
+            // Dashboard & Usuarios Real-time
+            onSnapshot(collection(db, "users"), (snap) => {
+                let bal = 0, prof = 0;
+                const tbody = document.getElementById('table-new-users');
+                const contratadosBody = document.getElementById('table-contratados');
+                tbody.innerHTML = "";
+                contratadosBody.innerHTML = "";
+
+                snap.forEach(u => {
+                    const d = u.data();
+                    bal += (d.saldo || 0);
+                    prof += (d.saldoLucro || 0);
+
+                    tbody.innerHTML += `<tr><td>${d.email}</td><td>${d.indicadoPor || 'Direto'}</td><td>${d.dataRegistro || '-'}</td><td>${formatBRL(d.saldo)}</td></tr>`;
+
+                    if(d.contratado) {
+                        contratadosBody.innerHTML += `
+                            <tr>
+                                <td>${d.email}</td>
+                                <td>${formatBRL(d.saldo)}</td>
+                                <td>${formatBRL(d.saldoLucro)}</td>
+                                <td><button class="btn-action btn-reject" onclick="toggleContrato('${u.id}', false)">Encerrar</button></td>
+                            </tr>`;
+                    }
+                });
+
+                document.getElementById('stat-total-platform').innerText = formatBRL(bal);
+                document.getElementById('stat-total-profit').innerText = formatBRL(prof);
+                document.getElementById('stat-users-today').innerText = snap.size;
+            });
+
+            // GESTÃO DE SAQUES (Coleção solicitacoes_saque)
+            onSnapshot(query(collection(db, "solicitacoes_saque"), where("status", "==", "pendente")), (snap) => {
+                const tbody = document.getElementById('table-withdrawals');
+                let totalPendente = 0;
+                tbody.innerHTML = "";
+                
+                snap.forEach(s => {
+                    const d = s.data();
+                    totalPendente += d.valorBruto;
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><b>${d.nomeUsuario}</b><br><small>${d.emailUsuario}</small></td>
+                            <td>${formatBRL(d.valorBruto)}</td>
+                            <td style="color: var(--success); font-weight: bold;">${formatBRL(d.valorLiquido)}</td>
+                            <td><span class="badge">${d.tipoChave}</span></td>
+                            <td style="color: var(--nio-blue);">${d.chavePix}</td>
+                            <td>
+                                <button class="btn-action btn-approve" onclick="aprovarSaque('${s.id}', ${JSON.stringify(d).replace(/"/g, '&quot;')})"><i class="fa-solid fa-check"></i></button>
+                                <button class="btn-action btn-reject" onclick="rejeitarSaque('${s.id}', '${d.uid}', ${d.valorBruto})"><i class="fa-solid fa-xmark"></i></button>
+                            </td>
+                        </tr>`;
+                });
+                document.getElementById('stat-pending-withdraw').innerText = formatBRL(totalPendente);
+            });
+        }
+
+        // FUNÇÃO APROVAR SAQUE + WEBHOOK MAKE
+        window.aprovarSaque = async (docId, data) => {
+            const confirm = await Swal.fire({
+                title: 'Aprovar Pagamento?',
+                text: `Confirmar envio de ${formatBRL(data.valorLiquido)} para ${data.emailUsuario}?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#00ff88',
+                confirmButtonText: 'Sim, Pagar via PIX'
+            });
+
+            if (!confirm.isConfirmed) return;
+
+            try {
+                // 1. Atualizar Status na solicitação
+                await updateDoc(doc(db, "solicitacoes_saque", docId), { 
+                    status: "aprovado",
+                    dataProcessamento: serverTimestamp()
+                });
+
+                // 2. Atualizar Status no histórico do usuário
+                const qTx = query(collection(db, "transactions"), where("uid", "==", data.uid), where("status", "==", "Aguardando Aprovação"));
+                const snapTx = await getDocs(qTx);
+                snapTx.forEach(async (tDoc) => {
+                    await updateDoc(doc(db, "transactions", tDoc.id), { status: "Concluído" });
+                });
+
+                // 3. Enviar para o Webhook do Make.com
+                await fetch(MAKE_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        event: "SAQUE_APROVADO",
+                        ...data,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+
+                Swal.fire('Sucesso!', 'Saque aprovado e enviado para processamento.', 'success');
+            } catch (e) {
+                console.error(e);
+                Swal.fire('Erro', 'Falha ao processar saque.', 'error');
+            }
+        };
+
+        // FUNÇÃO REJEITAR SAQUE (Estorna o valor)
+        window.rejeitarSaque = async (docId, uid, valorBruto) => {
+            const { value: motivo } = await Swal.fire({
+                title: 'Rejeitar Saque?',
+                input: 'text',
+                inputLabel: 'Motivo da rejeição',
+                inputPlaceholder: 'Dados PIX incorretos...',
+                showCancelButton: true
+            });
+
+            if (motivo) {
+                try {
+                    // 1. Atualizar solicitação
+                    await updateDoc(doc(db, "solicitacoes_saque", docId), { status: "rejeitado", motivo: motivo });
+                    
+                    // 2. Estornar saldoLucro ao usuário
+                    const userRef = doc(db, "users", uid);
+                    const userSnap = await getDocs(query(collection(db, "users"), where("__name__", "==", uid)));
+                    const currentProf = userSnap.docs[0].data().saldoLucro || 0;
+                    await updateDoc(userRef, { saldoLucro: currentProf + valorBruto });
+
+                    // 3. Atualizar histórico
+                    const qTx = query(collection(db, "transactions"), where("uid", "==", uid), where("status", "==", "Aguardando Aprovação"));
+                    const snapTx = await getDocs(qTx);
+                    snapTx.forEach(async (tDoc) => {
+                        await updateDoc(doc(db, "transactions", tDoc.id), { status: "Rejeitado", description: "Estornado: " + motivo });
+                    });
+
+                    Swal.fire('Rejeitado', 'O valor foi devolvido ao usuário.', 'info');
+                } catch (e) {
+                    Swal.fire('Erro', 'Falha ao estornar.', 'error');
+                }
+            }
+        };
+
+        window.searchUser = async () => {
+            const email = document.getElementById('searchInput').value;
+            const q = query(collection(db, "users"), where("email", "==", email));
+            const snap = await getDocs(q);
+
+            if(snap.empty) {
+                Swal.fire("Erro", "Membro não encontrado.", "error");
+                return;
+            }
+
+            const uDoc = snap.docs[0];
+            const d = uDoc.data();
+            currentSearchUid = uDoc.id;
+
+            document.getElementById('u-uid').innerText = uDoc.id;
+            document.getElementById('u-email').innerText = d.email;
+            document.getElementById('u-balance').innerText = formatBRL(d.saldo);
+            document.getElementById('u-profit').innerText = formatBRL(d.saldoLucro);
+            document.getElementById('userDetails').classList.remove('hidden');
+        };
+
+        window.editData = async (field, label) => {
+            const { value: newVal } = await Swal.fire({
+                title: `Ajustar ${label}`,
+                input: 'number',
+                background: '#02060d',
+                color: '#fff'
+            });
+
+            if (newVal) {
+                await updateDoc(doc(db, "users", currentSearchUid), { [field]: parseFloat(newVal) });
+                Swal.fire("Sucesso", "Dados atualizados.", "success");
+                searchUser(); 
+            }
+        };
+
+        window.toggleContrato = async (uid, status) => {
+            await updateDoc(doc(db, "users", uid), { contratado: status });
+            Swal.fire("Contrato", "Status atualizado.", "success");
+        };
+
+        window.banUser = async () => {
+            const confirm = await Swal.fire({
+                title: "Bloquear Membro?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#ff4d4d",
+                confirmButtonText: "Sim, Banir!"
+            });
+
+            if (confirm.isConfirmed) {
+                await updateDoc(doc(db, "users", currentSearchUid), { banido: true });
+                Swal.fire("Banido", "Acesso bloqueado.", "success");
+            }
+        };
+
+    </script>
+</body>
+</html>

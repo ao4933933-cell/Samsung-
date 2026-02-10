@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIO - Perfil Premium Real</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --nio-blue: #00a3e0;
+            --dark-bg: #010409;
+            --glass-card: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --nio-gradient: linear-gradient(135deg, #00a3e0 0%, #005a87 100%);
+            --profit-gradient: linear-gradient(135deg, #00ff88 0%, #008f4f 100%);
+            --danger: #ff4d4d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            padding-bottom: 120px;
+            background-image: radial-gradient(circle at 90% 10%, #0a1a2f 0%, transparent 40%);
+            min-height: 100vh;
+        }
+
+        /* HEADER DE PERFIL */
+        .profile-header {
+            padding: 50px 25px 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .avatar-container {
+            position: relative;
+        }
+
+        .profile-img {
+            width: 75px;
+            height: 75px;
+            border-radius: 25px;
+            border: 2px solid var(--nio-blue);
+            background: rgba(0, 163, 224, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            color: var(--nio-blue);
+            box-shadow: 0 0 20px rgba(0, 163, 224, 0.2);
+        }
+
+        .verified-badge {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            background: #00ff88;
+            color: #000;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            border: 3px solid var(--dark-bg);
+        }
+
+        .user-meta h2 {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .user-meta p {
+            font-size: 11px;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        /* AREA DE CARDS DE SALDO */
+        .wallets-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 0 20px 35px;
+        }
+
+        .wallet-card {
+            border-radius: 30px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .wallet-card.deposit { background: var(--nio-gradient); }
+        .wallet-card.profit { background: var(--profit-gradient); }
+
+        .wallet-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            font-weight: 800;
+            opacity: 0.9;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .wallet-balance {
+            font-size: 1.6rem;
+            font-weight: 900;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .wallet-actions-mini {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-mini {
+            flex: 1;
+            padding: 10px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-weight: 700;
+            font-size: 11px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            text-align: center;
+            text-decoration: none;
+        }
+
+        /* MENU DE OPÇÕES */
+        .menu-container {
+            padding: 0 20px;
+        }
+
+        .menu-group-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--nio-blue);
+            font-weight: 800;
+            margin: 0 0 12px 10px;
+            letter-spacing: 2px;
+        }
+
+        .menu-group {
+            background: var(--glass-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 25px;
+            text-decoration: none;
+            color: white;
+            border-bottom: 1px solid var(--glass-border);
+            transition: 0.3s;
+        }
+
+        .menu-item:last-child { border-bottom: none; }
+
+        .menu-item:active { background: rgba(255,255,255,0.05); }
+
+        .item-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .item-left i {
+            width: 38px;
+            height: 38px;
+            background: rgba(0, 163, 224, 0.12);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--nio-blue);
+            font-size: 18px;
+        }
+
+        .item-left span {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .item-right {
+            color: rgba(255,255,255,0.15);
+            font-size: 12px;
+        }
+
+        .btn-logout {
+            width: 100%;
+            padding: 20px;
+            background: rgba(255, 77, 77, 0.05);
+            border: 1px solid rgba(255, 77, 77, 0.2);
+            color: var(--danger);
+            border-radius: 25px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 10px 0 40px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-logout:active { background: rgba(255, 77, 77, 0.15); }
+
+        /* NAVBAR INFERIOR */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: rgba(5, 10, 20, 0.98);
+            backdrop-filter: blur(30px);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0 35px;
+            border-top: 1px solid var(--glass-border);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: rgba(255,255,255,0.3);
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .nav-item.active { color: var(--nio-blue); }
+        .nav-item i { font-size: 24px; display: block; margin-bottom: 6px; }
+
+    </style>
+</head>
+<body>
+
+    <header class="profile-header">
+        <div class="avatar-container">
+            <div class="profile-img">
+                <i class="fa-solid fa-user-astronaut"></i>
+            </div>
+            <div class="verified-badge"><i class="fa-solid fa-check"></i></div>
+        </div>
+        <div class="user-meta">
+            <h2 id="userNameDisplay">Carregando...</h2>
+            <p id="userRefDisplay">ID: NIO-PRO</p>
+        </div>
+    </header>
+
+    <div class="wallets-container">
+        <div class="wallet-card deposit">
+            <p class="wallet-label"><i class="fa-solid fa-bolt"></i> Saldo de Depósito</p>
+            <h2 class="wallet-balance" id="depositDisplay">R$ 0,00</h2>
+            <div class="wallet-actions-mini">
+                <a href="deposito.html" class="btn-mini">Recarregar</a>
+            </div>
+        </div>
+
+        <div class="wallet-card profit">
+            <p class="wallet-label"><i class="fa-solid fa-chart-line"></i> Saldo de Lucros</p>
+            <h2 class="wallet-balance" id="profitDisplay">R$ 0,00</h2>
+            <div class="wallet-actions-mini">
+                <a href="saque.html" class="btn-mini">Sacar Rendimentos</a>
+            </div>
+        </div>
+    </div>
+
+    <main class="menu-container">
+        
+        <p class="menu-group-title">Financeiro & Segurança</p>
+        <div class="menu-group">
+            <a href="extrato.html" class="menu-item">
+                <div class="item-left">
+                    <i class="fa-solid fa-receipt"></i>
+                    <span>Relatório de Lucros</span>
+                </div>
+                <div class="item-right"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+            <a href="segurancadaconta.html" class="menu-item">
+                <div class="item-left">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Segurança da Conta</span>
+                </div>
+                <div class="item-right"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+        </div>
+
+        <p class="menu-group-title">Comunidade & Ajuda</p>
+        <div class="menu-group">
+            <a href="https://wa.me/5521965141548" target="_blank" class="menu-item">
+                <div class="item-left">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span>Grupo Oficial WhatsApp</span>
+                </div>
+                <div class="item-right"><i class="fa-solid fa-external-link"></i></div>
+            </a>
+            <a href="https://wa.me/5521965141548" target="_blank" class="menu-item">
+                <div class="item-left">
+                    <i class="fa-solid fa-headset"></i>
+                    <span>Suporte VIP 24h</span>
+                </div>
+                <div class="item-right"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+        </div>
+
+        <button class="btn-logout" onclick="handleLogout()">Sair do Ecossistema</button>
+
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="home.html" class="nav-item"><i class="fa-solid fa-house-chimney"></i>HOME</a>
+        <a href="ativos.html" class="nav-item"><i class="fa-solid fa-microchip"></i>ATIVOS</a>
+        <a href="indicacao.html" class="nav-item"><i class="fa-solid fa-share-nodes"></i>CONVITE</a>
+        <a href="#" class="nav-item active"><i class="fa-solid fa-user-astronaut"></i>PERFIL</a>
+    </nav>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDyahOcB_wXbU_E0IzEXHBMsyw8uqJR2Es",
+            authDomain: "ironpay-cc5e1.firebaseapp.com",
+            projectId: "ironpay-cc5e1",
+            storageBucket: "ironpay-cc5e1.firebasestorage.app",
+            messagingSenderId: "283629903594",
+            appId: "1:283629903594:web:07b39ed18372335c758193"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // MONITORAMENTO DE DADOS REAIS
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Escuta as mudanças no documento do usuário no Firestore em tempo real
+                onSnapshot(doc(db, "users", user.uid), (docSnap) => {
+                    if (docSnap.exists()) {
+                        const userData = docSnap.data();
+                        
+                        // Atualiza Nome e ID
+                        document.getElementById('userNameDisplay').innerText = userData.nome || "Investidor NIO";
+                        document.getElementById('userRefDisplay').innerText = `ID: ${user.uid.slice(0, 8).toUpperCase()}`;
+                        
+                        // Atualiza Saldo de Depósito (campo: saldo)
+                        const saldoDepo = parseFloat(userData.saldo || 0);
+                        document.getElementById('depositDisplay').innerText = `R$ ${saldoDepo.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+                        
+                        // Atualiza Saldo de Lucro (campo: saldoLucro)
+                        const saldoLucro = parseFloat(userData.saldoLucro || 0);
+                        document.getElementById('profitDisplay').innerText = `R$ ${saldoLucro.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+                    }
+                });
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // LOGOUT COM SWEETALERT
+        window.handleLogout = function() {
+            Swal.fire({
+                title: 'Deseja encerrar?',
+                text: "Sua sessão será finalizada com segurança.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#00a3e0',
+                cancelButtonColor: '#1a1a1a',
+                confirmButtonText: 'Sim, sair',
+                cancelButtonText: 'Cancelar',
+                background: '#0a1a2f',
+                color: '#fff'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    signOut(auth).then(() => {
+                        window.location.href = 'index.html';
+                    }).catch((error) => {
+                        console.error("Erro ao sair:", error);
+                        window.location.href = 'index.html';
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
