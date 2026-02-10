@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NIO - Progress & Experience Premium</title>
+    <title>Samsung - Progress & Experience Premium</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
-            /* NOVA PALETA SAMSUNG: AZUL, BRANCO E CINZA */
+            /* PALETA SAMSUNG: AZUL, BRANCO E CINZA */
             --nio-blue: #034EA2; 
             --dark-bg: #f4f4f4;
             --card-bg: #ffffff;
@@ -81,7 +81,7 @@
         }
 
         .swiper-container { width: 100%; height: 100%; }
-        .swiper-slide img { width: 100%; height: 100%; object-fit: contain; background: #fff; }
+        .swiper-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
         .action-grid {
             display: grid;
@@ -141,8 +141,8 @@
 
         .plan-card.locked { opacity: 0.7; filter: grayscale(0.5); }
 
-        .plan-img-container { width: 100%; height: 200px; position: relative; background: #fff; }
-        .plan-img-container img { width: 100%; height: 100%; object-fit: contain; }
+        .plan-img-container { width: 100%; height: 250px; position: relative; background: #fff; overflow: hidden; }
+        .plan-img-container img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
         .plan-badge {
             position: absolute;
@@ -156,6 +156,7 @@
             text-transform: uppercase;
             z-index: 2;
             color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
         .plan-badge.popular { background: var(--popular-gold); color: black; }
@@ -238,8 +239,8 @@
     <div class="action-grid">
         <a href="deposito.html" class="action-item"><div class="icon-box"><i class="fa-solid fa-bolt-lightning"></i></div><span>Recarga</span></a>
         <a href="saque.html" class="action-item"><div class="icon-box"><i class="fa-solid fa-receipt"></i></div><span>Retirada</span></a>
-        <a href="https://chat.whatsapp.com/B5OsSHzPSGh0AgWN9DJlFx?mode=gi_t" class="action-item" target="_blank"><div class="icon-box"><i class="fa-solid fa-network-wired"></i></div><span>Grupo</span></a>
-        <a href="http://wa.me/5521965141548" class="action-item" target="_blank"><div class="icon-box"><i class="fa-solid fa-headset"></i></div><span>Suporte</span></a>
+        <a href="https://t.me/Sansung0000" class="action-item" target="_blank"><div class="icon-box"><i class="fa-solid fa-network-wired"></i></div><span>Grupo</span></a>
+        <a href="https://t.me/Sansung000" class="action-item" target="_blank"><div class="icon-box"><i class="fa-solid fa-headset"></i></div><span>Suporte</span></a>
     </div>
 
     <div class="tabs-container">
@@ -263,33 +264,33 @@
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyDyahOcB_wXbU_E0IzEXHBMsyw8uqJR2Es",
-            authDomain: "ironpay-cc5e1.firebaseapp.com",
-            projectId: "ironpay-cc5e1",
-            storageBucket: "ironpay-cc5e1.firebasestorage.app",
-            messagingSenderId: "283629903594",
-            appId: "1:283629903594:web:07b39ed18372335c758193"
+            apiKey: "AIzaSyBEwr-HGUXvLZwH15TFWbXI6Q4sdxbqsTw",
+            authDomain: "sasung-4e6c1.firebaseapp.com",
+            projectId: "sasung-4e6c1",
+            storageBucket: "sasung-4e6c1.firebasestorage.app",
+            messagingSenderId: "803651036609",
+            appId: "1:803651036609:web:5b11a565d4aa705e28bb40",
+            measurementId: "G-L31X649B5T"
         };
         
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // SUBSTITUIÇÃO DAS FOTOS DOS PLANOS
         const planosEstabilizar = [
             { id: 1, nome: "Samsung Galaxy S24 Ultra", valor: 30, img: "ativo1.jpg", badge: "Popular", status: "disponivel" },
             { id: 2, nome: "Samsung Galaxy Z Fold5", valor: 50, img: "ativo2.jpg", badge: "Premium", status: "disponivel" },
             { id: 3, nome: "Samsung Galaxy S23 FE", valor: 100, img: "ativo3.jpg", badge: "Premium", status: "disponivel" },
-            { id: 4, nome: "Samsung S-Series Pro", valor: 200, img: "ativo1.jpg", badge: "Premium", status: "disponivel" },
-            { id: 5, nome: "Samsung Fold Vision", valor: 400, img: "ativo2.jpg", badge: "Premium", status: "disponivel" },
-            { id: 6, nome: "Samsung Galaxy X-Max", valor: 600, img: "ativo3.jpg", badge: "Premium", status: "disponivel" },
-            { id: 7, nome: "Samsung Ultimate S25", valor: 800, img: "ativo1.jpg", badge: "Premium", status: "disponivel" }
+            { id: 4, nome: "Samsung S-Series Pro", valor: 200, img: "ativo4.jpg", badge: "Premium", status: "disponivel" },
+            { id: 5, nome: "Samsung Fold Vision", valor: 400, img: "ativo5.jpg", badge: "Premium", status: "disponivel" },
+            { id: 6, nome: "Samsung Galaxy X-Max", valor: 600, img: "ativo6.jpg", badge: "Premium", status: "disponivel" },
+            { id: 7, nome: "Samsung Ultimate S25", valor: 800, img: "ativo7.jpg", badge: "Premium", status: "disponivel" }
         ];
 
         const planosAvancados = [
-            { id: 101, nome: "NIO Advanced X1", valor: 1000, img: "ativo1.jpg", badge: "Indisponível", status: "bloqueado" },
-            { id: 102, nome: "NIO Advanced X2", valor: 1500, img: "ativo2.jpg", badge: "Indisponível", status: "bloqueado" },
-            { id: 103, nome: "NIO Advanced X3", valor: 2000, img: "ativo3.jpg", badge: "Indisponível", status: "bloqueado" }
+            { id: 101, nome: "Samsung Enterprise X1", valor: 1000, img: "ativo8.jpg", badge: "Indisponível", status: "bloqueado" },
+            { id: 102, nome: "Samsung Enterprise X2", valor: 1500, img: "ativo9.jpg", badge: "Indisponível", status: "bloqueado" },
+            { id: 103, nome: "Samsung Enterprise X3", valor: 2000, img: "ativo10.jpg", badge: "Indisponível", status: "bloqueado" }
         ];
 
         let abaAtual = 'estabilizar';
@@ -302,7 +303,7 @@
 
             listaParaRenderizar.forEach(plano => {
                 const lucroDiario = plano.valor * 0.20;
-                const lucroTotal = lucroDiario * 15;
+                const lucroTotal = lucroDiario * 120;
                 const isLocked = plano.status === 'bloqueado';
                 const badgeClass = plano.id === 1 ? 'popular' : (isLocked ? 'locked-badge' : '');
                 
@@ -320,7 +321,7 @@
                             <div class="stats-grid">
                                 <div class="stat-box"><h4>R$ ${lucroDiario.toFixed(2)}</h4><p>Lucro Diário</p></div>
                                 <div class="stat-box"><h4>R$ ${lucroTotal.toFixed(2)}</h4><p>Retorno Final</p></div>
-                                <div class="stat-box"><h4>15 dias</h4><p>Ciclo</p></div>
+                                <div class="stat-box"><h4>120 dias</h4><p>Ciclo</p></div>
                             </div>
                             <button class="btn-buy" 
                                     ${isLocked ? 'disabled' : ''} 
@@ -421,15 +422,15 @@
                         dataCompra: serverTimestamp(),
                         timestampCompra: timestampAgora,
                         ultimoPagamento: timestampAgora,
-                        cicloRestante: 15,
+                        cicloRestante: 120,
                         status: "ativo",
                         totalColhido: 0,
                         lucroTotalAcumulado: 0
                     });
                     Swal.fire({
                         icon: 'success',
-                        title: 'NIO Ativado!',
-                        text: 'Seu veículo já está gerando rendimentos.',
+                        title: 'Investimento Ativado!',
+                        text: 'Seu plano Samsung já está gerando rendimentos.',
                         confirmButtonColor: '#034EA2'
                     }).then(() => {
                         window.location.href = "ativos.html";
