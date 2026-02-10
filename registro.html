@@ -3,15 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NIO - Join the Future</title>
+    <title>Samsung - Join the Future</title>
     <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --nio-blue: #00a3e0;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --neon-glow: rgba(0, 163, 224, 0.3);
+            /* PALETA SAMSUNG */
+            --samsung-blue: #034EA2; 
+            --dark-bg: #f4f4f4;
+            --card-bg: #ffffff;
+            --border-color: #dddddd;
+            --text-main: #000000;
+            --text-sub: #555555;
+            --samsung-gradient: linear-gradient(135deg, #034EA2 0%, #002e67 100%);
         }
 
         *:focus {
@@ -22,111 +26,102 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', 'Segoe UI', sans-serif;
+            font-family: 'Samsung One', 'Inter', 'Segoe UI', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: #02060d;
+            background-color: var(--dark-bg);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-image: radial-gradient(circle at center, #0a1a2f 0%, #02060d 100%);
             padding: 40px 0;
         }
 
         .register-card {
             width: 90%;
             max-width: 420px;
-            background: var(--glass);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border);
-            border-radius: 40px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
             overflow: hidden;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
 
         .banner {
             width: 100%;
-            height: 200px;
+            height: 180px;
             position: relative;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .banner img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-        }
-
-        .banner::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 60%;
-            background: linear-gradient(to top, rgba(2, 6, 13, 1), transparent);
+            object-fit: cover; /* Ajustado para preenchimento total */
         }
 
         .form-container {
-            padding: 0 35px 45px;
+            padding: 25px 35px 45px;
             text-align: center;
         }
 
         .brand-name {
-            font-size: 2.2rem;
-            font-weight: 200;
-            letter-spacing: 15px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            color: #fff;
+            color: var(--samsung-blue);
             margin-bottom: 25px;
-            margin-right: -15px;
         }
 
         .input-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             position: relative;
         }
 
         .input-group input {
             width: 100%;
             padding: 16px 20px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--glass-border);
-            border-radius: 18px;
-            color: white;
+            background: #f8f9fa;
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            color: var(--text-main);
             font-size: 14px;
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.3s ease;
         }
 
         .input-group input:focus {
-            border-color: var(--nio-blue);
-            background: rgba(0, 0, 0, 0.6);
-            box-shadow: 0 0 20px var(--neon-glow);
+            border-color: var(--samsung-blue);
+            background: #ffffff;
+            box-shadow: 0 0 15px rgba(3, 78, 162, 0.1);
         }
 
         .btn-register {
             width: 100%;
             padding: 18px;
-            background: var(--nio-blue);
+            background: var(--samsung-gradient);
             color: white;
             border: none;
-            border-radius: 18px;
+            border-radius: 15px;
             font-size: 14px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             cursor: pointer;
             margin-top: 15px;
-            box-shadow: 0 10px 25px rgba(0, 163, 224, 0.3);
+            box-shadow: 0 10px 20px rgba(3, 78, 162, 0.2);
             transition: 0.4s;
         }
 
         .btn-register:disabled {
-            background: #444;
+            background: #bbb;
             cursor: not-allowed;
             box-shadow: none;
         }
@@ -134,40 +129,42 @@
         .btn-login-link {
             display: block;
             margin-top: 25px;
-            color: rgba(255, 255, 255, 0.4);
+            color: var(--text-sub);
             text-decoration: none;
-            font-size: 12px;
-            letter-spacing: 1px;
+            font-size: 13px;
+            font-weight: 600;
         }
 
-        .btn-login-link b { color: var(--nio-blue); }
+        .btn-login-link b { color: var(--samsung-blue); }
 
-        /* Estilo SweetAlert Premium Minimalista */
+        /* Estilo SweetAlert Samsung */
         .nio-swal-popup {
-            background: rgba(7, 13, 23, 0.95) !important;
-            backdrop-filter: blur(15px) !important;
-            border: 1px solid var(--glass-border) !important;
+            width: 320px !important;
+            background: #ffffff !important;
+            border: 1px solid var(--samsung-blue) !important;
             border-radius: 25px !important;
+            color: var(--text-main) !important;
+            padding: 20px !important;
         }
         .nio-swal-title {
-            color: #fff !important;
+            color: var(--samsung-blue) !important;
             font-size: 1.2rem !important;
             font-weight: 700 !important;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
         .nio-swal-content {
-            color: rgba(255,255,255,0.7) !important;
+            color: var(--text-sub) !important;
             font-size: 0.9rem !important;
         }
         .nio-swal-button {
-            background: var(--nio-blue) !important;
+            background: var(--samsung-gradient) !important;
             border-radius: 12px !important;
-            padding: 10px 30px !important;
-            font-weight: 600 !important;
+            padding: 12px 30px !important;
+            font-weight: 700 !important;
             text-transform: uppercase !important;
             font-size: 0.8rem !important;
-            letter-spacing: 1px !important;
+            color: #fff !important;
+            border: none !important;
             margin-top: 10px !important;
         }
     </style>
@@ -176,19 +173,19 @@
 
     <div class="register-card">
         <div class="banner">
-            <img src="carronio.jpg" alt="NIO Registration">
+            <img src="logo1.jpg" alt="Samsung Registration">
         </div>
 
         <div class="form-container">
-            <h1 class="brand-name">NIO</h1>
+            <h1 class="brand-name">SAMSUNG</h1>
             
             <form id="registerForm">
                 <div class="input-group">
-                    <input type="text" id="regName" placeholder="Seu Nome Completo" required>
+                    <input type="text" id="regName" placeholder="Nome Completo" required>
                 </div>
 
                 <div class="input-group">
-                    <input type="email" id="regEmail" placeholder="Seu E-mail" required>
+                    <input type="email" id="regEmail" placeholder="E-mail" required>
                 </div>
 
                 <div class="input-group">
@@ -217,24 +214,20 @@
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
         import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, collection, query, getDocs, serverTimestamp, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Web app's Firebase configuration
         const firebaseConfig = {
-          apiKey: "AIzaSyB2c4YTETLBLpYMW8ZnsdBWZoO8sj64Ql8",
-          authDomain: "nio0-dad5d.firebaseapp.com",
-          projectId: "nio0-dad5d",
-          storageBucket: "nio0-dad5d.firebasestorage.app",
-          messagingSenderId: "251157805045",
-          appId: "1:251157805045:web:6209ee6229fb7de31352bc",
-          measurementId: "G-5QP9TDBLQM"
+          apiKey: "AIzaSyBEwr-HGUXvLZwH15TFWbXI6Q4sdxbqsTw",
+          authDomain: "sasung-4e6c1.firebaseapp.com",
+          projectId: "sasung-4e6c1",
+          storageBucket: "sasung-4e6c1.firebasestorage.app",
+          messagingSenderId: "803651036609",
+          appId: "1:803651036609:web:5b11a565d4aa705e28bb40",
+          measurementId: "G-L31X649B5T"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
@@ -253,7 +246,6 @@
             });
         };
 
-        // Capturar código de convite via URL (se existir)
         const urlParams = new URLSearchParams(window.location.search);
         const refCode = urlParams.get('ref');
         if (refCode) {
@@ -273,7 +265,6 @@
             const confirm = document.getElementById('confirmPass').value;
             const shortCode = document.getElementById('inviteCode').value.trim();
 
-            // Validações Básicas
             if(email !== emailConfirm) {
                 nioNotify('Atenção', 'Os e-mails informados não coincidem.', 'warning');
                 return;
@@ -294,12 +285,10 @@
             btn.innerText = "Sincronizando Rede...";
 
             try {
-                // Configuração inicial da rede (Herança)
                 let nivel1 = "direto";
                 let nivel2 = "direto";
                 let nivel3 = "direto";
 
-                // --- MOTOR DE BUSCA E HERANÇA DE GENEALOGIA ---
                 if (shortCode && shortCode !== "" && shortCode !== "direto") {
                     const usersRef = collection(db, "users");
                     const q = query(usersRef);
@@ -319,7 +308,6 @@
                         nivel1 = sponsorFullId; 
                         nivel2 = sponsorData.indicadoPor || "direto";
                         nivel3 = sponsorData.nivel2 || "direto";
-                        console.log("Rede Identificada - N1:", nivel1, "N2:", nivel2, "N3:", nivel3);
                     }
                 }
 
@@ -334,10 +322,10 @@
                     userId: user.uid,
                     uid: user.uid,
                     indicadoPor: nivel1,
-                    nivel2: nivel2,      
-                    nivel3: nivel3,      
-                    saldo: 0,            
-                    saldoLucro: 0,       
+                    nivel2: nivel2,
+                    nivel3: nivel3,
+                    saldo: 0,
+                    saldoLucro: 0,
                     totalInvestido: 0,
                     totalComissaoRede: 0,
                     totalGanhos: 0,
@@ -346,7 +334,7 @@
                     status: "ativo"
                 });
 
-                nioNotify('Bem-vindo', 'Sua conta NIO foi criada com sucesso.', 'success').then(() => {
+                nioNotify('Bem-vindo', 'Sua conta Samsung foi criada com sucesso.', 'success').then(() => {
                     window.location.href = "home.html";
                 });
 
