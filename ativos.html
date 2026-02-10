@@ -3,61 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NIO - Meus Ativos Reais</title>
+    <title>Samsung Pay - Meus Ativos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
-            --nio-blue: #00a3e0;
-            --nio-light: #40c4ff;
-            --dark-bg: #010409;
-            --glass-card: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --nio-gradient: linear-gradient(135deg, #00a3e0 0%, #005a87 100%);
-            --active-green: #00ff88;
+            /* PALETA SAMSUNG ONE UI */
+            --samsung-blue: #034EA2; 
+            --samsung-bg: #f4f4f4;
+            --samsung-card: #ffffff;
+            --samsung-border: #dddddd;
+            --samsung-text-main: #000000;
+            --samsung-text-sub: #555555;
+            --samsung-success: #2fb13b;
+            --samsung-gradient: linear-gradient(135deg, #034EA2 0%, #002e67 100%);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Samsung One', 'Inter', 'Segoe UI', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--dark-bg);
-            color: white;
+            background-color: var(--samsung-bg);
+            color: var(--samsung-text-main);
             padding-bottom: 120px;
-            background-image: radial-gradient(circle at 50% 0%, #0a1a2f 0%, transparent 50%);
             min-height: 100vh;
         }
 
-        /* HEADER */
+        /* HEADER ESTILO ONE UI */
         .assets-header {
             padding: 50px 25px 30px;
-            text-align: center;
+            text-align: left;
+            background: #fff;
+            border-bottom: 1px solid var(--samsung-border);
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 25px;
         }
 
         .assets-header h1 {
-            font-weight: 200;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            font-size: 1.5rem;
-            color: #fff;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--samsung-text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .assets-header p {
+            font-size: 14px;
+            color: var(--samsung-text-sub);
+            margin-top: 5px;
         }
 
         /* CARD DE RENDIMENTO TOTAL */
         .total-earning-card {
-            background: var(--nio-gradient);
-            margin: 0 20px 40px;
-            padding: 25px;
-            border-radius: 30px;
+            background: var(--samsung-gradient);
+            margin: 0 20px 30px;
+            padding: 30px;
+            border-radius: 28px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 15px 35px rgba(0, 163, 224, 0.3);
+            box-shadow: 0 8px 25px rgba(3, 78, 162, 0.15);
             animation: fadeInDown 0.8s ease;
+            color: white;
         }
 
         @keyframes fadeInDown {
@@ -66,14 +77,14 @@
         }
 
         .earning-info p {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 12px;
+            text-transform: none;
+            font-weight: 500;
             opacity: 0.9;
         }
 
         .earning-info h2 {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 800;
             margin-top: 5px;
         }
@@ -81,12 +92,11 @@
         /* LISTAGEM */
         .section-label {
             padding: 0 25px;
-            font-size: 11px;
-            text-transform: uppercase;
-            color: var(--nio-blue);
-            letter-spacing: 2px;
+            font-size: 13px;
+            text-transform: none;
+            color: var(--samsung-text-sub);
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -96,49 +106,51 @@
             padding: 0 20px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
         }
 
-        /* CARD DE PLANO REAL */
+        /* CARD DE PLANO SAMSUNG */
         .active-plan-card {
-            background: var(--glass-card);
-            border: 1px solid var(--glass-border);
-            border-radius: 30px;
-            padding: 20px;
-            backdrop-filter: blur(20px);
+            background: var(--samsung-card);
+            border: 1px solid var(--samsung-border);
+            border-radius: 28px;
+            padding: 22px;
             position: relative;
             transition: 0.3s;
             overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
         .plan-visual {
             display: flex;
-            gap: 15px;
+            gap: 18px;
             margin-bottom: 20px;
             align-items: center;
         }
 
         .plan-visual img {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             object-fit: cover;
-            border-radius: 20px;
-            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            border: 1px solid #eee;
         }
 
         .plan-name-box h3 { 
-            font-size: 16px; 
-            font-weight: 600; 
+            font-size: 17px; 
+            font-weight: 700; 
             margin-bottom: 4px;
+            color: var(--samsung-text-main);
         }
 
         .plan-tag {
-            display: inline-block;
-            background: rgba(0, 255, 136, 0.1);
-            color: var(--active-green);
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 9px;
+            display: inline-flex;
+            align-items: center;
+            background: #e7f6ed;
+            color: var(--samsung-success);
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 10px;
             font-weight: 800;
             text-transform: uppercase;
         }
@@ -146,23 +158,23 @@
         .yield-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 20px;
-            background: rgba(0,0,0,0.2);
+            background: #f8f9fa;
             padding: 15px;
-            border-radius: 20px;
+            border-radius: 18px;
         }
 
-        .yield-item p { font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; margin-bottom: 4px; }
-        .yield-item span { font-size: 15px; font-weight: 700; }
+        .yield-item p { font-size: 11px; color: var(--samsung-text-sub); font-weight: 600; margin-bottom: 4px; }
+        .yield-item span { font-size: 15px; font-weight: 700; color: var(--samsung-text-main); }
 
         .progress-container {
             padding: 0 5px;
         }
 
         .progress-bar-bg {
-            width: 100%; height: 8px;
-            background: rgba(255,255,255,0.05);
+            width: 100%; height: 6px;
+            background: #eee;
             border-radius: 10px;
             overflow: hidden;
             margin-top: 8px;
@@ -170,7 +182,7 @@
 
         .progress-fill {
             height: 100%;
-            background: var(--nio-gradient);
+            background: var(--samsung-gradient);
             border-radius: 10px;
             width: 0%;
             transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -183,38 +195,51 @@
             display: none;
         }
 
-        #emptyState i { font-size: 40px; color: var(--nio-blue); opacity: 0.5; margin-bottom: 15px; }
+        #emptyState i { font-size: 50px; color: #ccc; margin-bottom: 20px; }
+        #emptyState p { font-size: 15px; font-weight: 500; color: var(--samsung-text-sub); }
+
+        .btn-empty {
+            margin-top: 25px;
+            background: var(--samsung-blue);
+            border: none;
+            color: white;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 5px 15px rgba(3, 78, 162, 0.2);
+        }
 
         /* NAV INFERIOR */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             width: 100%;
-            background: rgba(5, 10, 20, 0.98);
-            backdrop-filter: blur(25px);
+            background: #ffffff;
             display: flex;
             justify-content: space-around;
             padding: 15px 0 35px;
-            border-top: 1px solid var(--glass-border);
+            border-top: 1px solid var(--samsung-border);
             z-index: 2000;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
         }
 
         .nav-item {
             text-align: center;
-            color: rgba(255,255,255,0.3);
+            color: #bbbbbb;
             text-decoration: none;
             font-size: 10px;
             font-weight: 700;
         }
 
-        .nav-item.active { color: var(--nio-blue); }
+        .nav-item.active { color: var(--samsung-blue); }
         .nav-item i { font-size: 24px; display: block; margin-bottom: 6px; }
 
         /* LOADING */
         .loader {
-            width: 30px; height: 30px;
-            border: 3px solid var(--glass-border);
-            border-top-color: var(--nio-blue);
+            width: 35px; height: 35px;
+            border: 4px solid #f3f3f3;
+            border-top-color: var(--samsung-blue);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 40px auto;
@@ -226,18 +251,19 @@
 
     <header class="assets-header">
         <h1>Meus Ativos</h1>
+        <p>Acompanhe o rendimento da sua frota em tempo real.</p>
     </header>
 
     <div class="total-earning-card">
         <div class="earning-info">
-            <p>Lucro Total Acumulado</p>
+            <p>Lucro acumulado disponível</p>
             <h2 id="totalYieldDisplay">R$ 0,00</h2>
         </div>
-        <i class="fa-solid fa-microchip" style="font-size: 35px; opacity: 0.5;"></i>
+        <i class="fa-solid fa-wallet" style="font-size: 35px; opacity: 0.5;"></i>
     </div>
 
     <div class="section-label">
-        <i class="fa-solid fa-circle-play"></i> Frota em Operação
+        Dispositivos e veículos ativos
     </div>
 
     <main class="assets-container" id="realAssetsList">
@@ -245,14 +271,14 @@
     </main>
 
     <div id="emptyState">
-        <i class="fa-solid fa-car-side"></i>
-        <p style="opacity: 0.5;">Você ainda não possui veículos na frota.</p>
-        <button onclick="window.location.href='home.html'" style="margin-top:20px; background:var(--nio-blue); border:none; color:white; padding:12px 25px; border-radius:15px; font-weight:700; font-size:12px;">ADQUIRIR AGORA</button>
+        <i class="fa-solid fa-box-open"></i>
+        <p>Nenhum ativo operando no momento.</p>
+        <button class="btn-empty" onclick="window.location.href='home.html'">Ver oportunidades</button>
     </div>
 
     <nav class="bottom-nav">
         <a href="home.html" class="nav-item">
-            <i class="fa-solid fa-house-chimney"></i>HOME
+            <i class="fa-solid fa-house"></i>HOME
         </a>
         <a href="ativos.html" class="nav-item active">
             <i class="fa-solid fa-microchip"></i>ATIVOS
@@ -261,22 +287,24 @@
             <i class="fa-solid fa-share-nodes"></i>CONVITE
         </a>
         <a href="perfil.html" class="nav-item">
-            <i class="fa-solid fa-user-astronaut"></i>PERFIL
+            <i class="fa-solid fa-user"></i>PERFIL
         </a>
     </nav>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, query, where, onSnapshot, getDocs, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, query, where, onSnapshot, getDocs, doc, updateDoc, increment, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
+        // NOVO FIREBASE CONFIG (SAMSUNG PROJECT)
         const firebaseConfig = {
-            apiKey: "AIzaSyDyahOcB_wXbU_E0IzEXHBMsyw8uqJR2Es",
-            authDomain: "ironpay-cc5e1.firebaseapp.com",
-            projectId: "ironpay-cc5e1",
-            storageBucket: "ironpay-cc5e1.firebasestorage.app",
-            messagingSenderId: "283629903594",
-            appId: "1:283629903594:web:07b39ed18372335c758193"
+            apiKey: "AIzaSyBEwr-HGUXvLZwH15TFWbXI6Q4sdxbqsTw",
+            authDomain: "sasung-4e6c1.firebaseapp.com",
+            projectId: "sasung-4e6c1",
+            storageBucket: "sasung-4e6c1.firebasestorage.app",
+            messagingSenderId: "803651036609",
+            appId: "1:803651036609:web:5b11a565d4aa705e28bb40",
+            measurementId: "G-L31X649B5T"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -293,80 +321,80 @@
         const emptyState = document.getElementById('emptyState');
         const totalDisplay = document.getElementById('totalYieldDisplay');
 
-        // MOTOR DE PROCESSAMENTO CRONOLÓGICO (HORÁRIO FIXO)
+        // MOTOR DE PROCESSAMENTO PROTEGIDO
         async function processarRendimentos(uid) {
             const agora = Date.now();
             const vinteQuatroHoras = 24 * 60 * 60 * 1000;
+            
             const q = query(collection(db, "ativos"), where("userId", "==", uid), where("status", "==", "ativo"));
             const querySnapshot = await getDocs(q);
 
-            querySnapshot.forEach(async (docSnap) => {
-                const dados = docSnap.data();
+            for (const docSnap of querySnapshot.docs) {
+                const data = docSnap.data();
+                const baseTempo = data.ultimoPagamento || data.timestampCompra;
                 
-                // DATA DE ANCORAGEM: Calculamos exatamente quando o próximo lucro deve cair
-                // Com base na hora exata da COMPRA original
-                const diasPassadosDesdeCompra = Math.floor((agora - dados.timestampCompra) / vinteQuatroHoras);
-                const diasPagosJa = 15 - dados.cicloRestante;
-                
-                // Se o tempo passado desde a compra (em dias inteiros) for maior que os dias já pagos
-                if (diasPassadosDesdeCompra > diasPagosJa && dados.cicloRestante > 0) {
-                    
-                    // Calculamos quantos dias o sistema "deve" para o usuário
-                    const diasDevidos = diasPassadosDesdeCompra - diasPagosJa;
-                    const lucroPagar = dados.lucroDiario * diasDevidos;
-
+                if (agora >= (baseTempo + vinteQuatroHoras) && data.cicloRestante > 0) {
                     try {
-                        // 1. Atualiza SALDO LUCRO do Usuário
-                        const userRef = doc(db, "users", uid);
-                        await updateDoc(userRef, {
-                            saldoLucro: increment(lucroPagar)
-                        });
+                        await runTransaction(db, async (transaction) => {
+                            const userRef = doc(db, "users", uid);
+                            const ativoRef = docSnap.ref;
+                            
+                            const userDoc = await transaction.get(userRef);
+                            const currentAtivo = await transaction.get(ativoRef);
+                            const currentAtivoData = currentAtivo.data();
 
-                        // 2. Atualiza o Ativo - Mantendo a data fixa de aniversário
-                        await updateDoc(docSnap.ref, {
-                            // O ultimoPagamento vira exatamente a hora do "aniversário" da compra
-                            ultimoPagamento: dados.timestampCompra + (diasPassadosDesdeCompra * vinteQuatroHoras),
-                            lucroTotalAcumulado: increment(lucroPagar),
-                            cicloRestante: increment(-diasDevidos)
-                        });
+                            if (agora < (currentAtivoData.ultimoPagamento || currentAtivoData.timestampCompra) + vinteQuatroHoras) {
+                                return;
+                            }
 
-                        // SweetAlert Minimalista Premium (Toast)
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 4000,
-                            timerProgressBar: true,
-                            background: '#02060d',
-                            color: '#00a3e0',
-                            iconColor: '#00ff88',
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            const diasParaPagar = Math.floor((agora - baseTempo) / vinteQuatroHoras);
+                            const lucroPagar = currentAtivoData.lucroDiario * diasParaPagar;
+
+                            if (lucroPagar > 0 && currentAtivoData.cicloRestante > 0) {
+                                transaction.update(userRef, {
+                                    saldoLucro: increment(lucroPagar)
+                                });
+
+                                transaction.update(ativoRef, {
+                                    ultimoPagamento: baseTempo + (diasParaPagar * vinteQuatroHoras),
+                                    lucroTotalAcumulado: increment(lucroPagar),
+                                    cicloRestante: increment(-diasParaPagar)
+                                });
+
+                                mostrarToastSucesso(lucroPagar);
                             }
                         });
-
-                        Toast.fire({
-                            icon: 'success',
-                            title: `<span style="color:white; font-weight:700;">Lucro Creditado!</span>`,
-                            html: `<span style="color:rgba(255,255,255,0.7); font-size:12px;">+ R$ ${lucroPagar.toFixed(2)} adicionados ao seu saldo de ativos.</span>`
-                        });
-
-                    } catch (e) { 
-                        console.error("Erro na sincronização de lucro:", e); 
+                    } catch (e) {
+                        console.error("Erro na transação:", e);
                     }
-                } 
-                
-                // Finaliza o contrato se o ciclo acabar
-                if (dados.cicloRestante <= 0) {
+                }
+
+                if (data.cicloRestante <= 0 && data.status === "ativo") {
                     await updateDoc(docSnap.ref, { status: "finalizado" });
                 }
+            }
+        }
+
+        function mostrarToastSucesso(valor) {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                background: '#ffffff',
+                color: '#034EA2'
+            });
+
+            Toast.fire({
+                icon: 'success',
+                title: `Sincronização realizada`,
+                html: `<span style="color:#555; font-size:13px;">+ R$ ${valor.toFixed(2)} creditados em sua conta.</span>`
             });
         }
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Executa o motor assim que o usuário loga/entra na página
                 processarRendimentos(user.uid);
                 renderUserAssets(user.uid);
             } else {
@@ -397,36 +425,38 @@
                     
                     const cicloMax = 15;
                     const diasRestantes = data.cicloRestante || 0;
-                    const diasPassados = cicloMax - diasRestantes;
-                    const porcentagem = (diasPassados / cicloMax) * 100;
+                    const diasPassados = Math.max(0, cicloMax - diasRestantes);
+                    const porcentagem = Math.min(100, (diasPassados / cicloMax) * 100);
                     const imagem = imagensPlanos[data.planoId] || "Plano1.jpg";
 
                     const card = `
                         <div class="active-plan-card">
                             <div class="plan-visual">
-                                <img src="${imagem}" alt="NIO Vehicle">
+                                <img src="${imagem}" alt="Samsung Device">
                                 <div class="plan-name-box">
-                                    <p style="font-size: 8px; color: var(--nio-blue); margin-bottom:2px; letter-spacing:1px;">ID OPERACIONAL: ${id.slice(0,10).toUpperCase()}</p>
+                                    <p style="font-size: 10px; color: var(--samsung-text-sub); margin-bottom:2px;">SÉRIE: ${id.slice(0,8).toUpperCase()}</p>
                                     <h3>${data.nome}</h3>
-                                    <span class="plan-tag"><i class="fa-solid fa-satellite-dish" style="margin-right:4px;"></i> ${data.status.toUpperCase()}</span>
+                                    <div class="plan-tag">
+                                        <i class="fa-solid fa-circle-check" style="margin-right:5px; font-size:8px;"></i> ${data.status.toUpperCase()}
+                                    </div>
                                 </div>
                             </div>
                             
                             <div class="yield-grid">
                                 <div class="yield-item">
-                                    <p>Lucro/Dia</p>
+                                    <p>Lucro diário</p>
                                     <span>R$ ${parseFloat(data.lucroDiario).toFixed(2)}</span>
                                 </div>
                                 <div class="yield-item">
-                                    <p>Total Gerado</p>
-                                    <span style="color: var(--active-green);">R$ ${parseFloat(data.lucroTotalAcumulado).toFixed(2)}</span>
+                                    <p>Acumulado</p>
+                                    <span style="color: var(--samsung-success);">R$ ${parseFloat(data.lucroTotalAcumulado).toFixed(2)}</span>
                                 </div>
                             </div>
 
                             <div class="progress-container">
-                                <div style="display:flex; justify-content:space-between; font-size:10px; opacity:0.6; margin-bottom:4px;">
-                                    <span>Evolução do Contrato</span>
-                                    <span>Dia ${diasPassados} de ${cicloMax}</span>
+                                <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:600; color:var(--samsung-text-sub); margin-bottom:6px;">
+                                    <span>Ciclo operacional</span>
+                                    <span>Dia ${diasPassados}/${cicloMax}</span>
                                 </div>
                                 <div class="progress-bar-bg">
                                     <div class="progress-fill" style="width: ${porcentagem}%"></div>
