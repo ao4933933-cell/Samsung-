@@ -3,78 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NIO - Segurança da Conta</title>
+    <title>Samsung Pay - Segurança</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
-            --nio-blue: #00e5ff;
-            --nio-blue-dark: #00a3e0;
-            --dark-bg: #030712;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --accent-gradient: linear-gradient(135deg, #00e5ff 0%, #0077ff 100%);
-            --error: #ff3366;
-            --success: #00ffa3;
+            /* PALETA SAMSUNG ONE UI */
+            --samsung-blue: #034EA2; 
+            --samsung-bg: #f4f4f4;
+            --samsung-card: #ffffff;
+            --samsung-border: #dddddd;
+            --samsung-text-main: #000000;
+            --samsung-text-sub: #555555;
+            --samsung-success: #2fb13b;
+            --samsung-error: #e52e2e;
+            --samsung-gradient: linear-gradient(135deg, #034EA2 0%, #002e67 100%);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--dark-bg);
-            color: #ffffff;
+            background-color: var(--samsung-bg);
+            color: var(--samsung-text-main);
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 0% 0%, rgba(0, 229, 255, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 100% 100%, rgba(0, 119, 255, 0.05) 0%, transparent 40%);
             padding-bottom: 50px;
         }
 
-        /* HEADER */
+        /* HEADER ESTILO ONE UI */
         .premium-nav {
-            padding: 25px;
+            padding: 25px 20px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            background: transparent;
         }
 
         .btn-back-lux {
-            width: 45px;
-            height: 45px;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: var(--samsung-text-main);
             text-decoration: none;
-            backdrop-filter: blur(10px);
+            font-size: 20px;
         }
 
         .header-section {
-            padding: 0 25px 30px;
+            padding: 0 30px 30px;
         }
 
         .header-section h1 {
-            font-size: 28px;
-            font-weight: 800;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--samsung-text-main);
+            letter-spacing: -1px;
         }
 
         .header-section p {
-            font-size: 13px;
-            color: #94a3b8;
-            margin-top: 5px;
+            font-size: 15px;
+            color: var(--samsung-text-sub);
+            margin-top: 8px;
+            line-height: 1.4;
         }
 
         /* CONTAINER DE DADOS */
@@ -83,20 +81,20 @@
         }
 
         .lux-card {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 20px;
+            background: var(--samsung-card);
+            border: 1px solid var(--samsung-border);
+            border-radius: 28px;
+            padding: 24px;
             margin-bottom: 20px;
-            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
         .info-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 16px 0;
+            border-bottom: 1px solid #f0f0f0;
         }
 
         .info-item:last-child { border-bottom: none; }
@@ -105,87 +103,99 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            color: #94a3b8;
-            font-size: 13px;
-            font-weight: 600;
+            color: var(--samsung-text-sub);
+            font-size: 14px;
+            font-weight: 500;
         }
 
         .info-label i {
-            color: var(--nio-blue);
+            color: var(--samsung-blue);
             width: 20px;
             text-align: center;
+            font-size: 18px;
         }
 
         .info-value {
-            font-size: 14px;
-            font-weight: 700;
-            color: #f8fafc;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--samsung-text-main);
+            text-align: right;
         }
 
         /* FORMULÁRIO DE SENHA */
         .section-title {
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #475569;
-            margin: 20px 0 15px 10px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: none;
+            color: var(--samsung-blue);
+            margin: 25px 0 12px 15px;
         }
 
         .input-group {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
 
         .input-group label {
             display: block;
-            font-size: 12px;
-            color: #94a3b8;
+            font-size: 13px;
+            color: var(--samsung-text-sub);
             margin-bottom: 8px;
             margin-left: 5px;
+            font-weight: 500;
         }
 
         .lux-input {
             width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 15px;
-            color: white;
-            font-size: 14px;
+            background: #f8f9fa;
+            border: 1px solid var(--samsung-border);
+            border-radius: 18px;
+            padding: 18px;
+            color: var(--samsung-text-main);
+            font-size: 15px;
             outline: none;
             transition: 0.3s;
         }
 
         .lux-input:focus {
-            border-color: var(--nio-blue);
-            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--samsung-blue);
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(3, 78, 162, 0.1);
         }
 
         .btn-update {
             width: 100%;
-            padding: 18px;
-            background: var(--accent-gradient);
+            padding: 20px;
+            background: var(--samsung-gradient);
             border: none;
-            border-radius: 18px;
+            border-radius: 50px;
             color: white;
-            font-weight: 800;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-weight: 700;
+            font-size: 16px;
             cursor: pointer;
             margin-top: 10px;
-            box-shadow: 0 10px 20px rgba(0, 229, 255, 0.2);
+            box-shadow: 0 8px 15px rgba(3, 78, 162, 0.2);
+            transition: 0.3s;
         }
 
-        .btn-update:active { transform: scale(0.98); }
+        .btn-update:active { transform: scale(0.97); }
 
         .status-badge {
-            background: rgba(0, 255, 163, 0.1);
-            color: var(--success);
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 10px;
-            font-weight: 800;
+            background: #e7f6ed;
+            color: var(--samsung-success);
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* Custom Swal for Samsung Style */
+        .samsung-swal-popup {
+            border-radius: 28px !important;
+        }
+        .samsung-swal-confirm {
+            border-radius: 50px !important;
+            padding: 12px 30px !important;
+            font-weight: 700 !important;
         }
     </style>
 </head>
@@ -193,51 +203,51 @@
 
     <nav class="premium-nav">
         <a href="perfil.html" class="btn-back-lux">
-            <i class="fa-solid fa-arrow-left"></i>
+            <i class="fa-solid fa-chevron-left"></i>
         </a>
     </nav>
 
     <section class="header-section">
         <h1>Segurança</h1>
-        <p>Gerencie seus dados e proteja sua conta NIO.</p>
+        <p>Acesse suas informações de conta e mantenha sua proteção atualizada.</p>
     </section>
 
     <main class="info-container">
-        <h3 class="section-title">Dados da Conta</h3>
+        <h3 class="section-title">Informações Pessoais</h3>
         <div class="lux-card">
             <div class="info-item">
-                <div class="info-label"><i class="fa-solid fa-user"></i> Nome Completo</div>
-                <div class="info-value" id="display-nome">Carregando...</div>
+                <div class="info-label"><i class="fa-solid fa-user-circle"></i> Nome</div>
+                <div class="info-value" id="display-nome">Sincronizando...</div>
             </div>
             <div class="info-item">
                 <div class="info-label"><i class="fa-solid fa-envelope"></i> E-mail</div>
-                <div class="info-value" id="display-email">Carregando...</div>
+                <div class="info-value" id="display-email">Sincronizando...</div>
             </div>
             <div class="info-item">
-                <div class="info-label"><i class="fa-solid fa-id-card"></i> ID de Usuário</div>
-                <div class="info-value" style="font-family: monospace; font-size: 10px;" id="display-uid">---</div>
+                <div class="info-label"><i class="fa-solid fa-fingerprint"></i> ID da Conta</div>
+                <div class="info-value" style="font-family: monospace; font-size: 11px; opacity: 0.7;" id="display-uid">---</div>
             </div>
             <div class="info-item">
-                <div class="info-label"><i class="fa-solid fa-shield-check"></i> Status</div>
-                <div class="status-badge">PROTEGIDO</div>
+                <div class="info-label"><i class="fa-solid fa-shield-halved"></i> Verificação</div>
+                <div class="status-badge">ATIVADO</div>
             </div>
         </div>
 
-        <h3 class="section-title">Alterar Senha</h3>
+        <h3 class="section-title">Alterar Senha de Acesso</h3>
         <div class="lux-card">
             <div class="input-group">
                 <label>Nova Senha</label>
-                <input type="password" id="new-password" class="lux-input" placeholder="Mínimo 6 caracteres">
+                <input type="password" id="new-password" class="lux-input" placeholder="Mínimo de 6 dígitos">
             </div>
             <div class="input-group">
-                <label>Confirmar Nova Senha</label>
+                <label>Confirme a Nova Senha</label>
                 <input type="password" id="confirm-password" class="lux-input" placeholder="Repita a nova senha">
             </div>
-            <button class="btn-update" id="btn-change-password">Atualizar Senha</button>
+            <button class="btn-update" id="btn-change-password">Salvar Alterações</button>
         </div>
         
-        <p style="text-align: center; font-size: 11px; color: #475569; padding: 10px;">
-            A NIO utiliza criptografia de ponta a ponta para proteger seus dados.
+        <p style="text-align: center; font-size: 12px; color: var(--samsung-text-sub); padding: 20px; line-height: 1.5;">
+            Seus dados são criptografados e protegidos pelos protocolos de segurança Samsung Knox.
         </p>
     </main>
 
@@ -246,31 +256,40 @@
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, onAuthStateChanged, updatePassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
+        // NOVO FIREBASE CONFIG (SAMSUNG PROJECT)
         const firebaseConfig = {
-            apiKey: "AIzaSyDyahOcB_wXbU_E0IzEXHBMsyw8uqJR2Es",
-            authDomain: "ironpay-cc5e1.firebaseapp.com",
-            projectId: "ironpay-cc5e1",
-            storageBucket: "ironpay-cc5e1.firebasestorage.app",
-            messagingSenderId: "283629903594",
-            appId: "1:283629903594:web:07b39ed18372335c758193"
+            apiKey: "AIzaSyBEwr-HGUXvLZwH15TFWbXI6Q4sdxbqsTw",
+            authDomain: "sasung-4e6c1.firebaseapp.com",
+            projectId: "sasung-4e6c1",
+            storageBucket: "sasung-4e6c1.firebasestorage.app",
+            messagingSenderId: "803651036609",
+            appId: "1:803651036609:web:5b11a565d4aa705e28bb40",
+            measurementId: "G-L31X649B5T"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
 
+        const customSwal = Swal.mixin({
+            customClass: {
+                popup: 'samsung-swal-popup',
+                confirmButton: 'samsung-swal-confirm'
+            },
+            buttonsStyling: true,
+            confirmButtonColor: '#034EA2'
+        });
+
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Preenche dados básicos do Auth
                 document.getElementById('display-email').innerText = user.email;
                 document.getElementById('display-uid').innerText = user.uid;
 
-                // Busca nome no Firestore
                 try {
                     const userRef = doc(db, "users", user.uid);
                     const userSnap = await getDoc(userRef);
                     if (userSnap.exists()) {
-                        document.getElementById('display-nome').innerText = userSnap.data().nome || "Não definido";
+                        document.getElementById('display-nome').innerText = userSnap.data().nome || "Usuário Samsung";
                     }
                 } catch (error) {
                     console.error("Erro ao buscar dados:", error);
@@ -280,29 +299,27 @@
             }
         });
 
-        // Função para trocar a senha
         document.getElementById('btn-change-password').addEventListener('click', async () => {
             const newPass = document.getElementById('new-password').value;
             const confirmPass = document.getElementById('confirm-password').value;
             const user = auth.currentUser;
 
             if (newPass.length < 6) {
-                Swal.fire("Erro", "A senha deve ter pelo menos 6 caracteres.", "error");
+                customSwal.fire("Senha Curta", "A senha deve conter no mínimo 6 caracteres.", "warning");
                 return;
             }
 
             if (newPass !== confirmPass) {
-                Swal.fire("Erro", "As senhas não coincidem.", "error");
+                customSwal.fire("Erro de Digitação", "As senhas informadas não são iguais.", "error");
                 return;
             }
 
             try {
                 await updatePassword(user, newPass);
-                Swal.fire({
-                    title: "Sucesso!",
-                    text: "Sua senha foi atualizada com sucesso.",
-                    icon: "success",
-                    confirmButtonColor: "#00a3e0"
+                customSwal.fire({
+                    title: "Senha Atualizada",
+                    text: "Sua nova senha de acesso foi salva com sucesso.",
+                    icon: "success"
                 }).then(() => {
                     document.getElementById('new-password').value = "";
                     document.getElementById('confirm-password').value = "";
@@ -310,9 +327,9 @@
             } catch (error) {
                 console.error(error);
                 if (error.code === 'auth/requires-recent-login') {
-                    Swal.fire("Ação Necessária", "Para trocar a senha, você precisa ter feito login recentemente. Faça login novamente e tente de novo.", "warning");
+                    customSwal.fire("Sessão Expirada", "Para sua segurança, saia da conta e faça login novamente para alterar a senha.", "info");
                 } else {
-                    Swal.fire("Erro", "Não foi possível atualizar a senha: " + error.message, "error");
+                    customSwal.fire("Erro de Sistema", "Não foi possível processar a solicitação: " + error.message, "error");
                 }
             }
         });
